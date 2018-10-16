@@ -132,11 +132,11 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/users/signup")]
-        public async Task<IHttpActionResult> SignUp(UserSignUpViewMode userSignUp)
+        public async Task<IHttpActionResult> SignUp(UserSignUpSMSViewMode userSignUpSms)
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUp.PhoneNumber);
+                User user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUpSms.PhoneNumber);
                 Session session = null;
                 var randomNounce = RandomHelper.RandomInt(10000, 99999);
                 
@@ -144,11 +144,11 @@ namespace Teeleh.WApi.Controllers
                 {
                     user = new User()
                     {
-                        FirstName = userSignUp.FirstName,
-                        LastName = userSignUp.LastName,
-                        PhoneNumber = userSignUp.PhoneNumber,
-                        Email = userSignUp.Email,
-                        Password = HasherHelper.sha256_hash(userSignUp.Password),
+                        FirstName = userSignUpSms.FirstName,
+                        LastName = userSignUpSms.LastName,
+                        PhoneNumber = userSignUpSms.PhoneNumber,
+                        Email = userSignUpSms.Email,
+                        Password = HasherHelper.sha256_hash(userSignUpSms.Password),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
                         State = SessionState.Pending
@@ -162,7 +162,7 @@ namespace Teeleh.WApi.Controllers
                         State = SessionState.Pending,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
-                        UniqueCode = userSignUp.UniqueCode,
+                        UniqueCode = userSignUpSms.UniqueCode,
                         User = user
                     };
 
@@ -175,7 +175,7 @@ namespace Teeleh.WApi.Controllers
                     if (user.State == SessionState.Pending) //multiple requests
                     {
                         db.Sessions
-                            .Where(q => q.UniqueCode == userSignUp.UniqueCode)
+                            .Where(q => q.UniqueCode == userSignUpSms.UniqueCode)
                             .Where(q => q.State == SessionState.Pending)
                             .ToList()
                             .ForEach(q => q.State = SessionState.Abolished);
@@ -186,7 +186,7 @@ namespace Teeleh.WApi.Controllers
                             State = SessionState.Pending,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
-                            UniqueCode = userSignUp.UniqueCode,
+                            UniqueCode = userSignUpSms.UniqueCode,
                             User = user
                         };
 
@@ -201,9 +201,16 @@ namespace Teeleh.WApi.Controllers
                     }
                 }
 
-                var receptor = userSignUp.PhoneNumber;
+                var receptorPhone = userSignUpSms.PhoneNumber;
+                var receptorMail = userSignUpSms.Email;
                 var token = randomNounce.ToString();
-                if (NotificationHelper.CodeVerificationSMS_K(token, receptor) != null)
+
+                if (receptorMail != null) //Mail
+                {
+                    NotificationHelper.CodeVerificationEmail(token, receptorMail);
+                }
+
+                if (NotificationHelper.CodeVerificationSMS_K(token, receptorPhone) != null) //SMS
                 {
                     return InternalServerError();
                 }
@@ -216,6 +223,92 @@ namespace Teeleh.WApi.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("api/users/signup/email")]
+        public async Task<IHttpActionResult> SignUp(UserSignUpEmailViewModel userSignUpEmail)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUpEmail.PhoneNumber);
+                Session session = null;
+                var randomNounce = RandomHelper.RandomInt(10000, 99999);
+
+                if (user == null) //New User
+                {
+                    user = new User()
+                    {
+                        FirstName = userSignUpEmail.FirstName,
+                        LastName = userSignUpEmail.LastName,
+                        PhoneNumber = userSignUpEmail.PhoneNumber,
+                        Email = userSignUpEmail.Email,
+                        Password = HasherHelper.sha256_hash(userSignUpEmail.Password),
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        State = SessionState.Pending
+                    };
+
+                    db.Users.Add(user);
+
+                    session = new Session()
+                    {
+                        Nonce = randomNounce,
+                        State = SessionState.Pending,
+                        InitMoment = DateTime.Now,
+                        SessionKey = RandomHelper.RandomString(32),
+                        UniqueCode = userSignUpEmail.UniqueCode,
+                        User = user
+                    };
+
+                    db.Sessions.Add(session);
+                    await db.SaveChangesAsync();
+
+                }
+                else
+                {
+                    if (user.State == SessionState.Pending) //multiple requests
+                    {
+                        db.Sessions
+                            .Where(q => q.UniqueCode == userSignUpEmail.UniqueCode)
+                            .Where(q => q.State == SessionState.Pending)
+                            .ToList()
+                            .ForEach(q => q.State = SessionState.Abolished);
+
+                        session = new Session()
+                        {
+                            Nonce = randomNounce,
+                            State = SessionState.Pending,
+                            InitMoment = DateTime.Now,
+                            SessionKey = RandomHelper.RandomString(32),
+                            UniqueCode = userSignUpEmail.UniqueCode,
+                            User = user
+                        };
+
+                        db.Sessions.Add(session);
+
+                        await db.SaveChangesAsync();
+
+                    }
+                    else if (user.State == SessionState.Actived) //already registered user - use login form
+                    {
+                        return Conflict();
+                    }
+                }
+
+                var receptor = userSignUpEmail.Email;
+                var token = randomNounce.ToString();
+                NotificationHelper.CodeVerificationEmail(token, receptor);
+                
+                return Json(new
+                {
+                    SeesionId = session?.Id ?? -1
+                });
+            }
+
+            return BadRequest();
+        }
+
+
 
         ////////////////////// User Forgot Password ///////////////////////
 

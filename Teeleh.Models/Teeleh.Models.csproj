@@ -70,7 +70,8 @@
     <Compile Include="ViewModels\ForgotPasswordVerificationViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PendingSessionViewModel.cs" />
-    <Compile Include="ViewModels\UserSignUpViewMode.cs" />
+    <Compile Include="ViewModels\UserSignUpEmailViewModel.cs" />
+    <Compile Include="ViewModels\UserSignUpSMSViewMode.cs" />
     <Compile Include="ViewModels\SessionInfoObject.cs" />
     <Compile Include="ViewModels\UserInfoViewModel.cs" />
   </ItemGroup>

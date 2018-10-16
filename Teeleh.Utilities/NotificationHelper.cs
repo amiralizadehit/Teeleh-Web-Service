@@ -1,10 +1,16 @@
 ﻿using Kavenegar;
 using System;
+using System.Net.Mail;
 
 namespace Teeleh.Utilities
 {
     public class NotificationHelper
     {
+        //Email
+        private static string ZohoMailAddress= "noreply@teelehdev.ir";
+        private static string ZohoMailPassword= "teeleh2018Abc";
+        private static string ZohoMailHost= "smtp.zoho.com";
+
         //Kavenegar Spec
         private static string KavenegarApiKey = "5058466E65505161535A63627539584B592F753769773D3D";
         private static string KavenegarSenderNumber = "10000066600600 ";
@@ -41,6 +47,28 @@ namespace Teeleh.Utilities
                 return e;
             }
         }
+
+        public static void CodeVerificationEmail(string token, string receiver)
+        {
+            string body = "Your Verification Code is : " + token;
+            SmtpClient smtpClient = new SmtpClient(ZohoMailHost);
+            var mail = new MailMessage();
+            mail.From = new MailAddress(ZohoMailAddress);
+            mail.To.Add(receiver);
+            mail.Subject = "Teeleh Verification Code";
+            mail.IsBodyHtml = true;
+            mail.Body = body;
+            smtpClient.Port = 587;
+            smtpClient.Credentials = new System.Net.NetworkCredential(ZohoMailAddress, ZohoMailPassword);
+            smtpClient.EnableSsl = true;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.Send(mail);
+        }
+
+
+
+
+
 
         /*public static bool CodeVerificationSMS_T(string token, string receiver)
         {

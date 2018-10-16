@@ -2,7 +2,7 @@
 
 namespace Teeleh.Models.ViewModels
 {
-    public class UserSignUpViewMode
+    public class UserSignUpSMSViewMode
     {
         [Required]
         [StringLength(11)]
