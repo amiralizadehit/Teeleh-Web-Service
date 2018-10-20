@@ -468,10 +468,15 @@ namespace Teeleh.WApi.Controllers
 
                 if (session != null)
                 {
-                    User user = session.User;
+                    User user = session.User;                    
                     return Ok(
                     
-                        user.Sessions.Select(q => new{ActivationMoment = q.ActivationMoment}).ToList()
+                        user.Sessions.Select(q => new
+                        {
+                            ActivationMoment = q.ActivationMoment,
+                            DeactivationMoment = q.DeactivationMoment,
+                            UniqueCode = q.UniqueCode
+                        }).ToList()
                     );
                 }
 

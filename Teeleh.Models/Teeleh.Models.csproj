@@ -61,6 +61,14 @@
     <Compile Include="Migrations\201809151953423_AddingAdvertisementsTable.Designer.cs">
       <DependentUpon>201809151953423_AddingAdvertisementsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810201934561_GameTable.cs" />
+    <Compile Include="Migrations\201810201934561_GameTable.Designer.cs">
+      <DependentUpon>201810201934561_GameTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810202025485_ChangingModels.cs" />
+    <Compile Include="Migrations\201810202025485_ChangingModels.Designer.cs">
+      <DependentUpon>201810202025485_ChangingModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
@@ -93,6 +101,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809151953423_AddingAdvertisementsTable.resx">
       <DependentUpon>201809151953423_AddingAdvertisementsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810201934561_GameTable.resx">
+      <DependentUpon>201810201934561_GameTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810202025485_ChangingModels.resx">
+      <DependentUpon>201810202025485_ChangingModels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Teeleh.Models
 {
@@ -21,6 +22,9 @@ namespace Teeleh.Models
 
         public string UniqueCode { get; set; }
         public SessionState State { get; set; }
+
+        [ForeignKey("User")]
+        public int? User_Id { get; set; }
 
         public virtual User User { get; set; }
     }

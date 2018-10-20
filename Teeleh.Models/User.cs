@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Teeleh.Models
 {
@@ -39,7 +40,7 @@ namespace Teeleh.Models
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
 
-
-        public virtual IEnumerable<Session> Sessions { get; set; }
+        [ForeignKey("User_Id")]
+        public virtual List<Session> Sessions { get; set; }
     }
 }

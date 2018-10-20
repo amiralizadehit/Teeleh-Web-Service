@@ -10,10 +10,14 @@ namespace Teeleh.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public Avatar Avatar { get; set; }
-        public IEnumerable<Platform> SupportedPlatforms { get; set; }
-        public string PlatformId { get; set; }
+        public List<Platform> SupportedPlatforms { get; set; }
         public DateTime ReleaseDate { get; set; }
-
+        public float MetaScore { get; set; }
+        public float UserScore { get; set; }
+        public List<Genre> Genres { get; set; }
+        public string Developer { get; set; }
+        public string Publisher { get; set; }
+        public bool OnlineCapability { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
