@@ -19,13 +19,33 @@ namespace Teeleh.Utilities
         private static string TwilioAccountSid = "AC52512b29616508da13ce38f06646e2dc";
         private static string authToken = "de66d3f1f115e706bafa4cada80a863a";
 
+        public enum EmailMode
+        {
+            VERIFICATION,
+            PASSWORD_RECOVERY
+        }
+
+        public enum SMSMode
+        {
+            VERIFICATION,
+            PASSWORD_RECOVERY
+        }
+
         //Kavenegar
-        public static Exception CodeVerificationSMS_K(string token, string reciever)
+        public static Exception SendSMS_K(string token, string reciever, SMSMode mode)
         {
             try
             {
                 var api = new KavenegarApi(KavenegarApiKey);
-                api.VerifyLookup(reciever, token, "TeelehVerification");
+                switch (mode)
+                {
+                    case SMSMode.VERIFICATION:
+                        api.VerifyLookup(reciever, token, "TeelehVerification");
+                        break;
+                    case SMSMode.PASSWORD_RECOVERY:
+                        api.VerifyLookup(reciever, token, "TeelehForgetPassword");
+                        break;
+                }
                 return null;
             }
             catch (Exception e)
@@ -34,28 +54,28 @@ namespace Teeleh.Utilities
             }
         }
 
-        public static Exception ForgetPasswordSMS_K(string token, string reciever)
+        public static void CodeVerificationEmail(string token, string receiver, EmailMode mode)
         {
-            try
+            string bodyDefault = "";
+            string mailSubject = "";
+            switch (mode)
             {
-                var api = new KavenegarApi(KavenegarApiKey);
-                api.VerifyLookup(reciever, token, "TeelehForgetPassword");
-                return null;
+                case EmailMode.VERIFICATION:
+                    bodyDefault = "Your verification code is : ";
+                    mailSubject = "Teeleh Verification Code";
+                    break;
+                case EmailMode.PASSWORD_RECOVERY:
+                    bodyDefault = "Your password recovery code is : ";
+                    mailSubject = "Teeleh Password Recovery";
+                    break;
             }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
 
-        public static void CodeVerificationEmail(string token, string receiver)
-        {
-            string body = "Your Verification Code is : " + token;
+            string body = bodyDefault + token;
             SmtpClient smtpClient = new SmtpClient(ZohoMailHost);
             var mail = new MailMessage();
             mail.From = new MailAddress(ZohoMailAddress);
             mail.To.Add(receiver);
-            mail.Subject = "Teeleh Verification Code";
+            mail.Subject = mailSubject;
             mail.IsBodyHtml = true;
             mail.Body = body;
             smtpClient.Port = 587;

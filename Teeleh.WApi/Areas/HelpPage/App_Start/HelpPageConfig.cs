@@ -89,6 +89,7 @@ namespace Teeleh.WApi.Areas.HelpPage
             //// The sample will be generated as if the controller named "Values" and action named "Post" were returning a string.
             config.SetActualResponseType(typeof(SessionInfoObject), "Sessions", "Active");
             config.SetActualResponseType(typeof(SessionInfoObject), "Users", "Login");
+            config.SetActualResponseType(typeof(UserInfoViewModel), "Users", "GetUserInfo");
         }
 
 #if Handle_PageResultOfT
