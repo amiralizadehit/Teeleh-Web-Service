@@ -4,8 +4,12 @@ namespace Teeleh.Models
 {
     public class Platform
     {
-        public static string PSN ="PSN";
+        public static string PS4 ="PS4";
         public static string XBOX = "XBOX";
+        public static string PC = "PC";
+        public static string Switch = "Switch";
+        public static string Android = "Android";
+        public static string iOs = "iOS";
 
         public string Id { get; set; }
         public string Name { get; set; }

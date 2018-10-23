@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,9 +27,27 @@ namespace Teeleh.WApi.Controllers
         /// </summary>
         /// <returns>List of users</returns>
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public IHttpActionResult GetUsers()
         {
-            return db.Users.ToList();
+            return Ok(db.Users.Select(q => new
+            {
+                q.FirstName,
+                q.LastName,
+                q.CreatedAt,
+                q.Email,
+                q.PhoneNumber,
+                q.PSNId,
+                q.XBOXLive,
+                q.State,
+                Sessions = q.Sessions.Select(s => new
+                {
+                    s.ActivationMoment,
+                    s.DeactivationMoment,
+                    s.UniqueCode,
+                    s.State,
+                })
+
+            }).ToList());
         }
 
 
@@ -475,7 +492,8 @@ namespace Teeleh.WApi.Controllers
                         {
                             ActivationMoment = q.ActivationMoment,
                             DeactivationMoment = q.DeactivationMoment,
-                            UniqueCode = q.UniqueCode
+                            UniqueCode = q.UniqueCode,
+                            State = q.State
                         }).ToList()
                     );
                 }

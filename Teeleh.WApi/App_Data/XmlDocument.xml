@@ -481,6 +481,17 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:Teeleh.WApi.Controllers.GamesController">
+            <summary>
+            This class is used to manage games
+            </summary>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.GamesController.GetGames">
+            <summary>
+            Returns a list of all users.
+            </summary>
+            <returns>List of users</returns>
+        </member>
         <member name="T:Teeleh.WApi.Controllers.SessionsController">
             <summary>
             This class is used to manage sessions and authentication

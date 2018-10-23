@@ -1,0 +1,49 @@
+﻿@model Teeleh.Models.ViewModels.GameFormViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add a Game</h2>
+<form>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ReleaseDate)
+        @Html.TextBoxFor(m => m.ReleaseDate, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Developer)
+        @Html.TextBoxFor(m => m.Developer, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Publisher)
+        @Html.TextBoxFor(m => m.Publisher, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MetaScore)
+        @Html.TextBoxFor(m => m.MetaScore, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserScore)
+        @Html.TextBoxFor(m => m.UserScore, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.CheckBoxFor(m => m.OnlineCapability)
+        @Html.LabelFor(m => m.OnlineCapability)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedGenres)
+        @Html.ListBoxFor(m => m.SelectedGenres, Model.Genres, new { @class = "form-control" })
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedPlatforms)
+        @Html.ListBoxFor(m => m.SelectedPlatforms, Model.Platforms, new { @class = "form-control" })
+    </div>
+    <button type="submit"class="btn btn-primary ">Save</button>
+
+</form>
+

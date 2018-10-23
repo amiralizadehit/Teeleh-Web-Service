@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,10 +21,26 @@ namespace Teeleh.WApi.Controllers
         /// </summary>
         /// <returns>List of all sessions</returns>
         [HttpGet]
-        public IEnumerable<Session> GetSessions()
+        public IHttpActionResult GetSessions()
         {
-            var sessions = db.Sessions.Include(q => q.User).ToList();
-            return sessions;
+            return Ok(db.Sessions.Select(s=>new
+            {
+                s.ActivationMoment,
+                s.DeactivationMoment,
+                s.State,
+                s.UniqueCode,
+                User = new
+                {
+                    s.User.FirstName,
+                    s.User.LastName,
+                    s.User.CreatedAt,
+                    s.User.Email,
+                    s.User.PhoneNumber,
+                    s.User.PSNId,
+                    s.User.XBOXLive,
+                    s.User.State
+                }
+            }).ToList());
         }
 
 
