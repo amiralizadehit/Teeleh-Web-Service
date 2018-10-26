@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Teeleh.Models
 {
@@ -8,9 +9,16 @@ namespace Teeleh.Models
     public class Game
     {
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public Image Avatar { get; set; }
+
         public List<Platform> SupportedPlatforms { get; set; }
+
+        [Required]
         public DateTime ReleaseDate { get; set; }
         public float MetaScore { get; set; }
         public float UserScore { get; set; }

@@ -49,9 +49,9 @@ namespace Teeleh.WApi.Controllers
             }).ToList();
 
             viewModel.Platforms = new MultiSelectList(platforms,"PlatformId","PlatformName");
-            viewModel.SelectedPlatforms = new[] {Platform.PC,Platform.Switch,Platform.Android};
+            //viewModel.SelectedPlatforms = new[] {Platform.PC,Platform.Switch,Platform.Android};
             viewModel.Genres = new MultiSelectList(genres,"GenreId","GenreName");
-            viewModel.SelectedGenres = new[] {1, 3, 4};
+            //viewModel.SelectedGenres = new[] {1, 3, 4};
             
             return View(viewModel);
         }
@@ -59,7 +59,27 @@ namespace Teeleh.WApi.Controllers
         [HttpPost]
         public ActionResult Create(GameFormViewModel viewModel)
         {
-            
+            if (!ModelState.IsValid)
+            {
+                var genres = db.Genres.Select(g => new
+                {
+                    GenreId = g.Id,
+                    GenreName = g.Name
+
+                }).ToList();
+                var platforms = db.Platforms.Select(p => new
+                {
+                    PlatformId = p.Id,
+                    PlatformName = p.Name
+                }).ToList();
+
+                viewModel.Platforms = new MultiSelectList(platforms, "PlatformId", "PlatformName");
+                //viewModel.SelectedPlatforms = new[] { Platform.PC, Platform.Switch, Platform.Android };
+                viewModel.Genres = new MultiSelectList(genres, "GenreId", "GenreName");
+                //viewModel.SelectedGenres = new[] { 1, 3, 4 };
+                return View("Create", viewModel);
+            }
+
             var avatarPhotoFileExtension = Path.GetExtension(viewModel.ImageFile.FileName);
             var avatarPhotoFileName = viewModel.Name + "_" + "Avatar"+"_"+DateTime.Now.ToString("yymmssfff")+avatarPhotoFileExtension;
             //var avatarPhotoFilePath = "~/Image/" + avatarPhotoFileName;
@@ -87,7 +107,7 @@ namespace Teeleh.WApi.Controllers
                 MetaScore = viewModel.MetaScore,
                 UserScore = viewModel.UserScore,
                 OnlineCapability = viewModel.OnlineCapability,
-                ReleaseDate = viewModel.ParsedReleaseDate,
+                ReleaseDate = viewModel.GetReleaseDate(),
                 SupportedPlatforms = selectedPlatforms,
                 Avatar = avatarImage,
                 CreatedAt = DateTime.Now,

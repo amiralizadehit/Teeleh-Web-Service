@@ -120,6 +120,10 @@
     <Compile Include="Migrations\201810261658480_UpdateGamesTable.Designer.cs">
       <DependentUpon>201810261658480_UpdateGamesTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810262032534_ChangingGameModelTable.cs" />
+    <Compile Include="Migrations\201810262032534_ChangingGameModelTable.Designer.cs">
+      <DependentUpon>201810262032534_ChangingGameModelTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
@@ -134,6 +138,7 @@
     <Compile Include="ViewModels\UserSignUpSMSViewMode.cs" />
     <Compile Include="ViewModels\SessionInfoObject.cs" />
     <Compile Include="ViewModels\UserInfoViewModel.cs" />
+    <Compile Include="ViewModels\ValidDate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -180,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810261658480_UpdateGamesTable.resx">
       <DependentUpon>201810261658480_UpdateGamesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810262032534_ChangingGameModelTable.resx">
+      <DependentUpon>201810262032534_ChangingGameModelTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
