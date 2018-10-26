@@ -31,7 +31,7 @@ namespace Teeleh.Models
 
         public string XBOXLive { get; set; }
 
-        public Avatar UserAvatar { get; set; }
+        public Image UserImage { get; set; }
 
         public int ForgetPassCode { get; set; }
 

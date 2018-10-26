@@ -200,7 +200,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\API\AdvertisementsController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
-    <Compile Include="Controllers\API\HomeController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\API\SessionsController.cs" />
     <Compile Include="Controllers\API\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -267,6 +267,7 @@
     <Content Include="Views\Games\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Image\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Teeleh.Models;
@@ -52,7 +54,52 @@ namespace Teeleh.WApi.Controllers
             viewModel.SelectedGenres = new[] {1, 3, 4};
             
             return View(viewModel);
-        } 
+        }
+
+        [HttpPost]
+        public ActionResult Create(GameFormViewModel viewModel)
+        {
+            
+            var avatarPhotoFileExtension = Path.GetExtension(viewModel.ImageFile.FileName);
+            var avatarPhotoFileName = viewModel.Name + "_" + "Avatar"+"_"+DateTime.Now.ToString("yymmssfff")+avatarPhotoFileExtension;
+            //var avatarPhotoFilePath = "~/Image/" + avatarPhotoFileName;
+            avatarPhotoFileName = Path.Combine(Server.MapPath("~/Image/"), avatarPhotoFileName);
+            viewModel.ImageFile.SaveAs(avatarPhotoFileName);
+
+            var avatarImage = new Image()
+            {
+                Name = viewModel.Name,
+                ImagePath = avatarPhotoFileName,
+                Type = Image.ImageType.AVATAR,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+
+            };
+
+            var selectedGenres = db.Genres.Where(g => viewModel.SelectedGenres.Contains(g.Id)).ToList();
+            var selectedPlatforms = db.Platforms.Where(p => viewModel.SelectedPlatforms.Contains(p.Id)).ToList();
+            var game = new Game
+            {
+                Name = viewModel.Name,
+                Genres = selectedGenres,
+                Developer = viewModel.Developer,
+                Publisher = viewModel.Publisher,
+                MetaScore = viewModel.MetaScore,
+                UserScore = viewModel.UserScore,
+                OnlineCapability = viewModel.OnlineCapability,
+                ReleaseDate = viewModel.ParsedReleaseDate,
+                SupportedPlatforms = selectedPlatforms,
+                Avatar = avatarImage,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            };
+            db.Games.Add(game);
+            db.Images.Add(avatarImage);
+            db.SaveChanges();
+
+            return RedirectToAction("Index","Home");
+
+        }
 
         /// <summary>
         /// It is used for retrieving game information

@@ -79,7 +79,7 @@ namespace Teeleh.WApi.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    UserAvatar = user.UserAvatar.AvatarImage,
+                    //UserAvatar = user.UserImage.AvatarImage,
                     PSNId = user.PSNId,
                     XBOXLive = user.XBOXLive
                 };

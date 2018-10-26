@@ -42,6 +42,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -70,7 +72,7 @@
   <ItemGroup>
     <Compile Include="Advertisement.cs" />
     <Compile Include="AppDbContext.cs" />
-    <Compile Include="Avatar.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Genre.cs" />
     <Compile Include="Location.cs" />
@@ -101,6 +103,22 @@
     <Compile Include="Migrations\201810231300234_ChangingAvatarTable.cs" />
     <Compile Include="Migrations\201810231300234_ChangingAvatarTable.Designer.cs">
       <DependentUpon>201810231300234_ChangingAvatarTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810231545152_ChaningAvatarTable.cs" />
+    <Compile Include="Migrations\201810231545152_ChaningAvatarTable.Designer.cs">
+      <DependentUpon>201810231545152_ChaningAvatarTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810231547286_ChangingGameTable.cs" />
+    <Compile Include="Migrations\201810231547286_ChangingGameTable.Designer.cs">
+      <DependentUpon>201810231547286_ChangingGameTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810261628072_UpdateImageModel.cs" />
+    <Compile Include="Migrations\201810261628072_UpdateImageModel.Designer.cs">
+      <DependentUpon>201810261628072_UpdateImageModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810261658480_UpdateGamesTable.cs" />
+    <Compile Include="Migrations\201810261658480_UpdateGamesTable.Designer.cs">
+      <DependentUpon>201810261658480_UpdateGamesTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
@@ -150,6 +168,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810231300234_ChangingAvatarTable.resx">
       <DependentUpon>201810231300234_ChangingAvatarTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810231545152_ChaningAvatarTable.resx">
+      <DependentUpon>201810231545152_ChaningAvatarTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810231547286_ChangingGameTable.resx">
+      <DependentUpon>201810231547286_ChangingGameTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810261628072_UpdateImageModel.resx">
+      <DependentUpon>201810261628072_UpdateImageModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810261658480_UpdateGamesTable.resx">
+      <DependentUpon>201810261658480_UpdateGamesTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

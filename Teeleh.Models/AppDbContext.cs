@@ -14,7 +14,7 @@ namespace Teeleh.Models
         public DbSet<Game> Games { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Genre> Genres { get; set; }
-
+        public DbSet <Image> Images { get; set; }
 
     }
 }
