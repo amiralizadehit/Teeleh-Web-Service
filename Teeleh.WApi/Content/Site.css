@@ -16,6 +16,11 @@ textarea {
     max-width: 280px;
 }
 
+span.field-validation-error {
+    color: red;
+    font-weight: bold;
+}
+
 /* Bootstrap Overrides */
 .navbar-inverse {
     background-color: #ff4342;
@@ -28,4 +33,40 @@ textarea {
 
 .navbar-inverse .navbar-brand {
         color: #fff;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-control {
+    padding: 20px 15px;
+    -ms-border-radius: 9px;
+    border-radius: 9px;
+}
+.form-control:focus {
+    border-color: #2196f3;
+    box-shadow: none;
+    -webkit-box-shadow : none;
+}
+.btn {
+    padding: 7px 20px;
+    font-size: 17px;
+    -ms-border-radius: 9px;
+    border-radius: 9px;
+}
+.alert {
+    border-radius: 13px;
+}
+
+img {
+    height: 65px;
+    width: 61px;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+    vertical-align: middle;
+    
 }

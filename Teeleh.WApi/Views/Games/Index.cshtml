@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Teeleh.Models.Game>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Games</h2>
+
+@Html.ActionLink("Add a Game", "Create", "Games", new { @class = "btn btn-primary", @style = "margin-bottom:15px" })
+
+@if (!Model.Any())
+{
+    <p>There is no game availabe in the system.</p>
+}
+else
+{
+    <table id="games" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Avatar</th>
+                <th>Name</th>
+                <th>Developer</th>
+                <th>Meta Score</th>
+                <th>User Score</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Supported Platforms</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model)
+        {
+            <tr>
+                <td><img src="@Url.Content(game.Avatar.ImagePath)" alt="Image"/></td>
+                <td>
+                    @Html.ActionLink(game.Name, "Edit", "Games", new {id = game.Id}, null)
+                </td>
+                <td>@game.Developer</td>
+                <td>@game.MetaScore</td>
+                <td>@game.UserScore</td>
+                <td>@game.ReleaseDate.ToShortDateString()</td>
+                <td>
+                    @{string genres = string.Join(" - ", game.Genres.Select(x => x.Name));}
+                    @genres
+
+                </td>
+                <td>
+                    @{string platforms = string.Join(" - ", game.SupportedPlatforms.Select(x => x.Id));}
+                    @platforms
+                </td>
+                <td>
+                    <button data-game-id="@game.Id" class="btn-link js-delete" style="color: red">Delete</button>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#games").DataTable({
+                ajax: {
+                    url: "/api/games",
+                    dataSrc:""
+                }
+            });
+
+            $("#games ").on("click",".js-delete",
+                function () {
+                    bootbox.confirm("Are you sure you want to delete this game?",
+                        function(result) {
+                            if (result) {
+                                var button = $(this);
+                                $.ajax({
+                                    url: "/games/delete/" + button.attr("data-game-id"),
+                                    method: "DELETE",
+                                    success: function() {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}

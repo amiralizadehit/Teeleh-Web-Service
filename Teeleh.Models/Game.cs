@@ -18,9 +18,10 @@ namespace Teeleh.Models
 
         public List<Platform> SupportedPlatforms { get; set; }
 
+
         [Required]
         public DateTime ReleaseDate { get; set; }
-        public float MetaScore { get; set; }
+        public int MetaScore { get; set; }
         public float UserScore { get; set; }
         public List<Genre> Genres { get; set; }
         public string Developer { get; set; }

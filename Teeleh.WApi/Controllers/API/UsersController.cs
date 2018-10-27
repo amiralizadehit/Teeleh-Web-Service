@@ -245,7 +245,7 @@ namespace Teeleh.WApi.Controllers
 
                 return Json(new
                 {
-                    SeesionId = session?.Id ?? -1
+                    SessionId = session?.Id ?? -1
                 });
             }
 
@@ -336,7 +336,7 @@ namespace Teeleh.WApi.Controllers
                 
                 return Json(new
                 {
-                    SeesionId = session?.Id ?? -1
+                    SessionId = session?.Id ?? -1
                 });
             }
 

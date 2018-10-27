@@ -9,8 +9,10 @@ namespace Teeleh.Models.ViewModels
 {
     public class GameFormViewModel
     {
+        public int Id { get; set; }
+
         [Required]
-        [StringLength(20,ErrorMessage = "You can not enter a name with more than 20 characters")]
+        [StringLength(50,ErrorMessage = "You can not enter a name with more than 20 characters")]
         public string Name { get; set; }
 
        // [DisplayName("Upload avatar photo")]
@@ -20,7 +22,7 @@ namespace Teeleh.Models.ViewModels
 
         [Required(ErrorMessage = "You should select at least one platform for this game")]
         [DisplayName("Platform")]
-        public IEnumerable<string> SelectedPlatforms { get; set; }
+        public List<string> SelectedPlatforms { get; set; }
 
         public MultiSelectList Platforms { get; set; }
         
@@ -28,16 +30,18 @@ namespace Teeleh.Models.ViewModels
         [Required]
         [DisplayName("Meta Score")]
         [Range(0,100,ErrorMessage = "Meta Score can only be between 0 and 100")]
+   
         public int MetaScore { get; set; }
 
         [Required]
         [DisplayName("User Score")]
         [Range(0,10,ErrorMessage = "User Score can only be between 0 and 10")]
+        
         public float UserScore { get; set; }
 
-        [Required(ErrorMessage = "You should select at least one genre one this game")]
+        [Required(ErrorMessage = "You should select at least one genre for this game")]
         [DisplayName("Genre")]
-        public IEnumerable<int> SelectedGenres { get; set; }
+        public List<int> SelectedGenres { get; set; }
 
         public MultiSelectList Genres { get; set; }
 
@@ -60,7 +64,7 @@ namespace Teeleh.Models.ViewModels
 
         public DateTime GetReleaseDate()
         {
-            return DateTime.Parse(ReleaseDate);
+            return DateTime.Parse(ReleaseDate).Date;
         }
 
     }
