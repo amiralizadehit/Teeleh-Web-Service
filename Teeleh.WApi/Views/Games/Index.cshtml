@@ -60,19 +60,16 @@ else
 @section scripts{
     <script>
         $(document).ready(function () {
-            $("#games").DataTable({
-                ajax: {
-                    url: "/api/games",
-                    dataSrc:""
-                }
-            });
+            $("#games").DataTable();
 
-            $("#games ").on("click",".js-delete",
+            
+            $("#games ").on("click", ".js-delete",
                 function () {
+                    var button = $(this);
                     bootbox.confirm("Are you sure you want to delete this game?",
                         function(result) {
                             if (result) {
-                                var button = $(this);
+                                
                                 $.ajax({
                                     url: "/games/delete/" + button.attr("data-game-id"),
                                     method: "DELETE",
