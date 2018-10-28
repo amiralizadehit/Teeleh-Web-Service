@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Teeleh.Models;
 using Teeleh.Models.ViewModels;
+using Teeleh.Models.ViewModels.Website_View_Models;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -26,19 +27,38 @@ namespace Teeleh.WApi.Controllers
             db.Dispose();
         }
 
-
         public ActionResult Index()
         {
-            var games = db.Games.Include(p => p.SupportedPlatforms).Include(g => g.Genres).Include(a=>a.Avatar).ToList();
+            //var games = db.Games.Include(p => p.SupportedPlatforms).Include(g => g.Genres).Include(a=>a.Avatar).ToList();
+            var games = db.Games.ToList();
 
-            return View(games);
+            var gamesViewModel = new List<GamePageViewModel>();
+            foreach (var game in games)
+            {
+                
+                var viewModel = new GamePageViewModel()
+                {
+                    Id = game.Id,
+                    ImagePath = Url.Content(game.Avatar.ImagePath),
+                    Genres = game.Genres.Select(t=>t.Name).ToList(),
+                    Developer = game.Developer,
+                    Name = game.Name,
+                    MetaScore = game.MetaScore,
+                    UserScore = game.UserScore,
+                    SupportedPlatforms = game.SupportedPlatforms.Select(p=>p.Name).ToList(),
+                    ReleaseDate = game.ReleaseDate
+                };
+                gamesViewModel.Add(viewModel);
+            }
+
+            return View(gamesViewModel);
         }
 
         public ActionResult Edit(int id)
         {
             var viewModel = new GameFormViewModel();
 
-            var game = db.Games.Include(p=>p.SupportedPlatforms).Include(g=>g.Genres).SingleOrDefault(g => g.Id == id);
+            var game = db.Games.SingleOrDefault(g => g.Id == id);
 
             if (game == null)
             {
@@ -100,7 +120,6 @@ namespace Teeleh.WApi.Controllers
             return RedirectToAction("Index", "Games");
         }
 
-
         public ActionResult Create()
         {
             var viewModel = new GameFormViewModel();
@@ -154,10 +173,13 @@ namespace Teeleh.WApi.Controllers
                 return View("Create", viewModel);
             }
 
+            var gameName = viewModel.Name.Replace('?', ' ').Replace(':', ' ').TrimEnd().TrimStart();
             var avatarPhotoFileExtension = Path.GetExtension(viewModel.ImageFile.FileName);
-            var avatarPhotoFileName = viewModel.Name + "_" + "Avatar"+"_"+DateTime.Now.ToString("yymmssfff")+avatarPhotoFileExtension;
-            var avatarPhotoFilePath = "~/Image/" + avatarPhotoFileName;
-            avatarPhotoFileName = Path.Combine(Server.MapPath("~/Image/"), avatarPhotoFileName);
+
+            var avatarPhotoFileName = gameName + "_" + "Avatar"+"_"+DateTime.Now.ToString("yy-MM-dd-hh-mm-ss")+avatarPhotoFileExtension;
+            Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + gameName));
+            var avatarPhotoFilePath = "~/Image/Games/"+ gameName + "/"+avatarPhotoFileName;
+            avatarPhotoFileName = Path.Combine(Server.MapPath("~/Image/Games/"+ gameName + "/"), avatarPhotoFileName);
             viewModel.ImageFile.SaveAs(avatarPhotoFileName);
 
             var selectedGenres = db.Genres.Where(g => viewModel.SelectedGenres.Contains(g.Id)).ToList();
@@ -195,7 +217,7 @@ namespace Teeleh.WApi.Controllers
             }
             else
             {
-                var gameInDb = db.Games.Include(i=>i.Avatar).Include(g=>g.Genres).Include(p=>p.SupportedPlatforms).Single(g => g.Id == viewModel.Id);
+                var gameInDb = db.Games.Include(t=>t.Genres).Include(v=>v.SupportedPlatforms).Single(g => g.Id == viewModel.Id);
                
                     var imageInDb = db.Images.SingleOrDefault(i => i.Id == gameInDb.Avatar.Id);
 
@@ -222,35 +244,6 @@ namespace Teeleh.WApi.Controllers
             return RedirectToAction("Index","Games");
 
         }
-
-        /// <summary>
-        /// It is used for retrieving game information
-        /// </summary>
-        /// <returns>200 : Ok (game info returned) |
-        /// 404 : Game Not Found
-        /// </returns>
-        /*[System.Web.Mvc.HttpGet]
-        public async Task<IHttpActionResult> Details(int id)
-        {
-            Game game = await db.Games.Include(q => q.Genres).SingleOrDefaultAsync(g => g.Id == id);
-
-            if (game != null)
-            {
-                return Ok(game);
-            }
-
-            return NotFound();
-        }*/
-
-        /*[System.Web.Mvc.HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IHttpActionResult> Save(Game game)
-        {
-            if (!ModelState.IsValid)
-            {
-
-            }
-        }*/
 
     }
 }

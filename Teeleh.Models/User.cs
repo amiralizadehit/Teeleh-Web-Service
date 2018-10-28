@@ -33,12 +33,15 @@ namespace Teeleh.Models
 
         public Image UserImage { get; set; }
 
+        public List<Advertisement> Advertisements { get; set; }
+
         public int ForgetPassCode { get; set; }
 
         public SessionState State { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
+
 
         [ForeignKey("User_Id")]
         public virtual List<Session> Sessions { get; set; }

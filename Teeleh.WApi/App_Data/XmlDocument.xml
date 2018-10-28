@@ -481,6 +481,15 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Detail(System.Int32)">
+            <summary>
+            Returns an advertisement in a more detailed manner with given id
+            </summary>
+            <returns>200 : Ok |
+            404 : Advertisement Not Found |
+            400 : Bad Request
+            </returns>
+        </member>
         <member name="T:Teeleh.WApi.Controllers.GamesController">
             <summary>
             This class is used to manage games
@@ -546,7 +555,7 @@
             404 : Not Registered User
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.UsersController.SignUp(Teeleh.Models.ViewModels.UserSignUpSMSViewMode)">
+        <member name="M:Teeleh.WApi.Controllers.UsersController.SignUp(Teeleh.Models.ViewModels.UserSignUpSMSViewModel)">
             <summary>
             It is used for user sign up with given information. (uses SMS for Two-Factor authentication) 
             </summary>

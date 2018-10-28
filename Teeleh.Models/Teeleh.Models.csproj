@@ -72,6 +72,8 @@
   <ItemGroup>
     <Compile Include="Advertisement.cs" />
     <Compile Include="AppDbContext.cs" />
+    <Compile Include="Dtos\AdvertisementDto.cs" />
+    <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Genre.cs" />
@@ -128,6 +130,10 @@
     <Compile Include="Migrations\201810271519309_ChangingGameModelForView.Designer.cs">
       <DependentUpon>201810271519309_ChangingGameModelForView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810281726409_ChangingAdTable.cs" />
+    <Compile Include="Migrations\201810281726409_ChangingAdTable.Designer.cs">
+      <DependentUpon>201810281726409_ChangingAdTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
@@ -139,7 +145,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PendingSessionViewModel.cs" />
     <Compile Include="ViewModels\UserSignUpEmailViewModel.cs" />
-    <Compile Include="ViewModels\UserSignUpSMSViewMode.cs" />
+    <Compile Include="ViewModels\UserSignUpSMSViewModel.cs" />
     <Compile Include="ViewModels\SessionInfoObject.cs" />
     <Compile Include="ViewModels\UserInfoViewModel.cs" />
     <Compile Include="ViewModels\ValidDate.cs" />
@@ -200,6 +206,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810271519309_ChangingGameModelForView.resx">
       <DependentUpon>201810271519309_ChangingGameModelForView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810281726409_ChangingAdTable.resx">
+      <DependentUpon>201810281726409_ChangingAdTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

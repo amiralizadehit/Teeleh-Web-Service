@@ -160,7 +160,7 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/users/signup")]
-        public async Task<IHttpActionResult> SignUp(UserSignUpSMSViewMode userSignUpSms)
+        public async Task<IHttpActionResult> SignUp(UserSignUpSMSViewModel userSignUpSms)
         {
             if (ModelState.IsValid)
             {

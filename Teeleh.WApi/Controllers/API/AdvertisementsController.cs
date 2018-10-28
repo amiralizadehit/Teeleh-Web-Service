@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -10,30 +9,58 @@ namespace Teeleh.WApi.Controllers
     public class AdvertisementsController : ApiController
     {
         private AppDbContext db;
+
         public AdvertisementsController()
         {
             db = new AppDbContext();
         }
 
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Advertisement> GetAdvertisements()
+        [HttpGet]
+        public IHttpActionResult GetAdvertisements()
         {
-            var advertisements = db.Advertisements.ToList();
-            return advertisements;
+            var advertisements = db.Advertisements
+                .Select(a => new
+                {
+                    a.Game.Name,
+                    a.Game.Avatar.ImagePath,
+                    a.Platform,
+                    a.CreatedAt,
+                    a.Price
+                }).ToList();
+
+            return Ok(advertisements);
         }
 
-        public async Task<IHttpActionResult> Detail(int Id)
+        /*public async Task<IHttpActionResult> Create(SessionInfoObject sessionInfo)
         {
-            if (ModelState.IsValid)
+
+        }*/
+
+
+        /// <summary>
+        /// Returns an advertisement in a more detailed manner with given id
+        /// </summary>
+        /// <returns>200 : Ok |
+        /// 404 : Advertisement Not Found |
+        /// 400 : Bad Request
+        /// </returns>
+        [Route("api/advertisements/detail/{id}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Detail(int id)
+        {
+            var advertise = await db.Advertisements.Include(g=>g.Game)
+                .Include(l=>l.Location)
+                .Include(p=>p.Platform)
+                .Include(i=>i.UserImage)
+                .Include(e=>e.GamesToExchange)
+                .SingleOrDefaultAsync(a=>a.Id==id);
+
+            if (advertise != null)
             {
-                var advertise = await db.Advertisements.SingleOrDefaultAsync(c => c.Id == Id);
-                if (advertise == null)
-                    return NotFound();
-                else
-                    return Ok(advertise);
+                return Ok(advertise);
             }
 
-            return BadRequest();
+            return NotFound();
         }
 
         // GET api/<controller>/5
@@ -43,18 +70,12 @@ namespace Teeleh.WApi.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
+        public void Post([FromBody] string value) { }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        public void Put(int id, [FromBody] string value) { }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
+        public void Delete(int id) { }
     }
 }

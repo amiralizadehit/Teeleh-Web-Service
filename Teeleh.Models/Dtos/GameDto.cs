@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Teeleh.Models
+namespace Teeleh.Models.Dtos
 {
-
-
-    public class Game
+    class GameDto
     {
         public int Id { get; set; }
 
@@ -14,24 +12,20 @@ namespace Teeleh.Models
         public string Name { get; set; }
 
         [Required]
-        public virtual Image Avatar { get; set; }
+        public Image Avatar { get; set; }
 
-        public virtual List<Platform> SupportedPlatforms { get; set; }
+        public List<Platform> SupportedPlatforms { get; set; }
 
 
         [Required]
         public DateTime ReleaseDate { get; set; }
         public int MetaScore { get; set; }
         public float UserScore { get; set; }
-
-        public virtual List<Genre> Genres { get; set; }
-
+        public List<Genre> Genres { get; set; }
         public string Developer { get; set; }
-
         public string Publisher { get; set; }
         public bool OnlineCapability { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
     }
 }

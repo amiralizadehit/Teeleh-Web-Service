@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Teeleh.Models.Game>
+﻿@model IEnumerable<Teeleh.Models.ViewModels.Website_View_Models.GamePageViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -32,7 +32,7 @@ else
             @foreach (var game in Model)
         {
             <tr>
-                <td><img src="@Url.Content(game.Avatar.ImagePath)" alt="Image"/></td>
+                <td><img src="@game.ImagePath" alt="Image"/></td>
                 <td>
                     @Html.ActionLink(game.Name, "Edit", "Games", new {id = game.Id}, null)
                 </td>
@@ -41,12 +41,12 @@ else
                 <td>@game.UserScore</td>
                 <td>@game.ReleaseDate.ToShortDateString()</td>
                 <td>
-                    @{string genres = string.Join(" - ", game.Genres.Select(x => x.Name));}
+                    @{string genres = string.Join(" - ", game.Genres);}
                     @genres
 
                 </td>
                 <td>
-                    @{string platforms = string.Join(" - ", game.SupportedPlatforms.Select(x => x.Id));}
+                    @{string platforms = string.Join(" - ", game.SupportedPlatforms);}
                     @platforms
                 </td>
                 <td>
