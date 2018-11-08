@@ -16,7 +16,6 @@ namespace Teeleh.Models.Dtos
 
         public List<Platform> SupportedPlatforms { get; set; }
 
-
         [Required]
         public DateTime ReleaseDate { get; set; }
         public int MetaScore { get; set; }

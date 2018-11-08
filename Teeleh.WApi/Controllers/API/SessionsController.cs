@@ -25,6 +25,8 @@ namespace Teeleh.WApi.Controllers
         {
             return Ok(db.Sessions.Select(s=>new
             {
+                s.Id,
+                s.SessionKey,
                 s.ActivationMoment,
                 s.DeactivationMoment,
                 s.State,

@@ -74,6 +74,7 @@
     <Compile Include="AppDbContext.cs" />
     <Compile Include="Dtos\AdvertisementDto.cs" />
     <Compile Include="Dtos\GameDto.cs" />
+    <Compile Include="Dtos\ImageDto.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Genre.cs" />

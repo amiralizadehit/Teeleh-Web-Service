@@ -15,7 +15,8 @@ namespace Teeleh.Models
         public enum ImageType
         {
             AVATAR,
-            COVER
+            COVER,
+            USER_IMAGE
         }
     }
 }
