@@ -1,33 +1,32 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
 using Teeleh.Models;
+
 
 namespace Teeleh.WApi.Controllers.API
 {
     public class GamesController : ApiController
     {
-        private AppDbContext db;
+        private AppDbContext db = new AppDbContext();
 
-        public GamesController()
-        {
-            db = new AppDbContext();
-        }
+       
 
+        [HttpGet]
+        [Route("api/games")]
         public IHttpActionResult GetGames()
         {
-            var games = db.Games.Include(p => p.SupportedPlatforms).Include(g => g.Genres).Include(a => a.Avatar).Select(x=>new
+            var games = db.Games.Select(x => new
             {
-                x.Name,
-                x.ReleaseDate,
-                x.Genres,
-                x.OnlineCapability,
-                x.Developer,
-                x.Publisher,
-                x.Avatar,
-                x.MetaScore,
-                x.UserScore,
-            });
+                Id = x.Id,
+                Name = x.Name,
+                Image = x.Avatar.ImagePath,
+                
+            }).AsEnumerable().Select(v=>new
+            {
+                Id = v.Id,
+                Name = v.Name,
+                Image = Url.Content(v.Image),
+            }).ToList();
 
             return Ok(games);
         }

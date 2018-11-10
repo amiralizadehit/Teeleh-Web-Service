@@ -8,13 +8,25 @@ namespace Teeleh.Models
         {
                 
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Exchange>()
+                .HasRequired(a => a.Advertisement)
+                .WithMany(e=>e.ExchangeGames)
+                .WillCascadeOnDelete(false);
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet <Image> Images { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Exchange> Exchanges { get; set; }
 
     }
 }

@@ -10,7 +10,6 @@ namespace Teeleh.Models
         public ImageType Type { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        
 
         public enum ImageType
         {

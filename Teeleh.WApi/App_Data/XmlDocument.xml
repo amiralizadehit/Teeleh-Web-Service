@@ -481,9 +481,40 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:Teeleh.WApi.Controllers.AdvertisementsController">
+            <summary>
+            This class is used to manage client requests related to advertisements.
+            </summary>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements">
+            <summary>
+            This endpoint returns a list of games which contains their id, name and avatar photo.
+            </summary>
+            <returns>200 : sent 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Create(Teeleh.Models.Dtos.AdvertisementDto)">
+            <summary>
+            This endpoint creates an advertisement with given information.
+            </summary>
+            <returns>200 : Advertisement Created |
+            401 : Session info not found |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Delete(Teeleh.Models.ViewModels.SessionInfoObject,System.Int32)">
+            <summary>
+            This endpoint cancels an advertisement with given id.
+            </summary>
+            <returns>200 : Ok |
+            401 : Session info not found |
+            400 : Bad Request |
+            404 : Advertisement not found
+            </returns>
+        </member>
         <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Detail(System.Int32)">
             <summary>
-            Returns an advertisement in a more detailed manner with given id
+            Returns an advertisement in a more detailed manner with given id.
             </summary>
             <returns>200 : Ok |
             404 : Advertisement Not Found |

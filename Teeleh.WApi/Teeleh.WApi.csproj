@@ -207,6 +207,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\API\AdvertisementsController.cs" />
     <Compile Include="Controllers\API\GamesController.cs" />
+    <Compile Include="Controllers\API\LocationController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\API\SessionsController.cs" />

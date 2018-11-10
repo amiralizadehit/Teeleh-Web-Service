@@ -75,6 +75,7 @@
     <Compile Include="Dtos\AdvertisementDto.cs" />
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
+    <Compile Include="Exchange.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Genre.cs" />
@@ -134,6 +135,46 @@
     <Compile Include="Migrations\201810281726409_ChangingAdTable.cs" />
     <Compile Include="Migrations\201810281726409_ChangingAdTable.Designer.cs">
       <DependentUpon>201810281726409_ChangingAdTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811081844586_ChangingAdTable1.cs" />
+    <Compile Include="Migrations\201811081844586_ChangingAdTable1.Designer.cs">
+      <DependentUpon>201811081844586_ChangingAdTable1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811082002267_ChangingLocationTable.cs" />
+    <Compile Include="Migrations\201811082002267_ChangingLocationTable.Designer.cs">
+      <DependentUpon>201811082002267_ChangingLocationTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811082017541_PopulatingDateForLocation.cs" />
+    <Compile Include="Migrations\201811082017541_PopulatingDateForLocation.Designer.cs">
+      <DependentUpon>201811082017541_PopulatingDateForLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811082032497_AddingLocationToDatabase.cs" />
+    <Compile Include="Migrations\201811082032497_AddingLocationToDatabase.Designer.cs">
+      <DependentUpon>201811082032497_AddingLocationToDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811082051288_AddingLocationToDatabase1.cs" />
+    <Compile Include="Migrations\201811082051288_AddingLocationToDatabase1.Designer.cs">
+      <DependentUpon>201811082051288_AddingLocationToDatabase1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811082101019_AddingLocationToDatabase2.cs" />
+    <Compile Include="Migrations\201811082101019_AddingLocationToDatabase2.Designer.cs">
+      <DependentUpon>201811082101019_AddingLocationToDatabase2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811082117439_AddingTypeToLocation.cs" />
+    <Compile Include="Migrations\201811082117439_AddingTypeToLocation.Designer.cs">
+      <DependentUpon>201811082117439_AddingTypeToLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811102048082_AddingExchangeTable.cs" />
+    <Compile Include="Migrations\201811102048082_AddingExchangeTable.Designer.cs">
+      <DependentUpon>201811102048082_AddingExchangeTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811102114107_FixCaptionFirstLetter.cs" />
+    <Compile Include="Migrations\201811102114107_FixCaptionFirstLetter.Designer.cs">
+      <DependentUpon>201811102114107_FixCaptionFirstLetter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811102200363_SomeChangesToDb.cs" />
+    <Compile Include="Migrations\201811102200363_SomeChangesToDb.Designer.cs">
+      <DependentUpon>201811102200363_SomeChangesToDb.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
@@ -210,6 +251,36 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810281726409_ChangingAdTable.resx">
       <DependentUpon>201810281726409_ChangingAdTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811081844586_ChangingAdTable1.resx">
+      <DependentUpon>201811081844586_ChangingAdTable1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811082002267_ChangingLocationTable.resx">
+      <DependentUpon>201811082002267_ChangingLocationTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811082017541_PopulatingDateForLocation.resx">
+      <DependentUpon>201811082017541_PopulatingDateForLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811082032497_AddingLocationToDatabase.resx">
+      <DependentUpon>201811082032497_AddingLocationToDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811082051288_AddingLocationToDatabase1.resx">
+      <DependentUpon>201811082051288_AddingLocationToDatabase1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811082101019_AddingLocationToDatabase2.resx">
+      <DependentUpon>201811082101019_AddingLocationToDatabase2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811082117439_AddingTypeToLocation.resx">
+      <DependentUpon>201811082117439_AddingTypeToLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811102048082_AddingExchangeTable.resx">
+      <DependentUpon>201811102048082_AddingExchangeTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811102114107_FixCaptionFirstLetter.resx">
+      <DependentUpon>201811102114107_FixCaptionFirstLetter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811102200363_SomeChangesToDb.resx">
+      <DependentUpon>201811102200363_SomeChangesToDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,6 @@ namespace Teeleh.Models.ViewModels
         public string Name { get; set; }
 
        // [DisplayName("Upload avatar photo")]
-        [Required]
         public HttpPostedFileBase ImageFile { get; set; }
 
 
@@ -46,11 +45,11 @@ namespace Teeleh.Models.ViewModels
         public MultiSelectList Genres { get; set; }
 
         [Required]
-        [StringLength(15, ErrorMessage="You can not enter a developer with more than 15 characters")]
+        [StringLength(25, ErrorMessage="You can not enter a developer with more than 25 characters")]
         public string Developer { get; set; }
 
         [Required]
-        [StringLength(15, ErrorMessage = "You can not enter a publisher with more than 15 characters")]
+        [StringLength(25, ErrorMessage = "You can not enter a publisher with more than 25 characters")]
         public string Publisher { get; set; }
 
         [Required]

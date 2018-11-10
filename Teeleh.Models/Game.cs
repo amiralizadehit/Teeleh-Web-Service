@@ -18,6 +18,9 @@ namespace Teeleh.Models
 
         public virtual List<Platform> SupportedPlatforms { get; set; }
 
+        public List<Advertisement> Advertisements { get; set; }
+
+        public List<Exchange> ToExchangeWith { get; set; }
 
         [Required]
         public DateTime ReleaseDate { get; set; }

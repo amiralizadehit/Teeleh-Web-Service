@@ -12,15 +12,15 @@ namespace Teeleh.Models
         public virtual Platform Platform { get; set; }
         public virtual Location Location { get; set; }
         public virtual Image UserImage { get; set; }
-        public int UserImageId { get; set; }
         public int GameId { get; set; }
         public int LocationId { get; set; }
         public string PlatformId { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string caption { get; set; }
+        public string Caption { get; set; }
         public AdvertisementType AdType { get; set; }
-        public virtual List<Game> GamesToExchange { get; set; }
+        public virtual List<Exchange> ExchangeGames { get; set; }
+        public bool isDeleted { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
