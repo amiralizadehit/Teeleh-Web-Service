@@ -19,6 +19,7 @@ namespace Teeleh.WApi.Controllers.API
         {
             var provinces = db.Locations.Where(l=>l.Parent==null && l.Type==Location.LocationType.PROVINCE).Select(b=>new
             {
+                Id = b.Id,
                 Name = b.Name
             });
 
@@ -33,6 +34,7 @@ namespace Teeleh.WApi.Controllers.API
                 c.ParentId == provinceId && c.Type==Location.LocationType.CITY)
                 .Select(b => new
             {
+                Id = b.Id,
                 Name = b.Name
             });
             return Ok(cities);
@@ -46,6 +48,7 @@ namespace Teeleh.WApi.Controllers.API
                 c.Type==Location.LocationType.CITY)
                 .Select(b => new
             {
+                Id = b.Id,
                 Name = b.Name
             });
             return Ok(cities);
@@ -59,6 +62,7 @@ namespace Teeleh.WApi.Controllers.API
                 g.ParentId == cityId && g.Type==Location.LocationType.REGION)
                 .Select(b => new
             {
+                Id = b.Id,
                 Name = b.Name
             });
             return Ok(regions);

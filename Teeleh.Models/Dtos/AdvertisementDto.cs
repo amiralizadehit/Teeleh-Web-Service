@@ -11,7 +11,7 @@ namespace Teeleh.Models.Dtos
         public int GameId { get; set; }
         public string PlatformId { get; set; }
         public int LocationId { get; set; }
-        public byte[] UserImage { get; set; }
+        public string UserImage { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Caption { get; set; }

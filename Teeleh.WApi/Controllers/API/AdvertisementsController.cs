@@ -67,7 +67,9 @@ namespace Teeleh.WApi.Controllers
                 {
                     var user = session.User;
                     Image image;
-                    using (MemoryStream mStream = new MemoryStream(advertisement.UserImage))
+
+                    var byteArray = System.Convert.FromBase64String(advertisement.UserImage);
+                    using (MemoryStream mStream = new MemoryStream(byteArray))
                     {
                         image = Image.FromStream(mStream);
                     }
@@ -90,8 +92,7 @@ namespace Teeleh.WApi.Controllers
                     db.Images.Add(imageInDb);
                     await db.SaveChangesAsync();
 
-                    var gamesToExchange =
-                        db.Games.Where(g => advertisement.ExchangeGames.Contains(g.Id)).ToList(); //List
+
 
                     var new_advertisement = new Advertisement()
                     {
@@ -110,14 +111,14 @@ namespace Teeleh.WApi.Controllers
 
                     await db.SaveChangesAsync();
 
-                    if (gamesToExchange.Count != 0) //we have some games to exchange
+                    if (advertisement.ExchangeGames.Count != 0) //we have some games to exchange
                     {
-                        foreach (var game in gamesToExchange)
+                        foreach (var game in advertisement.ExchangeGames)
                         {
                             var newExchange = new Exchange()
                             {
                                 AdvertisementId = new_advertisement.Id,
-                                GameId = game.Id
+                                GameId = game
                             };
                             db.Exchanges.Add(newExchange);
                         }
