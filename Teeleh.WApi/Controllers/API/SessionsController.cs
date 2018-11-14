@@ -23,6 +23,7 @@ namespace Teeleh.WApi.Controllers
         [HttpGet]
         public IHttpActionResult GetSessions()
         {
+
             return Ok(db.Sessions.Select(s=>new
             {
                 s.Id,

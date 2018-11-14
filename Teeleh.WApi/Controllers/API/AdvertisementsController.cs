@@ -38,11 +38,18 @@ namespace Teeleh.WApi.Controllers
                 .Select(a => new
                 {
                     Game = a.Game.Name,
-                    Avatar = Url.Content(a.Game.Avatar.ImagePath),
+                    Avatar = a.Game.Avatar.ImagePath,
                     Platform = a.Platform.Name,
                     Adtype = a.AdType,
                     CreatedAt = a.CreatedAt,
                     Price = a.Price
+                }).AsEnumerable().Select(v=>new
+                {
+                    Game = v.Game,
+                    Avatar = Url.Content(v.Avatar),
+                    Adtype = v.Adtype,
+                    Price = v.Price,
+                    CreateAt = v.CreatedAt,
                 }).ToList();
 
             return Ok(advertisements);
@@ -62,24 +69,24 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var session = await
-                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisement.SessionInfo.SessionKey);
+                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisement.SessionInfo.SessionKey &&
+                                                          s.State==SessionState.Actived);
                 if (session != null)
                 {
                     var user = session.User;
                     Image image;
 
                     var byteArray = System.Convert.FromBase64String(advertisement.UserImage);
-                    using (MemoryStream mStream = new MemoryStream(byteArray))
-                    {
-                        image = Image.FromStream(mStream);
-                    }
-
                     Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
-                    string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id);
+                    string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
                     string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
                     string imagePath = folderPath + fileName;
                     string dbPath = "~/Image/Advertisements/" + session.User.Id + fileName;
-                    image.Save(imagePath, ImageFormat.Jpeg);
+                    using (MemoryStream mStream = new MemoryStream(byteArray))
+                    {
+                        image = Image.FromStream(mStream);
+                        image.Save(imagePath, ImageFormat.Jpeg);
+                    }
 
                     var imageInDb = new Teeleh.Models.Image()
                     {
@@ -106,6 +113,9 @@ namespace Teeleh.WApi.Controllers
                         PlatformId = advertisement.PlatformId,
                         Caption = advertisement.Caption,
                         UserImage = imageInDb,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                        
                     };
                     db.Advertisements.Add(new_advertisement);
 
@@ -125,6 +135,7 @@ namespace Teeleh.WApi.Controllers
                     }
 
                     await db.SaveChangesAsync();
+                    return Ok(new_advertisement.Id);
                 }
 
                 return Unauthorized();
@@ -170,7 +181,7 @@ namespace Teeleh.WApi.Controllers
         /// <summary>
         /// Returns an advertisement in a more detailed manner with given id.
         /// </summary>
-        /// <returns>200 : Ok |
+        /// <returns>200 : Ok |s
         /// 404 : Advertisement Not Found |
         /// 400 : Bad Request
         /// </returns>
@@ -178,17 +189,13 @@ namespace Teeleh.WApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Detail(int id)
         {
-            var advertise = await db.Advertisements.Include(g => g.Game)
-                .Include(l => l.Location)
-                .Include(p => p.Platform)
-                .Include(i => i.UserImage)
-                .Include(e => e.ExchangeGames)
-                .SingleOrDefaultAsync(a => a.Id == id);
+            //var advertise = await db.Advertisements.Where(f=>f.Id==id && f.isDeleted==false).Select(a => new
+           
 
-            if (advertise != null)
+            /*if (advertise != null)
             {
                 return Ok(advertise);
-            }
+            }*/
 
             return NotFound();
         }

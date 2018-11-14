@@ -6,7 +6,7 @@ namespace Teeleh.Models.Dtos
 {
     public class AdvertisementDto
     {
-        public SessionInfoObject SessionInfo { get; set; }
+        public SessionInfoObject SessionInfo { get; set; } = new SessionInfoObject();
         public float Price { get; set; }
         public int GameId { get; set; }
         public string PlatformId { get; set; }

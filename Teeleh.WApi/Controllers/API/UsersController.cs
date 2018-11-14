@@ -29,6 +29,7 @@ namespace Teeleh.WApi.Controllers
         [HttpGet]
         public IHttpActionResult GetUsers()
         {
+            
             return Ok(db.Users.Select(q => new
             {
                 q.FirstName,
