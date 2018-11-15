@@ -516,7 +516,7 @@
             <summary>
             Returns an advertisement in a more detailed manner with given id.
             </summary>
-            <returns>200 : Ok |
+            <returns>200 : Ok |s
             404 : Advertisement Not Found |
             400 : Bad Request
             </returns>
