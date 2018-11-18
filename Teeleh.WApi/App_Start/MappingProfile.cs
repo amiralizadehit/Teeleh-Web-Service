@@ -10,8 +10,8 @@ namespace Teeleh.WApi.App_Start
         {
            var AdConfig_1 = new MapperConfiguration(cfg=>
            {
-               cfg.CreateMap<Advertisement, AdvertisementDto>();
-               cfg.CreateMap<AdvertisementDto, Advertisement>();
+               cfg.CreateMap<Advertisement, AdvertisementCreateDto>();
+               cfg.CreateMap<AdvertisementCreateDto, Advertisement>();
            });
         }
     }

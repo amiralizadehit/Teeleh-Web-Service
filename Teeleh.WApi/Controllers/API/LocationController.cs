@@ -27,7 +27,7 @@ namespace Teeleh.WApi.Controllers.API
         }
 
         [HttpGet]
-        [Route("api/locations/getcity/{proviceId}")]
+        [Route("api/locations/getcity/{provinceId}")]
         public IHttpActionResult GetCity(int provinceId)
         {
             var cities = db.Locations.Where(c => 

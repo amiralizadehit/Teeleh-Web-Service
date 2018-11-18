@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.Remoting.Channels;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Teeleh.Models
 {
@@ -17,11 +19,6 @@ namespace Teeleh.Models
             AVATAR,
             COVER,
             USER_IMAGE
-        }
-
-        public string UrlContent(string imagePath)
-        {
-            return UrlContent(imagePath);
         }
     }
 }

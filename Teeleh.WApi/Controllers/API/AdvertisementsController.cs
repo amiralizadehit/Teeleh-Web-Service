@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Drawing.Imaging;
 using System.IO;
@@ -26,7 +27,7 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// This endpoint returns a list of games which contains their id, name and avatar photo.
+        /// This endpoint returns a list of games.
         /// </summary>
         /// <returns>200 : sent 
         /// </returns>
@@ -41,22 +42,58 @@ namespace Teeleh.WApi.Controllers
                     Avatar = a.Game.Avatar.ImagePath,
                     Platform = a.Platform.Name,
                     Adtype = a.AdType,
+                    Caption = a.Caption,
+                    GameRegion = a.GameReg,
+                    Location = new
+                    {
+                        Province = a.LocationProvince.Name,
+                        City = a.LocationCity.Name,
+                        Region = a.LocationRegion.Name
+                    },
                     CreatedAt = a.CreatedAt,
-                    Price = a.Price
+                    Price = a.Price,
+                    ExchangeGames = a.ExchangeGames.Select(g=>new
+                    {
+                        g.Game.Name,
+                        g.Game.Avatar
+                    })
+
                 }).AsEnumerable().Select(v=>new
                 {
                     Game = v.Game,
                     Avatar = Url.Content(v.Avatar),
+                    Caption = v.Caption,
                     Adtype = v.Adtype,
+                    GameRegion = v.GameRegion,
+                    Location = v.Location,
+                    Platform = v.Platform,
                     Price = v.Price,
                     CreateAt = v.CreatedAt,
+                    ExchangeGames = v.ExchangeGames.Select(g=>new
+                    {
+                        Name = g.Name,
+                        Avatar = Url.Content(g.Avatar.ImagePath)
+                    })
                 }).ToList();
 
             return Ok(advertisements);
         }
 
+
         /// <summary>
-        /// This endpoint creates an advertisement with given information.
+        /// This endpoint returns a list of games.
+        /// </summary>
+        /// <returns>200 : sent 
+        /// </returns>
+        /*[HttpPost]
+        [Route("api/advertisements/feed/")]
+        public IHttpActionResult GetAdvertisements(FilterConfig )
+        {
+
+        }*/
+
+        /// <summary>
+        /// This endpoint creates an advertisementCreate with given information.
         /// </summary>
         /// <returns>200 : Advertisement Created |
         /// 401 : Session info not found |
@@ -64,19 +101,20 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/advertisements/create")]
-        public async Task<IHttpActionResult> Create(AdvertisementDto advertisement)
+        public async Task<IHttpActionResult> Create(AdvertisementCreateDto advertisementCreate)
         {
             if (ModelState.IsValid)
             {
                 var session = await
-                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisement.SessionInfo.SessionKey &&
+                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisementCreate.SessionInfo.SessionKey &&
+                                                          s.Id == advertisementCreate.SessionInfo.SessionId &&
                                                           s.State==SessionState.Actived);
                 if (session != null)
                 {
                     var user = session.User;
                     Image image;
 
-                    var byteArray = System.Convert.FromBase64String(advertisement.UserImage);
+                    var byteArray = System.Convert.FromBase64String(advertisementCreate.UserImage);
                     Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
                     string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
                     string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
@@ -104,14 +142,16 @@ namespace Teeleh.WApi.Controllers
                     var new_advertisement = new Advertisement()
                     {
                         User = user,
-                        AdType = (Advertisement.AdvertisementType) advertisement.AdType,
-                        GameId = advertisement.GameId,
-                        Latitude = advertisement.Latitude,
-                        Longitude = advertisement.Longitude,
-                        LocationId = advertisement.LocationId,
-                        Price = advertisement.Price,
-                        PlatformId = advertisement.PlatformId,
-                        Caption = advertisement.Caption,
+                        AdType = (Advertisement.AdvertisementType) advertisementCreate.AdType,
+                        GameId = advertisementCreate.GameId,
+                        Latitude = advertisementCreate.Latitude,
+                        Longitude = advertisementCreate.Longitude,
+                        LocationRegionId = advertisementCreate.LocationRegionId,
+                        LocationCityId = advertisementCreate.LocationCityId,
+                        LocationProvinceId = advertisementCreate.LocationProvinceId,
+                        Price = advertisementCreate.Price,
+                        PlatformId = advertisementCreate.PlatformId,
+                        Caption = advertisementCreate.Caption,
                         UserImage = imageInDb,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
@@ -121,9 +161,9 @@ namespace Teeleh.WApi.Controllers
 
                     await db.SaveChangesAsync();
 
-                    if (advertisement.ExchangeGames.Count != 0) //we have some games to exchange
+                    if (advertisementCreate.ExchangeGames.Count != 0) //we have some games to exchange
                     {
-                        foreach (var game in advertisement.ExchangeGames)
+                        foreach (var game in advertisementCreate.ExchangeGames)
                         {
                             var newExchange = new Exchange()
                             {
@@ -145,7 +185,7 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// This endpoint cancels an advertisement with given id.
+        /// This endpoint cancels an advertisementCreate with given id.
         /// </summary>
         /// <returns>200 : Ok |
         /// 401 : Session info not found |
@@ -153,15 +193,19 @@ namespace Teeleh.WApi.Controllers
         /// 404 : Advertisement not found
         /// </returns>
         [HttpPost]
-        [Route("api/advertisements/cancel/{id}")]
-        public async Task<IHttpActionResult> Delete(SessionInfoObject session, int id)
+        [Route("api/advertisements/cancel")]
+        public async Task<IHttpActionResult> Delete(IDPairDto pair)
         {
             if (ModelState.IsValid)
             {
-                var sessionInDb = await db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == session.SessionKey);
+                
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == pair.session.SessionKey &&
+                                                          s.Id == pair.session.SessionId &&
+                                                          s.State == SessionState.Actived);
                 if (sessionInDb != null)
                 {
-                    var advertisementInDb = db.Advertisements.SingleOrDefault(a => a.Id == id);
+                    var advertisementInDb = db.Advertisements.SingleOrDefault(a => a.Id == pair.Id);
                     if (advertisementInDb != null)
                     {
                         advertisementInDb.isDeleted = true;
@@ -179,25 +223,34 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// Returns an advertisement in a more detailed manner with given id.
+        /// Returns an advertisementCreate in a more detailed manner with given id.
         /// </summary>
         /// <returns>200 : Ok |s
         /// 404 : Advertisement Not Found |
         /// 400 : Bad Request
         /// </returns>
-        [Route("api/advertisements/detail/{id}")]
+        /*[Route("api/advertisements/detail/{id}")]
         [HttpGet]
         public async Task<IHttpActionResult> Detail(int id)
         {
-            //var advertise = await db.Advertisements.Where(f=>f.Id==id && f.isDeleted==false).Select(a => new
-           
+            var advertisementInDb = db.Advertisements.Where(a => a.Id == id && a.isDeleted == false).
+                Select(f=>new
+                {
+                    UserImage = f.UserImage.ImagePath,
+                    Caption = f.Caption,
+                    Map = new
+                    {
+                        Latitude = f.Latitude,
+                        Longitude = f.Longitude,
+                    },
+                    Adtype = f.AdType,
+                    Location = f.LocationRegion,
+                    Platform = f.Platform.Name,
+                    Similar = db.Advertisements.Where(a=>a.GameId==f.GameId)
 
-            /*if (advertise != null)
-            {
-                return Ok(advertise);
-            }*/
+                });
 
             return NotFound();
-        }
+        }*/
     }
 }

@@ -166,10 +166,11 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
+
         /////////////////////////  User SignUp ////////////////////////////
 
         /// <summary>
-        /// It is used for user sign up with given information. (uses SMS for Two-Factor authentication) 
+        /// It is used for user sign up with given information. (uses SMS/Email for Two-Factor authentication) 
         /// </summary>
         /// <returns>200 : Ok (User Created - SMS Sent - SessionId Returned) |
         /// 500 : Internal Server Error (SMS Not Sent) |
@@ -264,9 +265,12 @@ namespace Teeleh.WApi.Controllers
                     NotificationHelper.CodeVerificationEmail(token, receptorMail, NotificationHelper.EmailMode.VERIFICATION);
                 }
 
-                if (NotificationHelper.SendSMS_K(token, receptorPhone, NotificationHelper.SMSMode.VERIFICATION) != null) //SMS
+                if (receptorPhone!=null)
                 {
-                    return InternalServerError();
+                    if (NotificationHelper.SendSMS_K(token, receptorPhone, NotificationHelper.SMSMode.VERIFICATION) != null) //SMS
+                    {
+                        return InternalServerError();
+                    }
                 }
 
                 return Json(new
@@ -376,21 +380,34 @@ namespace Teeleh.WApi.Controllers
 
 
         /// <summary>
-        /// It is used to send password recovery code via SMS to users who have forgotten their passwords with given phone number.
+        /// It is used to send password recovery code via SMS/Email to users who have forgotten their passwords with given phone number/Email.
         /// </summary>
         /// <param name="phoneNumber"></param>
         /// <returns>200 : Ok (SMS Sent) |
         /// 505 : Internal Server Error (SMS Not Sent) |
+        /// 409 : Not Confirmed User |
         /// 404 : User Not Found |
         /// 400 : Bad Request
         /// </returns>
         [HttpGet]
-        [Route("api/users/forgotpassword/{phoneNumber}")]
-        public async Task<IHttpActionResult> ForgotPassword(string phoneNumber)
+        [Route("api/users/forgotpassword/{phoneOrMail}")]
+        public async Task<IHttpActionResult> ForgotPassword(string phoneOrMail)
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == phoneNumber);
+                User user = null;
+                bool isEmail = false;
+                if (phoneOrMail.Contains("@"))
+                {
+                     user = await db.Users.SingleOrDefaultAsync(q => q.Email == phoneOrMail);
+                    isEmail = true;
+                }
+                else
+                {
+                     user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == phoneOrMail);
+                    isEmail = false;
+                }
+                
                 var randomNounce = RandomHelper.RandomInt(10000, 99999);
 
                 if (user == null)
@@ -398,25 +415,32 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //user not found
                 }
 
-                var email = user.Email;
-                user.ForgetPassCode = randomNounce;
-
-                await db.SaveChangesAsync();
-
-                var receptor = phoneNumber;
-                var token = randomNounce.ToString();
-
-                if (email != null) //mail
+                if (user.State==SessionState.Actived)
                 {
-                    NotificationHelper.CodeVerificationEmail(token, email, NotificationHelper.EmailMode.PASSWORD_RECOVERY);
+                    var email = user.Email;
+                    user.ForgetPassCode = randomNounce;
+
+                    await db.SaveChangesAsync();
+
+                    var receptor = phoneOrMail;
+                    var token = randomNounce.ToString();
+
+                    if (isEmail) //mail
+                    {
+                        NotificationHelper.CodeVerificationEmail(token, email, NotificationHelper.EmailMode.PASSWORD_RECOVERY);
+                    }
+                    else
+                    {
+                        if (NotificationHelper.SendSMS_K(token, receptor,NotificationHelper.SMSMode.PASSWORD_RECOVERY) != null) //SMS
+                        {
+                            return InternalServerError();
+                        }
+                    }
+
+                    return Ok();
                 }
 
-                if (NotificationHelper.SendSMS_K(token, receptor,NotificationHelper.SMSMode.PASSWORD_RECOVERY) != null) //SMS
-                {
-                    return InternalServerError();
-                }
-
-                return Ok();
+                return Conflict(); //Not Confirmed User
             }
 
             return BadRequest();
@@ -425,11 +449,12 @@ namespace Teeleh.WApi.Controllers
 
 
         /// <summary>
-        /// It is used to send password recovery code via Email to users who have forgotten their passwords with given phone number.
+        /// It is used to send password recovery code via Email to users who have forgotten their passwords with given Email.
         /// </summary>
         /// <param name="email"></param>
         /// <returns>200 : Ok (Email Sent) |
         /// 404 : User Not Found |
+        /// 409 : Not Confirmed User |
         /// 400 : Bad Request
         /// </returns>
         [HttpGet]
@@ -446,15 +471,20 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                user.ForgetPassCode = randomNounce;
+                if (user.State==SessionState.Actived)
+                {
+                    user.ForgetPassCode = randomNounce;
 
-                await db.SaveChangesAsync();
+                    await db.SaveChangesAsync();
 
-                var receptor = email;
-                var token = randomNounce.ToString();
-                NotificationHelper.CodeVerificationEmail(token, receptor, NotificationHelper.EmailMode.PASSWORD_RECOVERY);
+                    var receptor = email;
+                    var token = randomNounce.ToString();
+                    NotificationHelper.CodeVerificationEmail(token, receptor, NotificationHelper.EmailMode.PASSWORD_RECOVERY);
 
-                return Ok();
+                    return Ok();
+                }
+
+                return Conflict();
             }
 
             return BadRequest();

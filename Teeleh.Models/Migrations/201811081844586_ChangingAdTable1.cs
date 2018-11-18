@@ -12,26 +12,26 @@ namespace Teeleh.Models.Migrations
             DropIndex("dbo.Advertisements", new[] { "Game_Id" });
             DropIndex("dbo.Advertisements", new[] { "Location_Id" });
             RenameColumn(table: "dbo.Advertisements", name: "Game_Id", newName: "GameId");
-            RenameColumn(table: "dbo.Advertisements", name: "Location_Id", newName: "LocationId");
+            RenameColumn(table: "dbo.Advertisements", name: "Location_Id", newName: "LocationRegionId");
             RenameColumn(table: "dbo.Advertisements", name: "Platform_Id", newName: "PlatformId");
             AlterColumn("dbo.Advertisements", "GameId", c => c.Int(nullable: false));
-            AlterColumn("dbo.Advertisements", "LocationId", c => c.Int(nullable: false));
+            AlterColumn("dbo.Advertisements", "LocationRegionId", c => c.Int(nullable: false));
             CreateIndex("dbo.Advertisements", "GameId");
-            CreateIndex("dbo.Advertisements", "LocationId");
+            CreateIndex("dbo.Advertisements", "LocationRegionId");
             AddForeignKey("dbo.Advertisements", "GameId", "dbo.Games", "Id", cascadeDelete: true);
-            AddForeignKey("dbo.Advertisements", "LocationId", "dbo.Locations", "Id", cascadeDelete: true);
+            AddForeignKey("dbo.Advertisements", "LocationRegionId", "dbo.Locations", "Id", cascadeDelete: true);
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.Advertisements", "LocationId", "dbo.Locations");
+            DropForeignKey("dbo.Advertisements", "LocationRegionId", "dbo.Locations");
             DropForeignKey("dbo.Advertisements", "GameId", "dbo.Games");
-            DropIndex("dbo.Advertisements", new[] { "LocationId" });
+            DropIndex("dbo.Advertisements", new[] { "LocationRegionId" });
             DropIndex("dbo.Advertisements", new[] { "GameId" });
-            AlterColumn("dbo.Advertisements", "LocationId", c => c.Int());
+            AlterColumn("dbo.Advertisements", "LocationRegionId", c => c.Int());
             AlterColumn("dbo.Advertisements", "GameId", c => c.Int());
             RenameColumn(table: "dbo.Advertisements", name: "PlatformId", newName: "Platform_Id");
-            RenameColumn(table: "dbo.Advertisements", name: "LocationId", newName: "Location_Id");
+            RenameColumn(table: "dbo.Advertisements", name: "LocationRegionId", newName: "Location_Id");
             RenameColumn(table: "dbo.Advertisements", name: "GameId", newName: "Game_Id");
             CreateIndex("dbo.Advertisements", "Location_Id");
             CreateIndex("dbo.Advertisements", "Game_Id");

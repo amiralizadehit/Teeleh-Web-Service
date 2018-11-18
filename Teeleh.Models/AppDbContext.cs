@@ -15,6 +15,11 @@ namespace Teeleh.Models
                 .HasRequired(a => a.Advertisement)
                 .WithMany(e=>e.ExchangeGames)
                 .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Advertisement>()
+                .HasRequired(g=>g.LocationProvince)
+                .WithMany(e=>e.Advertisements)
+                .WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
         }
 

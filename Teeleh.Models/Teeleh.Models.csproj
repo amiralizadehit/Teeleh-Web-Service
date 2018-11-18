@@ -74,8 +74,11 @@
     <Compile Include="Advertisement.cs" />
     <Compile Include="AppDbContext.cs" />
     <Compile Include="CustomValidation\PhoneOrEmail.cs" />
-    <Compile Include="Dtos\AdvertisementDto.cs" />
+    <Compile Include="Dtos\AdvertisementCreateDto.cs" />
+    <Compile Include="Dtos\AdvertisementPageDto.cs" />
+    <Compile Include="Dtos\Filter.cs" />
     <Compile Include="Dtos\GameDto.cs" />
+    <Compile Include="Dtos\IDPairDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="Image.cs" />
@@ -181,6 +184,14 @@
     <Compile Include="Migrations\201811181431564_PhoneNumbeNotRequired.cs" />
     <Compile Include="Migrations\201811181431564_PhoneNumbeNotRequired.Designer.cs">
       <DependentUpon>201811181431564_PhoneNumbeNotRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811181615587_ChangingAdvertisementModel.cs" />
+    <Compile Include="Migrations\201811181615587_ChangingAdvertisementModel.Designer.cs">
+      <DependentUpon>201811181615587_ChangingAdvertisementModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811182019137_ChangingLocationInAdvertisement.cs" />
+    <Compile Include="Migrations\201811182019137_ChangingLocationInAdvertisement.Designer.cs">
+      <DependentUpon>201811182019137_ChangingLocationInAdvertisement.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
@@ -290,6 +301,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811181431564_PhoneNumbeNotRequired.resx">
       <DependentUpon>201811181431564_PhoneNumbeNotRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811181615587_ChangingAdvertisementModel.resx">
+      <DependentUpon>201811181615587_ChangingAdvertisementModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811182019137_ChangingLocationInAdvertisement.resx">
+      <DependentUpon>201811182019137_ChangingLocationInAdvertisement.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
