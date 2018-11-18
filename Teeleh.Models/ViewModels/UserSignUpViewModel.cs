@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Teeleh.Models.CustomValidation;
+
 
 namespace Teeleh.Models.ViewModels
 {
-    public class UserSignUpSMSViewModel
+    public class UserSignUpViewModel
     {
-        [Required]
         [StringLength(11)]
+        [Phone]
+        [PhoneOrEmail]
         public string PhoneNumber { get; set; }
 
         [Required]

@@ -106,9 +106,26 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
+                User user = null;
                 var hashPassword = HasherHelper.sha256_hash(loginInfo.Password);
-                User user = await db.Users.SingleOrDefaultAsync(q =>
-                    q.PhoneNumber == loginInfo.PhoneNumber && q.Password == hashPassword);
+                if (!string.IsNullOrEmpty(loginInfo.Email))
+                {
+                    
+                    user = await db.Users.SingleOrDefaultAsync(q =>
+                        q.Email == loginInfo.Email && q.Password == hashPassword);
+                }
+                else if (!string.IsNullOrEmpty(loginInfo.PhoneNumber))
+                {
+                    user = await db.Users.SingleOrDefaultAsync(q =>
+                        q.PhoneNumber == loginInfo.PhoneNumber && q.Password == hashPassword);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+               
+
+
                 if (user == null) //Not Registered User - Use Sign up form
                 {
                     return NotFound();
@@ -161,11 +178,19 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/users/signup")]
-        public async Task<IHttpActionResult> SignUp(UserSignUpSMSViewModel userSignUpSms)
+        public async Task<IHttpActionResult> SignUp(UserSignUpViewModel userSignUp)
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUpSms.PhoneNumber);
+                User user = null;
+
+                if(!string.IsNullOrEmpty(userSignUp.PhoneNumber))
+                    user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUp.PhoneNumber);
+                else if (!string.IsNullOrEmpty(userSignUp.Email))
+                    user = await db.Users.SingleOrDefaultAsync(q => q.Email == userSignUp.Email);
+                else
+                    return BadRequest();
+
                 Session session = null;
                 var randomNounce = RandomHelper.RandomInt(10000, 99999);
                 
@@ -173,11 +198,11 @@ namespace Teeleh.WApi.Controllers
                 {
                     user = new User()
                     {
-                        FirstName = userSignUpSms.FirstName,
-                        LastName = userSignUpSms.LastName,
-                        PhoneNumber = userSignUpSms.PhoneNumber,
-                        Email = userSignUpSms.Email,
-                        Password = HasherHelper.sha256_hash(userSignUpSms.Password),
+                        FirstName = userSignUp.FirstName,
+                        LastName = userSignUp.LastName,
+                        PhoneNumber = userSignUp.PhoneNumber,
+                        Email = userSignUp.Email,
+                        Password = HasherHelper.sha256_hash(userSignUp.Password),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
                         State = SessionState.Pending
@@ -191,7 +216,7 @@ namespace Teeleh.WApi.Controllers
                         State = SessionState.Pending,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
-                        UniqueCode = userSignUpSms.UniqueCode,
+                        UniqueCode = userSignUp.UniqueCode,
                         User = user
                     };
 
@@ -204,7 +229,7 @@ namespace Teeleh.WApi.Controllers
                     if (user.State == SessionState.Pending) //multiple requests
                     {
                         db.Sessions
-                            .Where(q => q.UniqueCode == userSignUpSms.UniqueCode)
+                            .Where(q => q.UniqueCode == userSignUp.UniqueCode)
                             .Where(q => q.State == SessionState.Pending)
                             .ToList()
                             .ForEach(q => q.State = SessionState.Abolished);
@@ -215,7 +240,7 @@ namespace Teeleh.WApi.Controllers
                             State = SessionState.Pending,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
-                            UniqueCode = userSignUpSms.UniqueCode,
+                            UniqueCode = userSignUp.UniqueCode,
                             User = user
                         };
 
@@ -230,8 +255,8 @@ namespace Teeleh.WApi.Controllers
                     }
                 }
 
-                var receptorPhone = userSignUpSms.PhoneNumber;
-                var receptorMail = userSignUpSms.Email;
+                var receptorPhone = userSignUp.PhoneNumber;
+                var receptorMail = userSignUp.Email;
                 var token = randomNounce.ToString();
 
                 if (receptorMail != null) //Mail
@@ -253,6 +278,7 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
+
         /// <summary>
         /// It is used for user sign up with given information. (uses Email for Two-Factor authentication)
         /// </summary>
@@ -266,7 +292,7 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUpEmail.PhoneNumber);
+                User user = await db.Users.SingleOrDefaultAsync(q => q.Email == userSignUpEmail.Email);
                 Session session = null;
                 var randomNounce = RandomHelper.RandomInt(10000, 99999);
 

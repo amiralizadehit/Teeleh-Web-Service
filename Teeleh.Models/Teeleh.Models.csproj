@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Advertisement.cs" />
     <Compile Include="AppDbContext.cs" />
+    <Compile Include="CustomValidation\PhoneOrEmail.cs" />
     <Compile Include="Dtos\AdvertisementDto.cs" />
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
@@ -177,6 +178,10 @@
     <Compile Include="Migrations\201811102200363_SomeChangesToDb.Designer.cs">
       <DependentUpon>201811102200363_SomeChangesToDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811181431564_PhoneNumbeNotRequired.cs" />
+    <Compile Include="Migrations\201811181431564_PhoneNumbeNotRequired.Designer.cs">
+      <DependentUpon>201811181431564_PhoneNumbeNotRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
@@ -188,7 +193,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PendingSessionViewModel.cs" />
     <Compile Include="ViewModels\UserSignUpEmailViewModel.cs" />
-    <Compile Include="ViewModels\UserSignUpSMSViewModel.cs" />
+    <Compile Include="ViewModels\UserSignUpViewModel.cs" />
     <Compile Include="ViewModels\SessionInfoObject.cs" />
     <Compile Include="ViewModels\UserInfoViewModel.cs" />
     <Compile Include="ViewModels\ValidDate.cs" />
@@ -282,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811102200363_SomeChangesToDb.resx">
       <DependentUpon>201811102200363_SomeChangesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811181431564_PhoneNumbeNotRequired.resx">
+      <DependentUpon>201811181431564_PhoneNumbeNotRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

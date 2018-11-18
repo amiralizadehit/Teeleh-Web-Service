@@ -17,7 +17,7 @@ namespace Teeleh.Models
         [StringLength(30)]
         public string LastName { get; set; }
 
-        [Required]
+
         [StringLength(11)]
         public string PhoneNumber { get; set; }
 
