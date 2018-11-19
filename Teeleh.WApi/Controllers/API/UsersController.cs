@@ -96,7 +96,7 @@ namespace Teeleh.WApi.Controllers
         /// It is used for user login.
         /// </summary>
         /// <returns>200 : Ok (User Logged in Successfully - Session Info Sent) |
-        /// 406 : Not Confirmed User |
+        /// 409 : Not Confirmed User |
         /// 400 : Bad Request |
         /// 404 : Not Registered User
         /// </returns>
