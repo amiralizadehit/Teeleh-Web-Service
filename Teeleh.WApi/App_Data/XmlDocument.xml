@@ -512,6 +512,34 @@
             404 : Advertisement not found
             </returns>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.API.LocationController.GetProvince">
+            <summary>
+            This endpoint returns a list of provinces.
+            </summary>
+            <returns>200 : sent 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.LocationController.GetCity(System.Int32)">
+            <summary>
+            This endpoint returns a list of cities inside a province with given Id.
+            </summary>
+            <returns>200 : sent 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.LocationController.GetCity">
+            <summary>
+            This endpoint returns a list of cities which have no provinces.
+            </summary>
+            <returns>200 : sent 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.LocationController.GetRegion(System.Int32)">
+            <summary>
+            This endpoint returns a list of regions inside a city with given Id.
+            </summary>
+            <returns>200 : sent 
+            </returns>
+        </member>
         <member name="T:Teeleh.WApi.Controllers.GamesController">
             <summary>
             This class is used to manage games

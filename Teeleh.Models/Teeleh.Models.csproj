@@ -193,6 +193,10 @@
     <Compile Include="Migrations\201811182019137_ChangingLocationInAdvertisement.Designer.cs">
       <DependentUpon>201811182019137_ChangingLocationInAdvertisement.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811201822249_PopulatingSomeRegionForLocation.cs" />
+    <Compile Include="Migrations\201811201822249_PopulatingSomeRegionForLocation.Designer.cs">
+      <DependentUpon>201811201822249_PopulatingSomeRegionForLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
@@ -307,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811182019137_ChangingLocationInAdvertisement.resx">
       <DependentUpon>201811182019137_ChangingLocationInAdvertisement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811201822249_PopulatingSomeRegionForLocation.resx">
+      <DependentUpon>201811201822249_PopulatingSomeRegionForLocation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
