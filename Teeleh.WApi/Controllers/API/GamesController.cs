@@ -23,6 +23,11 @@ namespace Teeleh.WApi.Controllers.API
                 Name = x.Name,
                 Image = x.Avatar.ImagePath,
                 UserScore = x.UserScore,
+                MetaScore = x.MetaScore,
+                OnlineCapability = x.OnlineCapability,
+                Publisher = x.Publisher,
+                Developer = x.Developer,
+                ReleaseDate = x.ReleaseDate,
                 Genres = x.Genres.Select(t => t.Name).ToList(),
                 Platforms = x.SupportedPlatforms.Select(p => p.Name).ToList()
             }).AsEnumerable().Select(v=>new
@@ -31,6 +36,11 @@ namespace Teeleh.WApi.Controllers.API
                 Name = v.Name,
                 Image = Url.Content(v.Image),
                 UserScore = v.UserScore,
+                MetaScore = v.MetaScore,
+                OnlineCapability = v.OnlineCapability,
+                Publisher = v.Publisher,
+                Developer = v.Developer,
+                ReleaseDate = v.ReleaseDate,
                 Genres = v.Genres,
                 Platforms = v.Platforms
             }).ToList();

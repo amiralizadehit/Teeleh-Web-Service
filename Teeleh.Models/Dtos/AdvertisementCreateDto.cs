@@ -19,7 +19,7 @@ namespace Teeleh.Models.Dtos
         public string PlatformId { get; set; }
 
 
-        public int LocationRegionId { get; set; }
+        public int? LocationRegionId { get; set; }
 
         [Required]
         public int LocationCityId { get; set; }

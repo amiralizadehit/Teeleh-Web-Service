@@ -112,33 +112,34 @@ namespace Teeleh.WApi.Controllers
                 if (session != null)
                 {
                     var user = session.User;
-                    Image image;
+                    Models.Image imageInDb = null;
 
-                    var byteArray = System.Convert.FromBase64String(advertisementCreate.UserImage);
-                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
-                    string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
-                    string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
-                    string imagePath = folderPath + fileName;
-                    string dbPath = "~/Image/Advertisements/" + session.User.Id + fileName;
-                    using (MemoryStream mStream = new MemoryStream(byteArray))
+                    if (!string.IsNullOrEmpty(advertisementCreate.UserImage))
                     {
-                        image = Image.FromStream(mStream);
-                        image.Save(imagePath, ImageFormat.Jpeg);
+                        Image image;
+                        var byteArray = Convert.FromBase64String(advertisementCreate.UserImage);
+                        Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
+                        string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
+                        string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
+                        string imagePath = folderPath + fileName;
+                        string dbPath = "~/Image/Advertisements/" + session.User.Id + fileName;
+                        using (MemoryStream mStream = new MemoryStream(byteArray))
+                        {
+                            image = Image.FromStream(mStream);
+                            image.Save(imagePath, ImageFormat.Jpeg);
+                        }
+
+                        imageInDb = new Models.Image()
+                        {
+                            Name = "User" + "_" + session.User.Id + "Ad",
+                            ImagePath = dbPath,
+                            Type = Models.Image.ImageType.USER_IMAGE,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        };
+                        db.Images.Add(imageInDb);
+                        await db.SaveChangesAsync();
                     }
-
-                    var imageInDb = new Teeleh.Models.Image()
-                    {
-                        Name = "User" + "_" + session.User.Id + "Ad",
-                        ImagePath = dbPath,
-                        Type = Models.Image.ImageType.USER_IMAGE,
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now
-                    };
-                    db.Images.Add(imageInDb);
-                    await db.SaveChangesAsync();
-
-
-
                     var new_advertisement = new Advertisement()
                     {
                         User = user,
