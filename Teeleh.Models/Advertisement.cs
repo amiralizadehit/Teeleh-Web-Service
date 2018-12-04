@@ -42,7 +42,7 @@ namespace Teeleh.Models
         public string Caption { get; set; }
 
         [Required]
-        public AdvertisementType AdType { get; set; }
+        public MediaType MedType { get; set; }
 
         public virtual List<Exchange> ExchangeGames { get; set; }
         public bool isDeleted { get; set; }
@@ -51,7 +51,7 @@ namespace Teeleh.Models
 
 
 
-        public enum AdvertisementType
+        public enum MediaType
         {
             NEW,
             SECOND_HAND,

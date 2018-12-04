@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Drawing.Imaging;
@@ -41,7 +42,7 @@ namespace Teeleh.WApi.Controllers
                     Game = a.Game.Name,
                     Avatar = a.Game.Avatar.ImagePath,
                     Platform = a.Platform.Name,
-                    Adtype = a.AdType,
+                    MedType = a.MedType,
                     Caption = a.Caption,
                     GameRegion = a.GameReg,
                     Location = new
@@ -63,7 +64,7 @@ namespace Teeleh.WApi.Controllers
                     Game = v.Game,
                     Avatar = Url.Content(v.Avatar),
                     Caption = v.Caption,
-                    Adtype = v.Adtype,
+                    MedType = v.MedType,
                     GameRegion = v.GameRegion,
                     Location = v.Location,
                     Platform = v.Platform,
@@ -78,6 +79,92 @@ namespace Teeleh.WApi.Controllers
 
             return Ok(advertisements);
         }
+
+
+        [HttpPost]
+        [Route("api/advertisements")]
+        public IHttpActionResult GetAdvertisements(Filter filter)
+        {
+            if (ModelState.IsValid)
+            {
+                var pageSize = 10;
+                var platforms = filter.PlatformIds;
+                var minPrice = (filter.MinPrice ?? 0);
+                var maxPrice = (filter.MaxPrice ?? 3000000);
+                var ProvinceId = filter.LocationProvinceId;
+                var CityId = filter.LocationCityId;
+                var mediaType = filter.MedType;
+                var pageNumber = (filter.PageNumber ?? 1);
+
+                var final = db.Advertisements.Where(a => (a.Price > minPrice && a.Price < maxPrice && a.isDeleted==false));
+
+                if (ProvinceId!=null)
+                {
+                    final = final.Where(f => f.LocationProvinceId == ProvinceId);
+                }
+
+                if (CityId != null)
+                {
+                    final = final.Where(c => c.LocationCityId == CityId);
+                }
+
+                if (mediaType!=null)
+                {
+                    final = final.Where(m => (int)m.MedType == mediaType);
+                }
+
+                if (platforms != null)
+                {
+                    final = final.Where(p => platforms.Contains(p.PlatformId));
+                }
+                    final.Skip(pageSize * (pageNumber - 1))
+                    .Take(pageSize)
+                    .OrderByDescending(t=>t.CreatedAt)
+                    .Select(a => new
+                    {
+                        Game = a.Game.Name,
+                        Avatar = a.Game.Avatar.ImagePath,
+                        Platform = a.Platform.Name,
+                        MedType = a.MedType,
+                        Caption = a.Caption,
+                        GameRegion = a.GameReg,
+                        Location = new
+                        {
+                            Province = a.LocationProvince.Name,
+                            City = a.LocationCity.Name,
+                            Region = a.LocationRegion.Name
+                        },
+                        CreatedAt = a.CreatedAt,
+                        Price = a.Price,
+                        ExchangeGames = a.ExchangeGames.Select(g => new
+                        {
+                            g.Game.Name,
+                            g.Game.Avatar
+                        })
+
+                    }).AsEnumerable().Select(v => new
+                    {
+                        Game = v.Game,
+                        Avatar = Url.Content(v.Avatar),
+                        Caption = v.Caption,
+                        MedType = v.MedType,
+                        GameRegion = v.GameRegion,
+                        Location = v.Location,
+                        Platform = v.Platform,
+                        Price = v.Price,
+                        CreateAt = v.CreatedAt,
+                        ExchangeGames = v.ExchangeGames.Select(g => new
+                        {
+                            Name = g.Name,
+                            Avatar = Url.Content(g.Avatar.ImagePath)
+                        })
+                    }).ToList();
+                return Ok(final);
+            }
+
+            return BadRequest();
+        }
+
 
 
         /// <summary>
@@ -143,7 +230,7 @@ namespace Teeleh.WApi.Controllers
                     var new_advertisement = new Advertisement()
                     {
                         User = user,
-                        AdType = (Advertisement.AdvertisementType) advertisementCreate.AdType,
+                        MedType = (Advertisement.MediaType) advertisementCreate.MedType,
                         GameId = advertisementCreate.GameId,
                         Latitude = advertisementCreate.Latitude,
                         Longitude = advertisementCreate.Longitude,
@@ -244,7 +331,7 @@ namespace Teeleh.WApi.Controllers
                         Latitude = f.Latitude,
                         Longitude = f.Longitude,
                     },
-                    Adtype = f.AdType,
+                    Adtype = f.MedType,
                     Location = f.LocationRegion,
                     Platform = f.Platform.Name,
                     Similar = db.Advertisements.Where(a=>a.GameId==f.GameId)

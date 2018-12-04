@@ -33,7 +33,7 @@ namespace Teeleh.Models.Dtos
         public string Caption { get; set; }
 
         [Required]
-        public int AdType { get; set; }
+        public int MedType { get; set; }
 
         public List<int> ExchangeGames { get; set; }
 

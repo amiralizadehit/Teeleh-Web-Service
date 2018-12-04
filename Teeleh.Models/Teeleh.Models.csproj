@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teeleh.Models</RootNamespace>
     <AssemblyName>Teeleh.Models</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -197,6 +197,10 @@
     <Compile Include="Migrations\201811201822249_PopulatingSomeRegionForLocation.Designer.cs">
       <DependentUpon>201811201822249_PopulatingSomeRegionForLocation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812041649221_ChanginAdTypeToMedType.cs" />
+    <Compile Include="Migrations\201812041649221_ChanginAdTypeToMedType.Designer.cs">
+      <DependentUpon>201812041649221_ChanginAdTypeToMedType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
@@ -314,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811201822249_PopulatingSomeRegionForLocation.resx">
       <DependentUpon>201811201822249_PopulatingSomeRegionForLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812041649221_ChanginAdTypeToMedType.resx">
+      <DependentUpon>201812041649221_ChanginAdTypeToMedType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
