@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Teeleh.Models;
 
@@ -9,19 +10,26 @@ namespace Teeleh.WApi.Controllers.API
 {
     public class GamesController : ApiController
     {
-        private AppDbContext db = new AppDbContext();
+        private AppDbContext db;
+        private string localDomain;
 
+        public GamesController()
+        {
+            db = new AppDbContext();
+            localDomain = HttpContext.Current.Request.Url.Host;
+        }
        
 
         [HttpGet]
         [Route("api/games")]
         public IHttpActionResult GetGames()
         {
+            
             var games = db.Games.Select(x => new
             {
                 Id = x.Id,
                 Name = x.Name,
-                Image = x.Avatar.ImagePath,
+                Image = localDomain+x.Avatar.ImagePath,
                 UserScore = x.UserScore,
                 MetaScore = x.MetaScore,
                 OnlineCapability = x.OnlineCapability,
@@ -30,19 +38,6 @@ namespace Teeleh.WApi.Controllers.API
                 ReleaseDate = x.ReleaseDate,
                 Genres = x.Genres.Select(t => t.Name).ToList(),
                 Platforms = x.SupportedPlatforms.Select(p => p.Name).ToList()
-            }).AsEnumerable().Select(v=>new
-            {
-                Id = v.Id,
-                Name = v.Name,
-                Image = Url.Content(v.Image),
-                UserScore = v.UserScore,
-                MetaScore = v.MetaScore,
-                OnlineCapability = v.OnlineCapability,
-                Publisher = v.Publisher,
-                Developer = v.Developer,
-                ReleaseDate = v.ReleaseDate,
-                Genres = v.Genres,
-                Platforms = v.Platforms
             }).ToList();
             return Ok(games);
         }
@@ -57,7 +52,7 @@ namespace Teeleh.WApi.Controllers.API
                 var game = new
                 {
                     gameInDb.Name,
-                    Avatar = Url.Content(gameInDb.Avatar.ImagePath),
+                    Avatar = localDomain+ gameInDb.Avatar.ImagePath,
                     gameInDb.Developer,
                     gameInDb.MetaScore,
                     gameInDb.UserScore,

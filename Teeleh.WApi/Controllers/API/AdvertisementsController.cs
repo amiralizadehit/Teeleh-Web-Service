@@ -21,10 +21,12 @@ namespace Teeleh.WApi.Controllers
     public class AdvertisementsController : ApiController
     {
         private AppDbContext db;
+        private string localDomain;
 
         public AdvertisementsController()
         {
             db = new AppDbContext();
+            localDomain = HttpContext.Current.Request.Url.Host;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Teeleh.WApi.Controllers
                 .Select(a => new
                 {
                     Game = a.Game.Name,
-                    Avatar = a.Game.Avatar.ImagePath,
+                    Avatar = localDomain+a.Game.Avatar.ImagePath,
                     Platform = a.Platform.Name,
                     MedType = a.MedType,
                     Caption = a.Caption,
@@ -53,28 +55,12 @@ namespace Teeleh.WApi.Controllers
                     },
                     CreatedAt = a.CreatedAt,
                     Price = a.Price,
-                    ExchangeGames = a.ExchangeGames.Select(g=>new
+                    ExchangeGames = a.ExchangeGames.Select(g => new
                     {
-                        g.Game.Name,
-                        g.Game.Avatar
+                        Name = g.Game.Name,
+                        Avatar = localDomain+g.Game.Avatar.ImagePath
                     })
 
-                }).AsEnumerable().Select(v=>new
-                {
-                    Game = v.Game,
-                    Avatar = Url.Content(v.Avatar),
-                    Caption = v.Caption,
-                    MedType = v.MedType,
-                    GameRegion = v.GameRegion,
-                    Location = v.Location,
-                    Platform = v.Platform,
-                    Price = v.Price,
-                    CreateAt = v.CreatedAt,
-                    ExchangeGames = v.ExchangeGames.Select(g=>new
-                    {
-                        Name = g.Name,
-                        Avatar = Url.Content(g.Avatar.ImagePath)
-                    })
                 }).ToList();
 
             return Ok(advertisements);
@@ -91,39 +77,42 @@ namespace Teeleh.WApi.Controllers
                 var platforms = filter.PlatformIds;
                 var minPrice = (filter.MinPrice ?? 0);
                 var maxPrice = (filter.MaxPrice ?? 3000000);
-                var ProvinceId = filter.LocationProvinceId;
-                var CityId = filter.LocationCityId;
+                var provinceId = filter.LocationProvinceId;
+                var cityId = filter.LocationCityId;
                 var mediaType = filter.MedType;
                 var pageNumber = (filter.PageNumber ?? 1);
 
-                var final = db.Advertisements.Where(a => (a.Price > minPrice && a.Price < maxPrice && a.isDeleted==false));
+                var query = db.Advertisements.Where(a => a.Price > minPrice && a.Price < maxPrice)
+                                             .Where(d => d.isDeleted == false);
+                                            
 
-                if (ProvinceId!=null)
+                if (provinceId!=null)
                 {
-                    final = final.Where(f => f.LocationProvinceId == ProvinceId);
+                    query = query.Where(f => f.LocationProvinceId == provinceId);
                 }
 
-                if (CityId != null)
+                if (cityId != null)
                 {
-                    final = final.Where(c => c.LocationCityId == CityId);
+                    query = query.Where(c => c.LocationCityId == cityId);
                 }
 
                 if (mediaType!=null)
                 {
-                    final = final.Where(m => (int)m.MedType == mediaType);
+                    query = query.Where(m => (int)m.MedType == mediaType);
                 }
 
                 if (platforms != null)
                 {
-                    final = final.Where(p => platforms.Contains(p.PlatformId));
+                    query = query.Where(p => platforms.Any(x=>x==p.PlatformId));
                 }
-                    final.Skip(pageSize * (pageNumber - 1))
+
+                query.Skip(pageSize * (pageNumber - 1))
                     .Take(pageSize)
-                    .OrderByDescending(t=>t.CreatedAt)
+                    .OrderByDescending(t => t.CreatedAt)
                     .Select(a => new
                     {
                         Game = a.Game.Name,
-                        Avatar = a.Game.Avatar.ImagePath,
+                        Avatar = localDomain + a.Game.Avatar.ImagePath,
                         Platform = a.Platform.Name,
                         MedType = a.MedType,
                         Caption = a.Caption,
@@ -139,27 +128,11 @@ namespace Teeleh.WApi.Controllers
                         ExchangeGames = a.ExchangeGames.Select(g => new
                         {
                             g.Game.Name,
-                            g.Game.Avatar
+                            Avatar = localDomain+g.Game.Avatar.ImagePath
                         })
 
-                    }).AsEnumerable().Select(v => new
-                    {
-                        Game = v.Game,
-                        Avatar = Url.Content(v.Avatar),
-                        Caption = v.Caption,
-                        MedType = v.MedType,
-                        GameRegion = v.GameRegion,
-                        Location = v.Location,
-                        Platform = v.Platform,
-                        Price = v.Price,
-                        CreateAt = v.CreatedAt,
-                        ExchangeGames = v.ExchangeGames.Select(g => new
-                        {
-                            Name = g.Name,
-                            Avatar = Url.Content(g.Avatar.ImagePath)
-                        })
                     }).ToList();
-                return Ok(final);
+                return Ok(query);
             }
 
             return BadRequest();
@@ -209,7 +182,7 @@ namespace Teeleh.WApi.Controllers
                         string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
                         string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
                         string imagePath = folderPath + fileName;
-                        string dbPath = "~/Image/Advertisements/" + session.User.Id + fileName;
+                        string dbPath = "/Image/Advertisements/" + user.Id + fileName;
                         using (MemoryStream mStream = new MemoryStream(byteArray))
                         {
                             image = Image.FromStream(mStream);

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Teeleh.Models;
 using Teeleh.Models.ViewModels;
 using Teeleh.Models.ViewModels.Website_View_Models;
+using Teeleh.Utilities;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -16,10 +17,12 @@ namespace Teeleh.WApi.Controllers
     public class GamesController : Controller
     {
         private readonly AppDbContext db;
+        
 
         public GamesController()
         {
             db = new AppDbContext();
+            
         }
 
         protected override void Dispose(bool disposing)
@@ -29,6 +32,7 @@ namespace Teeleh.WApi.Controllers
 
         public ActionResult Index()
         {
+            
             //var games = db.Games.Include(p => p.SupportedPlatforms).Include(g => g.Genres).Include(a=>a.Avatar).ToList();
             var games = db.Games.ToList();
 
@@ -167,24 +171,25 @@ namespace Teeleh.WApi.Controllers
                 return View("Create", viewModel);
             }
 
-            var gameName = viewModel.Name.Replace('?', ' ').Replace(':', ' ').TrimEnd().TrimStart();
+            var gameName = viewModel.Name.Replace("?", "").Replace(":", "").TrimEnd().TrimStart();
 
             string avatarPhotoFilePath = "";
             if (viewModel.ImageFile != null)
             {
+                var random = RandomHelper.RandomInt(0, 10000);
                 var avatarPhotoFileExtension = Path.GetExtension(viewModel.ImageFile.FileName);
 
-                var avatarPhotoFileName = gameName + "_" + "Avatar" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
+                var avatarPhotoFileName = random + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
                                           avatarPhotoFileExtension;
-                Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + gameName));
-                avatarPhotoFilePath = "~/Image/Games/" + gameName + "/" + avatarPhotoFileName;
+                Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + random));
+                avatarPhotoFilePath = "/Image/Games/" + random + "/" + avatarPhotoFileName;
                 avatarPhotoFileName =
-                    Path.Combine(Server.MapPath("~/Image/Games/" + gameName + "/"), avatarPhotoFileName);
+                    Path.Combine(Server.MapPath("~/Image/Games/" + random + "/"), avatarPhotoFileName);
                 viewModel.ImageFile.SaveAs(avatarPhotoFileName);
             }
             else
             { //Default
-                avatarPhotoFilePath = "~/Image/Games/Default/Default.jpg";
+                avatarPhotoFilePath = "/Image/Games/Default/Default.jpg";
             }
 
             var selectedGenres = db.Genres.Where(g => viewModel.SelectedGenres.Contains(g.Id)).ToList();
@@ -228,12 +233,28 @@ namespace Teeleh.WApi.Controllers
 
                 if (viewModel.ImageFile != null)
                 {
-                    imageInDb.Name = viewModel.Name;
-                    imageInDb.ImagePath = avatarPhotoFilePath;
-                    imageInDb.Type = Image.ImageType.AVATAR;
-                    imageInDb.UpdatedAt = DateTime.Now;
-                } 
-
+                    if (imageInDb == null) //Making a new record
+                    {
+                        var avatarImage = new Image()
+                        {
+                            Name = viewModel.Name,
+                            ImagePath = avatarPhotoFilePath,
+                            Type = Image.ImageType.AVATAR,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        };
+                        gameInDb.Avatar = avatarImage;
+                    }
+                    else //Editing old record
+                    {
+                        imageInDb.Name = viewModel.Name;
+                        imageInDb.ImagePath = avatarPhotoFilePath;
+                        imageInDb.Type = Image.ImageType.AVATAR;
+                        imageInDb.UpdatedAt = DateTime.Now;
+                    }
+                    
+                }
+                
                 gameInDb.Name = viewModel.Name;
                 gameInDb.Genres = selectedGenres;
                 gameInDb.Developer = viewModel.Developer;

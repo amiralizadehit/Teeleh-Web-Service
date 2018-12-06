@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Remoting.Channels;
 using System.Web;
 using System.Web.Mvc;
