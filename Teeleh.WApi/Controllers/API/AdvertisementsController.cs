@@ -26,7 +26,7 @@ namespace Teeleh.WApi.Controllers
         public AdvertisementsController()
         {
             db = new AppDbContext();
-            localDomain = HttpContext.Current.Request.Url.Host;
+            localDomain = "http://" + HttpContext.Current.Request.Url.Host;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Teeleh.WApi.Controllers
                 var mediaType = filter.MedType;
                 var pageNumber = (filter.PageNumber ?? 1);
 
-                var query = db.Advertisements.Where(a => a.Price > minPrice && a.Price < maxPrice)
+                var query = db.Advertisements.Where(a => a.Price >= minPrice && a.Price <= maxPrice)
                                              .Where(d => d.isDeleted == false);
                                             
 
@@ -106,9 +106,9 @@ namespace Teeleh.WApi.Controllers
                     query = query.Where(p => platforms.Any(x=>x==p.PlatformId));
                 }
 
-                query.Skip(pageSize * (pageNumber - 1))
+                var advertisements = query.OrderByDescending(t => t.CreatedAt)
+                    .Skip(pageSize * (pageNumber - 1))
                     .Take(pageSize)
-                    .OrderByDescending(t => t.CreatedAt)
                     .Select(a => new
                     {
                         Game = a.Game.Name,
@@ -127,12 +127,11 @@ namespace Teeleh.WApi.Controllers
                         Price = a.Price,
                         ExchangeGames = a.ExchangeGames.Select(g => new
                         {
-                            g.Game.Name,
+                            Name = g.Game.Name,
                             Avatar = localDomain+g.Game.Avatar.ImagePath
                         })
-
                     }).ToList();
-                return Ok(query);
+                return Ok(advertisements);
             }
 
             return BadRequest();
@@ -306,7 +305,7 @@ namespace Teeleh.WApi.Controllers
                     },
                     Adtype = f.MedType,
                     Location = f.LocationRegion,
-                    Platform = f.Platform.Name,
+                    Platform = f.Platform.FirstName,
                     Similar = db.Advertisements.Where(a=>a.GameId==f.GameId)
 
                 });

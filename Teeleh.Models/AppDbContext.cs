@@ -1,4 +1,7 @@
 ﻿using System.Data.Entity;
+using System.Web.UI.WebControls;
+using Teeleh.Models.Panel;
+
 
 namespace Teeleh.Models
 {
@@ -32,6 +35,9 @@ namespace Teeleh.Models
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
+
+        // Teeleh 
+        public DbSet<Admin> Admins { get; set; }
 
     }
 }

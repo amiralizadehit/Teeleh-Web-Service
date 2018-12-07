@@ -201,13 +201,27 @@
     <Compile Include="Migrations\201812041649221_ChanginAdTypeToMedType.Designer.cs">
       <DependentUpon>201812041649221_ChanginAdTypeToMedType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812072038156_AddAdminModel.cs" />
+    <Compile Include="Migrations\201812072038156_AddAdminModel.Designer.cs">
+      <DependentUpon>201812072038156_AddAdminModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812072202253_UpdatingAdminModel.cs" />
+    <Compile Include="Migrations\201812072202253_UpdatingAdminModel.Designer.cs">
+      <DependentUpon>201812072202253_UpdatingAdminModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812072204139_PopulateAdmin.cs" />
+    <Compile Include="Migrations\201812072204139_PopulateAdmin.Designer.cs">
+      <DependentUpon>201812072204139_PopulateAdmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="Panel\Admin.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DeactiveSessionViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordVerificationViewModel.cs" />
+    <Compile Include="ViewModels\Website View Models\AdminLoginViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\GameFormViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PendingSessionViewModel.cs" />
@@ -321,6 +335,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812041649221_ChanginAdTypeToMedType.resx">
       <DependentUpon>201812041649221_ChanginAdTypeToMedType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812072038156_AddAdminModel.resx">
+      <DependentUpon>201812072038156_AddAdminModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812072202253_UpdatingAdminModel.resx">
+      <DependentUpon>201812072202253_UpdatingAdminModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812072204139_PopulateAdmin.resx">
+      <DependentUpon>201812072204139_PopulateAdmin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

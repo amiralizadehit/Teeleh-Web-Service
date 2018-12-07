@@ -16,7 +16,7 @@ namespace Teeleh.WApi.Controllers.API
         public GamesController()
         {
             db = new AppDbContext();
-            localDomain = HttpContext.Current.Request.Url.Host;
+            localDomain = "http://"+HttpContext.Current.Request.Url.Host;
         }
        
 

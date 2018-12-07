@@ -275,6 +275,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AdminsController.cs" />
     <Compile Include="Controllers\API\AdvertisementsController.cs" />
     <Compile Include="Controllers\API\GamesController.cs" />
     <Compile Include="Controllers\API\LocationController.cs" />
@@ -590,6 +591,9 @@
     <Content Include="Views\Games\Index.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\ForgetPassword.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Image\" />

@@ -11,7 +11,7 @@ namespace Teeleh.Models
         public static string PC = "PC";
         public static string Switch = "Switch";
         public static string Android = "Android";
-        public static string iOs = "iOS";
+        public static string iOS = "iOS";
 
         public string Id { get; set; }
         public string Name { get; set; }
