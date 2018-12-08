@@ -74,6 +74,7 @@
     <Compile Include="Advertisement.cs" />
     <Compile Include="AppDbContext.cs" />
     <Compile Include="CustomValidation\PhoneOrEmail.cs" />
+    <Compile Include="CustomValidation\Website\SessionTimeoutAttribute.cs" />
     <Compile Include="Dtos\AdvertisementCreateDto.cs" />
     <Compile Include="Dtos\AdvertisementPageDto.cs" />
     <Compile Include="Dtos\Filter.cs" />
@@ -213,7 +214,12 @@
     <Compile Include="Migrations\201812072204139_PopulateAdmin.Designer.cs">
       <DependentUpon>201812072204139_PopulateAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812081652137_AddingAdminSession.cs" />
+    <Compile Include="Migrations\201812081652137_AddingAdminSession.Designer.cs">
+      <DependentUpon>201812081652137_AddingAdminSession.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Panel\Admin.cs" />
@@ -222,6 +228,7 @@
     <Compile Include="ViewModels\DeactiveSessionViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordVerificationViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\AdminLoginViewModel.cs" />
+    <Compile Include="ViewModels\Website View Models\AdminViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\GameFormViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PendingSessionViewModel.cs" />
@@ -344,6 +351,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812072204139_PopulateAdmin.resx">
       <DependentUpon>201812072204139_PopulateAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812081652137_AddingAdminSession.resx">
+      <DependentUpon>201812081652137_AddingAdminSession.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

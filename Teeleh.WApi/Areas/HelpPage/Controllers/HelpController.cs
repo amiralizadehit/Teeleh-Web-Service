@@ -1,6 +1,7 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
+using Teeleh.Models.CustomValidation.Website;
 using Teeleh.WApi.Areas.HelpPage.ModelDescriptions;
 using Teeleh.WApi.Areas.HelpPage.Models;
 
@@ -9,6 +10,7 @@ namespace Teeleh.WApi.Areas.HelpPage.Controllers
     /// <summary>
     /// The controller that will handle requests for the help page.
     /// </summary>
+    [SessionTimeout]
     public class HelpController : Controller
     {
         private const string ErrorViewName = "Error";

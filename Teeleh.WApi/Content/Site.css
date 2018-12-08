@@ -23,8 +23,8 @@ span.field-validation-error {
 
 /* Bootstrap Overrides */
 .navbar-inverse {
-    background-color: #ff4342;
-    border-color: #ff4342;
+    background-color: #35435A;
+    border-color: #35435A;
 }
 
 .navbar-inverse .navbar-nav > li > a {

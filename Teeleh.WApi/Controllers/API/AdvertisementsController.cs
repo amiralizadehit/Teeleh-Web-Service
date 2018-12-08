@@ -167,7 +167,7 @@ namespace Teeleh.WApi.Controllers
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisementCreate.SessionInfo.SessionKey &&
                                                           s.Id == advertisementCreate.SessionInfo.SessionId &&
-                                                          s.State==SessionState.Actived);
+                                                          s.State==SessionState.Active);
                 if (session != null)
                 {
                     var user = session.User;
@@ -262,7 +262,7 @@ namespace Teeleh.WApi.Controllers
                 var sessionInDb = await
                     db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == pair.session.SessionKey &&
                                                           s.Id == pair.session.SessionId &&
-                                                          s.State == SessionState.Actived);
+                                                          s.State == SessionState.Active);
                 if (sessionInDb != null)
                 {
                     var advertisementInDb = db.Advertisements.SingleOrDefault(a => a.Id == pair.Id);

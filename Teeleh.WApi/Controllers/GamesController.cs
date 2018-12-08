@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Teeleh.Models;
+using Teeleh.Models.CustomValidation.Website;
 using Teeleh.Models.ViewModels;
 using Teeleh.Models.ViewModels.Website_View_Models;
 using Teeleh.Utilities;
@@ -30,6 +31,7 @@ namespace Teeleh.WApi.Controllers
             db.Dispose();
         }
 
+        [SessionTimeout]
         public ActionResult Index()
         {
             
@@ -57,6 +59,7 @@ namespace Teeleh.WApi.Controllers
             return View(gamesViewModel);
         }
 
+        [SessionTimeout]
         public ActionResult Edit(int id)
         {
             var viewModel = new GameFormViewModel();
@@ -112,6 +115,7 @@ namespace Teeleh.WApi.Controllers
             }
         }
 
+        [SessionTimeout]
         public ActionResult Delete(int id)
         {
             var gameToDelete = db.Games.Single(g => g.Id == id);
@@ -121,6 +125,7 @@ namespace Teeleh.WApi.Controllers
             return RedirectToAction("Index", "Games");
         }
 
+        [SessionTimeout]
         public ActionResult Create()
         {
             var viewModel = new GameFormViewModel();
@@ -149,6 +154,7 @@ namespace Teeleh.WApi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SessionTimeout]
         public ActionResult Create(GameFormViewModel viewModel)
         {
             if (!ModelState.IsValid)

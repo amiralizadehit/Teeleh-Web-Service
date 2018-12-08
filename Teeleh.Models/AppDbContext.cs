@@ -38,6 +38,7 @@ namespace Teeleh.Models
 
         // Teeleh 
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<AdminSession> AdminSessions { get; set; }
 
     }
 }

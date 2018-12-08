@@ -131,14 +131,14 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                if (user.State == SessionState.Actived)
+                if (user.State == SessionState.Active)
                 {
                     var sessionKey = RandomHelper.RandomString(32);
 
                     Session newSession = new Session()
                     {
                         Nonce = null,
-                        State = SessionState.Actived,
+                        State = SessionState.Active,
                         InitMoment = DateTime.Now,
                         ActivationMoment = DateTime.Now,
                         SessionKey = sessionKey,
@@ -250,7 +250,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                     }
-                    else if (user.State == SessionState.Actived) //already registered user - use login form
+                    else if (user.State == SessionState.Active) //already registered user - use login form
                     {
                         return Conflict();
                     }
@@ -355,7 +355,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                     }
-                    else if (user.State == SessionState.Actived) //already registered user - use login form
+                    else if (user.State == SessionState.Active) //already registered user - use login form
                     {
                         return Conflict();
                     }
@@ -415,7 +415,7 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //user not found
                 }
 
-                if (user.State==SessionState.Actived)
+                if (user.State==SessionState.Active)
                 {
                     var email = user.Email;
                     user.ForgetPassCode = randomNounce;
@@ -471,7 +471,7 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                if (user.State==SessionState.Actived)
+                if (user.State==SessionState.Active)
                 {
                     user.ForgetPassCode = randomNounce;
 
@@ -538,7 +538,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 Session session = await db.Sessions.Include(u=>u.User).SingleOrDefaultAsync(q =>
-                    q.SessionKey == sessionInfoObj.SessionKey && q.State == SessionState.Actived);
+                    q.SessionKey == sessionInfoObj.SessionKey && q.State == SessionState.Active);
 
                 if (session != null)
                 {
@@ -591,7 +591,7 @@ namespace Teeleh.WApi.Controllers
              {
                  Session session =
                      await db.Sessions.SingleOrDefaultAsync(f =>
-                         f.SessionKey == userFurtherInfo.SessionKey && f.State == SessionState.Actived);
+                         f.SessionKey == userFurtherInfo.SessionKey && f.State == SessionState.Active);
                  if (session != null)
                  {
                      User userInDb = session.User;

@@ -481,6 +481,7 @@
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Teeleh - Web Deploy.pubxml" />
+    <Content Include="Image\favicon.ico" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -591,12 +592,12 @@
     <Content Include="Views\Games\Index.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Admin\ForgetPassword.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Shared\_CustomLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Image\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

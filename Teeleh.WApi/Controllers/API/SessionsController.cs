@@ -72,10 +72,10 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //Wrong Nounce Entered
                 }
 
-                session.User.State = SessionState.Actived;
+                session.User.State = SessionState.Active;
                 session.User.UpdatedAt = DateTime.Now;
                 session.ActivationMoment = DateTime.Now;
-                session.State = SessionState.Actived;
+                session.State = SessionState.Active;
 
                 await db.SaveChangesAsync();
 
@@ -116,7 +116,7 @@ namespace Teeleh.WApi.Controllers
                 }
 
                 session.DeactivationMoment = DateTime.Now;
-                session.State = SessionState.Deactived;
+                session.State = SessionState.Deactivate;
                 await db.SaveChangesAsync();
 
                 return Ok();

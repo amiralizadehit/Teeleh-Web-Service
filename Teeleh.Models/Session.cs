@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Teeleh.Models
 {
-    public enum SessionState { Pending, Actived, Deactived, Abolished }
+    public enum SessionState { Pending, Active, Deactivate, Abolished }
     public class Session
     {
         public int Id { get; set; }
