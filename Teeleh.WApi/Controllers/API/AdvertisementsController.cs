@@ -45,6 +45,7 @@ namespace Teeleh.WApi.Controllers
                     Id = a.Id,
                     Game = a.Game.Name,
                     Avatar = localDomain+a.Game.Avatar.ImagePath,
+                    UserImage = localDomain + a.UserImage.ImagePath,
                     Platform = a.Platform.Name,
                     MedType = a.MedType,
                     Caption = a.Caption,
@@ -121,6 +122,7 @@ namespace Teeleh.WApi.Controllers
                         Platform = a.Platform.Name,
                         MedType = a.MedType,
                         Caption = a.Caption,
+                        UserImage =  localDomain + a.UserImage.ImagePath,
                         GameRegion = a.GameReg,
                         Location = new
                         {
@@ -188,7 +190,7 @@ namespace Teeleh.WApi.Controllers
                         string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
                         string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
                         string imagePath = folderPath + fileName;
-                        string dbPath = "/Image/Advertisements/" + user.Id + fileName;
+                        string dbPath = "/Image/Advertisements/" + user.Id +"/"+ fileName;
                         using (MemoryStream mStream = new MemoryStream(byteArray))
                         {
                             image = Image.FromStream(mStream);
