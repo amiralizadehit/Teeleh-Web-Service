@@ -218,6 +218,10 @@
     <Compile Include="Migrations\201812081652137_AddingAdminSession.Designer.cs">
       <DependentUpon>201812081652137_AddingAdminSession.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812091634269_ChangingAdvertisementModel1.cs" />
+    <Compile Include="Migrations\201812091634269_ChangingAdvertisementModel1.Designer.cs">
+      <DependentUpon>201812091634269_ChangingAdvertisementModel1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -354,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812081652137_AddingAdminSession.resx">
       <DependentUpon>201812081652137_AddingAdminSession.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812091634269_ChangingAdvertisementModel1.resx">
+      <DependentUpon>201812091634269_ChangingAdvertisementModel1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -46,8 +46,11 @@ namespace Teeleh.Models
 
         public virtual List<Exchange> ExchangeGames { get; set; }
         public bool isDeleted { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+
 
 
 

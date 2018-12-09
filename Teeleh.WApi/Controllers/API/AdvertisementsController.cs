@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.SqlServer;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace Teeleh.WApi.Controllers
             var advertisements = db.Advertisements.Where(g => g.isDeleted == false)
                 .Select(a => new
                 {
+                    Id = a.Id,
                     Game = a.Game.Name,
                     Avatar = localDomain+a.Game.Avatar.ImagePath,
                     Platform = a.Platform.Name,
@@ -51,7 +53,9 @@ namespace Teeleh.WApi.Controllers
                     {
                         Province = a.LocationProvince.Name,
                         City = a.LocationCity.Name,
-                        Region = a.LocationRegion.Name
+                        Region = a.LocationRegion.Name,
+                        Latitude = a.Latitude,
+                        Longitude = a.Longitude
                     },
                     CreatedAt = a.CreatedAt,
                     Price = a.Price,
@@ -111,6 +115,7 @@ namespace Teeleh.WApi.Controllers
                     .Take(pageSize)
                     .Select(a => new
                     {
+                        Id = a.Id,
                         Game = a.Game.Name,
                         Avatar = localDomain + a.Game.Avatar.ImagePath,
                         Platform = a.Platform.Name,
@@ -121,9 +126,11 @@ namespace Teeleh.WApi.Controllers
                         {
                             Province = a.LocationProvince.Name,
                             City = a.LocationCity.Name,
-                            Region = a.LocationRegion.Name
+                            Region = a.LocationRegion.Name,
+                            Latitude = a.Latitude,
+                            Longitude = a.Longitude
                         },
-                        CreatedAt = a.CreatedAt,
+                        Age = SqlFunctions.DateDiff("minute", a.CreatedAt, DateTime.Now),
                         Price = a.Price,
                         ExchangeGames = a.ExchangeGames.Select(g => new
                         {
