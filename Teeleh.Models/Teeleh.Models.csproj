@@ -222,6 +222,14 @@
     <Compile Include="Migrations\201812091634269_ChangingAdvertisementModel1.Designer.cs">
       <DependentUpon>201812091634269_ChangingAdvertisementModel1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812131344391_AddingIsCompletedToAdminModel.cs" />
+    <Compile Include="Migrations\201812131344391_AddingIsCompletedToAdminModel.Designer.cs">
+      <DependentUpon>201812131344391_AddingIsCompletedToAdminModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812132118333_AddingAdminId.cs" />
+    <Compile Include="Migrations\201812132118333_AddingAdminId.Designer.cs">
+      <DependentUpon>201812132118333_AddingAdminId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -361,6 +369,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812091634269_ChangingAdvertisementModel1.resx">
       <DependentUpon>201812091634269_ChangingAdvertisementModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812131344391_AddingIsCompletedToAdminModel.resx">
+      <DependentUpon>201812131344391_AddingIsCompletedToAdminModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812132118333_AddingAdminId.resx">
+      <DependentUpon>201812132118333_AddingAdminId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

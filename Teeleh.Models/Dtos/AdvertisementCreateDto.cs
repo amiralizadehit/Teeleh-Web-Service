@@ -27,6 +27,9 @@ namespace Teeleh.Models.Dtos
         [Required]
         public int LocationProvinceId { get; set; }
 
+
+        public int GameReg { get; set; }
+
         public string UserImage { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

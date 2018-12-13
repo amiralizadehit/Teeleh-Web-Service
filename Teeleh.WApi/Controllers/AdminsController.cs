@@ -46,35 +46,30 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var admin = db.Admins.SingleOrDefault(a => a.Username == adminLogin.Username
-                                                           && a.Password==adminLogin.Password);
-
+                var admin = db.Admins.SingleOrDefault(a => a.Username == adminLogin.Username);
 
                 if (admin != null)
                 {
-                    var secretKey = RandomHelper.RandomString(15);
-                    var session = new AdminSession()
+                    if (!admin.IsCompleted)
                     {
-                        Admin = admin,
-                        InitMoment = DateTime.Now,
-                        SessionKey = secretKey,
-                        State = SessionState.Active
-                    };
-                    Session["SessionKey"] = secretKey;
-                    Session["UserId"] = admin.Id;
+                        CreateSession(admin);
+                        if (adminLogin.RememberMe)
+                        {
+                            HttpCookie cookie = new HttpCookie("Login");
+                            cookie.Values.Add("Username", adminLogin.Username);
+                            cookie.Expires.AddDays(15);
+                            Response.Cookies.Add(cookie);
+                        }
 
-                    db.AdminSessions.Add(session);
-                    db.SaveChanges();
-
-                    if (adminLogin.RememberMe)
-                    {
-                        HttpCookie cookie = new HttpCookie("Login");
-                        cookie.Values.Add("Username", adminLogin.Username);
-                        cookie.Expires.AddDays(15);
-                        Response.Cookies.Add(cookie);
+                        return RedirectToAction("Edit");
                     }
 
-                    return RedirectToAction("Edit");
+                    var hashPassword = HasherHelper.sha256_hash(adminLogin.Password);
+                    if (admin.Password == hashPassword)
+                    {
+                        CreateSession(admin);
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
 
                 ModelState.AddModelError(string.Empty, "The user name or password is incorrect.");
@@ -108,18 +103,22 @@ namespace Teeleh.WApi.Controllers
         [SessionTimeout]
         public ActionResult Edit(AdminViewModel admin)
         {
-            var adminInDb = db.Admins.SingleOrDefault(s => s.Id == admin.Id);
-
-            if (adminInDb!=null)
+            if (ModelState.IsValid)
             {
-                adminInDb.Username = admin.Username;
-                adminInDb.Password = admin.Password;
-                adminInDb.Email = admin.Email;
-                adminInDb.FirstName = admin.FirstName;
-                adminInDb.LastName = admin.LastName;
+                var adminInDb = db.Admins.SingleOrDefault(s => s.Id == admin.Id);
 
-                db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                if (adminInDb!=null)
+                {
+                    adminInDb.Username = admin.Username;
+                    adminInDb.Password = HasherHelper.sha256_hash(admin.Password);
+                    adminInDb.Email = admin.Email;
+                    adminInDb.FirstName = admin.FirstName;
+                    adminInDb.LastName = admin.LastName;
+                    adminInDb.IsCompleted = true;
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
             }
               return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad Request");
     }
@@ -129,6 +128,30 @@ namespace Teeleh.WApi.Controllers
     {
     return View();
 }
+
+    public void CreateSession(Admin admin)
+    {
+        var sessions = db.AdminSessions.Where(s => s.AdminId == admin.Id);
+        foreach (var adminSession in sessions)
+        {
+            adminSession.State = SessionState.Deactivate;
+        }
+
+            var secretKey = RandomHelper.RandomString(15);
+            var session = new AdminSession()
+            {
+                Admin = admin,
+                InitMoment = DateTime.Now,
+                SessionKey = secretKey,
+                State = SessionState.Active
+            };
+            Session["SessionKey"] = secretKey;
+            Session["UserId"] = admin.Id;
+
+            db.AdminSessions.Add(session);
+            db.SaveChanges();
+
+        }
 
 }
 }

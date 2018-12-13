@@ -18,5 +18,6 @@ namespace Teeleh.Models.Panel
         public SessionState State { get; set; }
 
         public Admin Admin { get; set; }
+        public int AdminId { get; set; }
     }
 }

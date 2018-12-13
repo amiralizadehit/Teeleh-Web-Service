@@ -213,6 +213,7 @@ namespace Teeleh.WApi.Controllers
                         User = user,
                         MedType = (Advertisement.MediaType) advertisementCreate.MedType,
                         GameId = advertisementCreate.GameId,
+                        GameReg = (Advertisement.GameRegion)advertisementCreate.GameReg,
                         Latitude = advertisementCreate.Latitude,
                         Longitude = advertisementCreate.Longitude,
                         LocationRegionId = advertisementCreate.LocationRegionId,
