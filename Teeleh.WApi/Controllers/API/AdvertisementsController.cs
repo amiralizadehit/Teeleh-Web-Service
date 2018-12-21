@@ -44,7 +44,7 @@ namespace Teeleh.WApi.Controllers
                 {
                     Id = a.Id,
                     Game = a.Game.Name,
-                    Avatar = localDomain+a.Game.Avatar.ImagePath,
+                    Avatar = localDomain + a.Game.Avatar.ImagePath,
                     UserImage = localDomain + a.UserImage.ImagePath,
                     Platform = a.Platform.Name,
                     MedType = a.MedType,
@@ -63,9 +63,8 @@ namespace Teeleh.WApi.Controllers
                     ExchangeGames = a.ExchangeGames.Select(g => new
                     {
                         Name = g.Game.Name,
-                        Avatar = localDomain+g.Game.Avatar.ImagePath
+                        Avatar = localDomain + g.Game.Avatar.ImagePath
                     })
-
                 }).ToList();
 
             return Ok(advertisements);
@@ -86,12 +85,13 @@ namespace Teeleh.WApi.Controllers
                 var cityId = filter.LocationCityId;
                 var mediaType = filter.MedType;
                 var pageNumber = (filter.PageNumber ?? 1);
+                var sort = (filter.Sort ?? Sort.NEWEST);
 
                 var query = db.Advertisements.Where(a => a.Price >= minPrice && a.Price <= maxPrice)
-                                             .Where(d => d.isDeleted == false);
-                                            
+                    .Where(d => d.isDeleted == false);
 
-                if (provinceId!=null)
+
+                if (provinceId != null)
                 {
                     query = query.Where(f => f.LocationProvinceId == provinceId);
                 }
@@ -101,18 +101,24 @@ namespace Teeleh.WApi.Controllers
                     query = query.Where(c => c.LocationCityId == cityId);
                 }
 
-                if (mediaType!=null)
+                if (mediaType != null)
                 {
-                    query = query.Where(m => (int)m.MedType == mediaType);
+                    query = query.Where(m => m.MedType == mediaType);
                 }
 
                 if (platforms != null)
                 {
-                    query = query.Where(p => platforms.Any(x=>x==p.PlatformId));
+                    query = query.Where(p => platforms.Any(x => x == p.PlatformId));
                 }
 
-                var advertisements = query.OrderByDescending(t => t.CreatedAt)
-                    .Skip(pageSize * (pageNumber - 1))
+                if (sort == Sort.NEWEST)
+                    query = query.OrderByDescending(t => t.CreatedAt);
+                else if (sort == Sort.PRICE_ASCENDING)
+                    query = query.OrderBy(t => t.Price);
+                else
+                    query = query.OrderByDescending(t => t.Price);
+
+                var advertisements = query.Skip(pageSize * (pageNumber - 1))
                     .Take(pageSize)
                     .Select(a => new
                     {
@@ -122,7 +128,7 @@ namespace Teeleh.WApi.Controllers
                         Platform = a.Platform.Name,
                         MedType = a.MedType,
                         Caption = a.Caption,
-                        UserImage =  localDomain + a.UserImage.ImagePath,
+                        UserImage = localDomain + a.UserImage.ImagePath,
                         GameRegion = a.GameReg,
                         Location = new
                         {
@@ -137,7 +143,7 @@ namespace Teeleh.WApi.Controllers
                         ExchangeGames = a.ExchangeGames.Select(g => new
                         {
                             Name = g.Game.Name,
-                            Avatar = localDomain+g.Game.Avatar.ImagePath
+                            Avatar = localDomain + g.Game.Avatar.ImagePath
                         })
                     }).ToList();
                 return Ok(advertisements);
@@ -145,7 +151,6 @@ namespace Teeleh.WApi.Controllers
 
             return BadRequest();
         }
-
 
 
         /// <summary>
@@ -176,7 +181,7 @@ namespace Teeleh.WApi.Controllers
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisementCreate.SessionInfo.SessionKey &&
                                                           s.Id == advertisementCreate.SessionInfo.SessionId &&
-                                                          s.State==SessionState.Active);
+                                                          s.State == SessionState.Active);
                 if (session != null)
                 {
                     var user = session.User;
@@ -186,11 +191,13 @@ namespace Teeleh.WApi.Controllers
                     {
                         Image image;
                         var byteArray = Convert.FromBase64String(advertisementCreate.UserImage);
-                        Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
-                        string folderPath = HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id+"/");
+                        Directory.CreateDirectory(
+                            HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
+                        string folderPath =
+                            HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id + "/");
                         string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
                         string imagePath = folderPath + fileName;
-                        string dbPath = "/Image/Advertisements/" + user.Id +"/"+ fileName;
+                        string dbPath = "/Image/Advertisements/" + user.Id + "/" + fileName;
                         using (MemoryStream mStream = new MemoryStream(byteArray))
                         {
                             image = Image.FromStream(mStream);
@@ -208,12 +215,13 @@ namespace Teeleh.WApi.Controllers
                         db.Images.Add(imageInDb);
                         await db.SaveChangesAsync();
                     }
+
                     var new_advertisement = new Advertisement()
                     {
                         User = user,
                         MedType = (Advertisement.MediaType) advertisementCreate.MedType,
                         GameId = advertisementCreate.GameId,
-                        GameReg = (Advertisement.GameRegion)advertisementCreate.GameReg,
+                        GameReg = (Advertisement.GameRegion) advertisementCreate.GameReg,
                         Latitude = advertisementCreate.Latitude,
                         Longitude = advertisementCreate.Longitude,
                         LocationRegionId = advertisementCreate.LocationRegionId,
@@ -225,7 +233,6 @@ namespace Teeleh.WApi.Controllers
                         UserImage = imageInDb,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
-                        
                     };
                     db.Advertisements.Add(new_advertisement);
 
@@ -268,7 +275,6 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                
                 var sessionInDb = await
                     db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == pair.session.SessionKey &&
                                                           s.Id == pair.session.SessionId &&

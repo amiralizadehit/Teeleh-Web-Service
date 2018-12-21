@@ -13,7 +13,15 @@ namespace Teeleh.Models.Dtos
         public float? MinPrice { get; set; }
         public int? LocationCityId { get; set; }
         public int? LocationProvinceId { get; set; }
-        public int? MedType { get; set; }
+        public Advertisement.MediaType? MedType { get; set; }
         public int? PageNumber { get; set; }
+        public Sort? Sort { get; set; }
+    }
+
+    public enum Sort
+    {
+        PRICE_ASCENDING,
+        PRICE_DESCENDING,
+        NEWEST
     }
 }
