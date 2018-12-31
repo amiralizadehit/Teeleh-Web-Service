@@ -230,6 +230,10 @@
     <Compile Include="Migrations\201812132118333_AddingAdminId.Designer.cs">
       <DependentUpon>201812132118333_AddingAdminId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812311144160_AddingRatingToGameModel.cs" />
+    <Compile Include="Migrations\201812311144160_AddingRatingToGameModel.Designer.cs">
+      <DependentUpon>201812311144160_AddingRatingToGameModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -375,6 +379,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812132118333_AddingAdminId.resx">
       <DependentUpon>201812132118333_AddingAdminId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812311144160_AddingRatingToGameModel.resx">
+      <DependentUpon>201812311144160_AddingRatingToGameModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

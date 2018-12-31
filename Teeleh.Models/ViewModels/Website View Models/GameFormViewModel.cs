@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 using System.Web;
 using System.Web.Mvc;
 
@@ -51,6 +52,11 @@ namespace Teeleh.Models.ViewModels
         [Required]
         [StringLength(25, ErrorMessage = "You can not enter a publisher with more than 25 characters")]
         public string Publisher { get; set; }
+
+        [Required]
+        [Range(1, 5, ErrorMessage = "Select a valid ESRB rating")]
+        [DisplayName("ESRB Rating")]
+        public ESRB ESRBRating { get; set; }
 
         [Required]
         [DisplayName("Online Capability")]

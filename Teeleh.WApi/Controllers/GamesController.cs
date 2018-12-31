@@ -47,6 +47,7 @@ namespace Teeleh.WApi.Controllers
                     ImagePath = Url.Content(game.Avatar.ImagePath),
                     Genres = game.Genres.Select(t => t.Name).ToList(),
                     Developer = game.Developer,
+                    Rating = (game.Rating>0)?game.Rating.ToString():"Not Specified",
                     Name = game.Name,
                     MetaScore = game.MetaScore,
                     UserScore = game.UserScore,
@@ -98,16 +99,17 @@ namespace Teeleh.WApi.Controllers
                 {
                     genreIds.Add(gameGenre.Id);
                 }
+           
 
                 viewModel.Genres = new MultiSelectList(genres, "GenreId", "GenreName");
                 viewModel.SelectedGenres = genreIds;
-
                 viewModel.Developer = game.Developer;
                 viewModel.MetaScore = game.MetaScore;
                 viewModel.Name = game.Name;
                 viewModel.OnlineCapability = game.OnlineCapability;
                 viewModel.ReleaseDate = game.ReleaseDate.ToString("d MMM yyyy");
                 viewModel.Publisher = game.Publisher;
+                viewModel.ESRBRating = game.Rating;
                 viewModel.UserScore = game.UserScore;
                 viewModel.Id = id;
 
@@ -221,6 +223,7 @@ namespace Teeleh.WApi.Controllers
                     MetaScore = viewModel.MetaScore,
                     UserScore = viewModel.UserScore,
                     OnlineCapability = viewModel.OnlineCapability,
+                    Rating = viewModel.ESRBRating,
                     ReleaseDate = viewModel.GetReleaseDate(),
                     SupportedPlatforms = selectedPlatforms,
                     Avatar = avatarImage,
@@ -268,6 +271,7 @@ namespace Teeleh.WApi.Controllers
                 gameInDb.MetaScore = viewModel.MetaScore;
                 gameInDb.UserScore = viewModel.UserScore;
                 gameInDb.OnlineCapability = viewModel.OnlineCapability;
+                gameInDb.Rating = viewModel.ESRBRating;
                 gameInDb.ReleaseDate = viewModel.GetReleaseDate();
                 gameInDb.SupportedPlatforms = selectedPlatforms;
                 gameInDb.Avatar = imageInDb;

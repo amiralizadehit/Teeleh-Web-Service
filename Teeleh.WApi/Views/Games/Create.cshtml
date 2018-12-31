@@ -7,42 +7,52 @@
 <h2>Add a Game</h2>
 @{
     bool condition = false;
-    if (Model.Id != -1) { condition = true; }
+    if (Model.Id != -1)
+    {
+        condition = true;
+    }
 }
 
-@using (Html.BeginForm("Create", "Games", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+
+@using (Html.BeginForm("Create", "Games", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     <p class="alert alert-info">All fields are <strong>required</strong>.</p>
     @Html.AntiForgeryToken()
     <div class="form-group">
         @Html.LabelFor(m => m.Name)
-        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", autofocus = "autofocus" })
+        @Html.TextBoxFor(m => m.Name, new {@class = "form-control", autofocus = "autofocus"})
         @Html.ValidationMessageFor(m => m.Name)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ReleaseDate)
-        @Html.TextBoxFor(m => m.ReleaseDate, new { @class = "form-control", placeholder = "eg 26 Oct 2018" })
+        @Html.TextBoxFor(m => m.ReleaseDate, new {@class = "form-control", placeholder = "eg 26 Oct 2018"})
         @Html.ValidationMessageFor(m => m.ReleaseDate)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Developer)
-        @Html.TextBoxFor(m => m.Developer, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Developer, new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.Developer)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Publisher)
-        @Html.TextBoxFor(m => m.Publisher, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Publisher, new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.Publisher)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.MetaScore)
-        @Html.TextBoxFor(m => m.MetaScore, new { @class = "form-control", type = "number", min = "0", max = "100", step = "1", maxlength="3" })
+        @Html.TextBoxFor(m => m.MetaScore, new {@class = "form-control", type = "number", min = "0", max = "100", step = "1", maxlength = "3"})
         @Html.ValidationMessageFor(m => m.MetaScore)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.UserScore)
-        @Html.TextBoxFor(m => m.UserScore, new { @class = "form-control", type = "number", min = "0", max = "10", step = "0.1",maxlength="3"})
+        @Html.TextBoxFor(m => m.UserScore, new {@class = "form-control", type = "number", min = "0", max = "10", step = "0.1", maxlength = "3"})
         @Html.ValidationMessageFor(m => m.UserScore)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ESRBRating)
+        @Html.EnumDropDownListFor(m => m.ESRBRating,"Choose One ...", new {@class = "form-control"})
+        @Html.ValidationMessageFor(m => m.ESRBRating)
     </div>
     <div class="form-group">
         @Html.CheckBoxFor(m => m.OnlineCapability)
@@ -51,34 +61,34 @@
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedGenres)
         <p class="alert alert-info">You can select multiple genres by holding down <strong>Ctrl</strong> button.</p>
-        @Html.ListBoxFor(m => m.SelectedGenres, Model.Genres, new { @class = "form-control" })
+        @Html.ListBoxFor(m => m.SelectedGenres, Model.Genres, new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.SelectedGenres)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedPlatforms)
         <p class="alert alert-info">You can select multiple platforms by holding down <strong>Ctrl</strong> button.</p>
-        @Html.ListBoxFor(m => m.SelectedPlatforms, Model.Platforms, new { @class = "form-control" })
+        @Html.ListBoxFor(m => m.SelectedPlatforms, Model.Platforms, new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.SelectedPlatforms)
     </div>
     <div>
         @Html.Label("Upload avatar photo")
-        <input type="file" name="ImageFile" />
+        <input type="file" name="ImageFile"/>
 
     </div>
     @Html.HiddenFor(q => q.Id)
-    <br />
+    <br/>
     <div>
         <button type="submit" class="btn btn-primary ">Save</button>
         @if (condition)
         {
-            @Html.ActionLink("Delete", "Delete", "Games", new {id=Model.Id }, new { @class = "btn btn-danger", })
+            @Html.ActionLink("Delete", "Delete", "Games", new {id = Model.Id}, new {@class = "btn btn-danger",})
         }
-        
-    </div>
-    
 
+    </div>
 }
+
 @section scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
 }
+

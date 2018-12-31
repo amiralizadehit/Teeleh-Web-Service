@@ -53,14 +53,6 @@ namespace Teeleh.WApi.Controllers
                     if (!admin.IsCompleted)
                     {
                         CreateSession(admin);
-                        if (adminLogin.RememberMe)
-                        {
-                            HttpCookie cookie = new HttpCookie("Login");
-                            cookie.Values.Add("Username", adminLogin.Username);
-                            cookie.Expires.AddDays(15);
-                            Response.Cookies.Add(cookie);
-                        }
-
                         return RedirectToAction("Edit");
                     }
 
@@ -68,6 +60,13 @@ namespace Teeleh.WApi.Controllers
                     if (admin.Password == hashPassword)
                     {
                         CreateSession(admin);
+                        if (adminLogin.RememberMe)
+                        {
+                            HttpCookie cookie = new HttpCookie("Login");
+                            cookie.Values.Add("Username", adminLogin.Username);
+                            cookie.Expires.AddDays(15);
+                            Response.Cookies.Add(cookie);
+                        }
                         return RedirectToAction("Index", "Home");
                     }
                 }

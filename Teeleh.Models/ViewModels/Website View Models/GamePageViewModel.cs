@@ -14,6 +14,7 @@ namespace Teeleh.Models.ViewModels.Website_View_Models
         public float UserScore { get; set; }
         public List<string> Genres { get; set; }
         public string Developer { get; set; }
+        public string Rating { get; set; }
 
     }
 }

@@ -25,6 +25,7 @@ else
                 <th>Release Date</th>
                 <th>Genre</th>
                 <th>Supported Platforms</th>
+                <th>Rating</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -48,6 +49,9 @@ else
                 <td>
                     @{string platforms = string.Join(" - ", game.SupportedPlatforms);}
                     @platforms
+                </td>
+                <td>
+                    @game.Rating
                 </td>
                 <td>
                     <button data-game-id="@game.Id" class="btn-link js-delete" style="color: red">Delete</button>
