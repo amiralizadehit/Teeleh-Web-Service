@@ -488,9 +488,26 @@
         </member>
         <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements">
             <summary>
-            This endpoint returns a list of games.
+            This endpoint returns a list of all advertisements.
             </summary>
-            <returns>200 : sent 
+            <returns>200 : sent
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements(Teeleh.Models.Dtos.Filter)">
+            <summary>
+            This endpoint returns a list of advertisements filtered by given filter object.
+            </summary>
+            <returns>200 : sent |
+            400 : Bad Request
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            This endpoint returns a list of advertisements owned by a user specified by given session information.
+            </summary>
+            <returns>200 : sent |
+            400 : Bad Request |
+            401 : Session info not found
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Create(Teeleh.Models.Dtos.AdvertisementCreateDto)">
@@ -504,7 +521,7 @@
         </member>
         <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Delete(Teeleh.Models.Dtos.IDPairDto)">
             <summary>
-            This endpoint cancels an advertisementCreate with given id.
+            This endpoint cancels an advertisement with given id.
             </summary>
             <returns>200 : Ok |
             401 : Session info not found |

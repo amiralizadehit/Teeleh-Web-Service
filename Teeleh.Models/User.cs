@@ -33,7 +33,7 @@ namespace Teeleh.Models
 
         public Image UserImage { get; set; }
 
-        public List<Advertisement> Advertisements { get; set; }
+        public virtual List<Advertisement> Advertisements { get; set; }
 
         public int ForgetPassCode { get; set; }
 

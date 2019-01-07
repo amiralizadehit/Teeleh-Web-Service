@@ -51,7 +51,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ESRBRating)
-        @Html.EnumDropDownListFor(m => m.ESRBRating,"Choose One ...", new {@class = "form-control"})
+        @Html.EnumDropDownListFor(m => m.ESRBRating,"Choose One ...", new {@class = "form-control", @style= "padding-top: 2px;padding-bottom:2px;" })
         @Html.ValidationMessageFor(m => m.ESRBRating)
     </div>
     <div class="form-group">

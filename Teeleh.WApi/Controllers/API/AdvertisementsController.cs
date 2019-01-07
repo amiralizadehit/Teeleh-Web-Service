@@ -31,9 +31,9 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// This endpoint returns a list of games.
+        /// This endpoint returns a list of all advertisements.
         /// </summary>
-        /// <returns>200 : sent 
+        /// <returns>200 : sent
         /// </returns>
         [HttpGet]
         [Route("api/advertisements")]
@@ -70,7 +70,12 @@ namespace Teeleh.WApi.Controllers
             return Ok(advertisements);
         }
 
-
+        /// <summary>
+        /// This endpoint returns a list of advertisements filtered by given filter object.
+        /// </summary>
+        /// <returns>200 : sent |
+        /// 400 : Bad Request
+        /// </returns>
         [HttpPost]
         [Route("api/advertisements")]
         public IHttpActionResult GetAdvertisements(Filter filter)
@@ -154,16 +159,61 @@ namespace Teeleh.WApi.Controllers
 
 
         /// <summary>
-        /// This endpoint returns a list of games.
+        /// This endpoint returns a list of advertisements owned by a user specified by given session information.
         /// </summary>
-        /// <returns>200 : sent 
+        /// <returns>200 : sent |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
         /// </returns>
-        /*[HttpPost]
-        [Route("api/advertisements/feed/")]
-        public IHttpActionResult GetAdvertisements(FilterConfig )
+        [HttpPost]
+        [Route("api/advertisements/me")]
+        public async Task<IHttpActionResult> GetAdvertisements(SessionInfoObject pair)
         {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == pair.SessionKey &&
+                                                          s.Id == pair.SessionId &&
+                                                          s.State == SessionState.Active);
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var advertisement = db.Advertisements
+                        .Where(c=>c.isDeleted==false&& c.User.Id==user.Id)
+                        .Select(a => new
+                    {
+                        Id = a.Id,
+                        Game = a.Game.Name,
+                        Avatar = localDomain + a.Game.Avatar.ImagePath,
+                        UserImage = localDomain + a.UserImage.ImagePath,
+                        Platform = a.Platform.Name,
+                        MedType = a.MedType,
+                        Caption = a.Caption,
+                        GameRegion = a.GameReg,
+                        Location = new
+                        {
+                            Province = a.LocationProvince.Name,
+                            City = a.LocationCity.Name,
+                            Region = a.LocationRegion.Name,
+                            Latitude = a.Latitude,
+                            Longitude = a.Longitude
+                        },
+                        CreatedAt = a.CreatedAt,
+                        Price = a.Price,
+                        ExchangeGames = a.ExchangeGames.Select(g => new
+                        {
+                            Name = g.Game.Name,
+                            Avatar = localDomain + g.Game.Avatar.ImagePath
+                        })
+                    }).ToList();
+                    return Ok(advertisement);
 
-        }*/
+                }
+                return Unauthorized();
+            }
+            return BadRequest();
+        }
+
 
         /// <summary>
         /// This endpoint creates an advertisementCreate with given information.
@@ -262,7 +312,7 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// This endpoint cancels an advertisementCreate with given id.
+        /// This endpoint cancels an advertisement with given id.
         /// </summary>
         /// <returns>200 : Ok |
         /// 401 : Session info not found |
