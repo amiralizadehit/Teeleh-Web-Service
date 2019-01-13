@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Teeleh.Models.Enums;
 
 namespace Teeleh.Models
 {
@@ -50,25 +51,6 @@ namespace Teeleh.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-
-
-
-
-        public enum MediaType
-        {
-            NEW,
-            SECOND_HAND,
-            DIGITAL_ACCOUNT
-        }
-
-        public enum GameRegion
-        {
-            ALL,
-            R1,
-            R2,
-            R3,
-            R4
-        }
         
     }
 }

@@ -6,12 +6,15 @@ using System.Data.Entity.SqlServer;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
+using Teeleh.WApi.Helper;
 using Image = System.Drawing.Image;
 
 namespace Teeleh.WApi.Controllers
@@ -22,12 +25,12 @@ namespace Teeleh.WApi.Controllers
     public class AdvertisementsController : ApiController
     {
         private AppDbContext db;
-        private string localDomain;
+    
+
 
         public AdvertisementsController()
         {
             db = new AppDbContext();
-            localDomain = "http://" + HttpContext.Current.Request.Url.Host;
         }
 
         /// <summary>
@@ -39,33 +42,9 @@ namespace Teeleh.WApi.Controllers
         [Route("api/advertisements")]
         public IHttpActionResult GetAdvertisements()
         {
-            var advertisements = db.Advertisements.Where(g => g.isDeleted == false)
-                .Select(a => new
-                {
-                    Id = a.Id,
-                    Game = a.Game.Name,
-                    Avatar = localDomain + a.Game.Avatar.ImagePath,
-                    UserImage = localDomain + a.UserImage.ImagePath,
-                    Platform = a.Platform.Name,
-                    MedType = a.MedType,
-                    Caption = a.Caption,
-                    GameRegion = a.GameReg,
-                    Location = new
-                    {
-                        Province = a.LocationProvince.Name,
-                        City = a.LocationCity.Name,
-                        Region = a.LocationRegion.Name,
-                        Latitude = a.Latitude,
-                        Longitude = a.Longitude
-                    },
-                    CreatedAt = a.CreatedAt,
-                    Price = a.Price,
-                    ExchangeGames = a.ExchangeGames.Select(g => new
-                    {
-                        Name = g.Game.Name,
-                        Avatar = localDomain + g.Game.Avatar.ImagePath
-                    })
-                }).ToList();
+            
+            var advertisements = db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
+                .Select(QueryHelper.GetAdvertisementQuery()).ToList();
 
             return Ok(advertisements);
         }
@@ -125,32 +104,7 @@ namespace Teeleh.WApi.Controllers
 
                 var advertisements = query.Skip(pageSize * (pageNumber - 1))
                     .Take(pageSize)
-                    .Select(a => new
-                    {
-                        Id = a.Id,
-                        Game = a.Game.Name,
-                        Avatar = localDomain + a.Game.Avatar.ImagePath,
-                        Platform = a.Platform.Name,
-                        MedType = a.MedType,
-                        Caption = a.Caption,
-                        UserImage = localDomain + a.UserImage.ImagePath,
-                        GameRegion = a.GameReg,
-                        Location = new
-                        {
-                            Province = a.LocationProvince.Name,
-                            City = a.LocationCity.Name,
-                            Region = a.LocationRegion.Name,
-                            Latitude = a.Latitude,
-                            Longitude = a.Longitude
-                        },
-                        Age = SqlFunctions.DateDiff("minute", a.CreatedAt, DateTime.Now),
-                        Price = a.Price,
-                        ExchangeGames = a.ExchangeGames.Select(g => new
-                        {
-                            Name = g.Game.Name,
-                            Avatar = localDomain + g.Game.Avatar.ImagePath
-                        })
-                    }).ToList();
+                    .Select(QueryHelper.GetAdvertisementQuery()).ToList();
                 return Ok(advertisements);
             }
 
@@ -172,40 +126,13 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == pair.SessionKey &&
-                                                          s.Id == pair.SessionId &&
-                                                          s.State == SessionState.Active);
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
                     var advertisement = db.Advertisements
-                        .Where(c=>c.isDeleted==false&& c.User.Id==user.Id)
-                        .Select(a => new
-                    {
-                        Id = a.Id,
-                        Game = a.Game.Name,
-                        Avatar = localDomain + a.Game.Avatar.ImagePath,
-                        UserImage = localDomain + a.UserImage.ImagePath,
-                        Platform = a.Platform.Name,
-                        MedType = a.MedType,
-                        Caption = a.Caption,
-                        GameRegion = a.GameReg,
-                        Location = new
-                        {
-                            Province = a.LocationProvince.Name,
-                            City = a.LocationCity.Name,
-                            Region = a.LocationRegion.Name,
-                            Latitude = a.Latitude,
-                            Longitude = a.Longitude
-                        },
-                        CreatedAt = a.CreatedAt,
-                        Price = a.Price,
-                        ExchangeGames = a.ExchangeGames.Select(g => new
-                        {
-                            Name = g.Game.Name,
-                            Avatar = localDomain + g.Game.Avatar.ImagePath
-                        })
-                    }).ToList();
+                        .Where(QueryHelper.GetAdvertisementValidationQuery()).Where(c=>c.User.Id == user.Id)
+                        .Select(QueryHelper.GetAdvertisementQuery()).ToList();
                     return Ok(advertisement);
 
                 }
@@ -229,9 +156,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var session = await
-                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == advertisementCreate.SessionInfo.SessionKey &&
-                                                          s.Id == advertisementCreate.SessionInfo.SessionId &&
-                                                          s.State == SessionState.Active);
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(advertisementCreate.SessionInfo));
                 if (session != null)
                 {
                     var user = session.User;
@@ -258,7 +183,7 @@ namespace Teeleh.WApi.Controllers
                         {
                             Name = "User" + "_" + session.User.Id + "Ad",
                             ImagePath = dbPath,
-                            Type = Models.Image.ImageType.USER_IMAGE,
+                            Type = ImageType.USER_IMAGE,
                             CreatedAt = DateTime.Now,
                             UpdatedAt = DateTime.Now
                         };
@@ -269,9 +194,9 @@ namespace Teeleh.WApi.Controllers
                     var new_advertisement = new Advertisement()
                     {
                         User = user,
-                        MedType = (Advertisement.MediaType) advertisementCreate.MedType,
+                        MedType = (MediaType) advertisementCreate.MedType,
                         GameId = advertisementCreate.GameId,
-                        GameReg = (Advertisement.GameRegion) advertisementCreate.GameReg,
+                        GameReg = (GameRegion) advertisementCreate.GameReg,
                         Latitude = advertisementCreate.Latitude,
                         Longitude = advertisementCreate.Longitude,
                         LocationRegionId = advertisementCreate.LocationRegionId,
@@ -326,9 +251,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(s => s.SessionKey == pair.session.SessionKey &&
-                                                          s.Id == pair.session.SessionId &&
-                                                          s.State == SessionState.Active);
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
                 if (sessionInDb != null)
                 {
                     var advertisementInDb = db.Advertisements.SingleOrDefault(a => a.Id == pair.Id);
@@ -378,5 +301,9 @@ namespace Teeleh.WApi.Controllers
 
             return NotFound();
         }*/
+
+
+        ////////////
+        
     }
 }

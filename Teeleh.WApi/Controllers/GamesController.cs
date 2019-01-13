@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Teeleh.Models;
 using Teeleh.Models.CustomValidation.Website;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 using Teeleh.Models.ViewModels.Website_View_Models;
 using Teeleh.Utilities;
@@ -209,7 +210,7 @@ namespace Teeleh.WApi.Controllers
                 {
                     Name = viewModel.Name,
                     ImagePath = avatarPhotoFilePath,
-                    Type = Image.ImageType.AVATAR,
+                    Type = ImageType.AVATAR,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 };
@@ -248,7 +249,7 @@ namespace Teeleh.WApi.Controllers
                         {
                             Name = viewModel.Name,
                             ImagePath = avatarPhotoFilePath,
-                            Type = Image.ImageType.AVATAR,
+                            Type = ImageType.AVATAR,
                             CreatedAt = DateTime.Now,
                             UpdatedAt = DateTime.Now
                         };
@@ -258,7 +259,7 @@ namespace Teeleh.WApi.Controllers
                     {
                         imageInDb.Name = viewModel.Name;
                         imageInDb.ImagePath = avatarPhotoFilePath;
-                        imageInDb.Type = Image.ImageType.AVATAR;
+                        imageInDb.Type = ImageType.AVATAR;
                         imageInDb.UpdatedAt = DateTime.Now;
                     }
                     

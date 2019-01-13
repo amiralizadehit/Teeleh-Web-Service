@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 using System.Web;
 using System.Web.Mvc;
+using Teeleh.Models.Enums;
 
 namespace Teeleh.Models.ViewModels
 {

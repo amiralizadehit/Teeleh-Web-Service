@@ -582,7 +582,7 @@
             400 : Bad Request 
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.SessionsController.Deactive(Teeleh.Models.ViewModels.DeactiveSessionViewModel)">
+        <member name="M:Teeleh.WApi.Controllers.SessionsController.Deactive(Teeleh.Models.ViewModels.SessionInfoObject)">
             <summary>
             Deactives active session with given SessionId and SessionKey - User Logout
             </summary>

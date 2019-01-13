@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Teeleh.Models.Enums;
 
 namespace Teeleh.Models
 {
@@ -20,6 +21,8 @@ namespace Teeleh.Models
         public virtual List<Platform> SupportedPlatforms { get; set; }
 
         public List<Advertisement> Advertisements { get; set; }
+
+        public List<Request> Requests { get; set; }
 
         public List<Exchange> ToExchangeWith { get; set; }
 
@@ -43,18 +46,6 @@ namespace Teeleh.Models
 
     }
 
-    public enum ESRB
-    {
-       [Display(Name = "E")]
-        E = 1,
-       [Display(Name = "E +10")]
-        E10 = 2,
-       [Display(Name = "T")]
-        T = 3,
-       [Display(Name = "M")]
-        M = 4,
-       [Display(Name = "AO")]
-        AO = 5
-    }
+    
 
 }

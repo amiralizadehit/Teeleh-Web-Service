@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Teeleh.Models;
+using Teeleh.WApi.Helper;
 
 
 namespace Teeleh.WApi.Controllers.API
@@ -11,12 +12,12 @@ namespace Teeleh.WApi.Controllers.API
     public class GamesController : ApiController
     {
         private AppDbContext db;
-        private string localDomain;
+       
 
         public GamesController()
         {
             db = new AppDbContext();
-            localDomain = "http://"+HttpContext.Current.Request.Url.Host;
+         
         }
        
 
@@ -25,20 +26,7 @@ namespace Teeleh.WApi.Controllers.API
         public IHttpActionResult GetGames()
         {
             
-            var games = db.Games.Select(x => new
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Image = localDomain+x.Avatar.ImagePath,
-                UserScore = x.UserScore,
-                MetaScore = x.MetaScore,
-                OnlineCapability = x.OnlineCapability,
-                Publisher = x.Publisher,
-                Developer = x.Developer,
-                ReleaseDate = x.ReleaseDate,
-                Genres = x.Genres.Select(t => t.Name).ToList(),
-                Platforms = x.SupportedPlatforms.Select(p => p.Name).ToList()
-            }).ToList();
+            var games = db.Games.Select(QueryHelper.GetGameQuery()).ToList();
             return Ok(games);
         }
         [HttpGet]
@@ -52,7 +40,7 @@ namespace Teeleh.WApi.Controllers.API
                 var game = new
                 {
                     gameInDb.Name,
-                    Avatar = localDomain+ gameInDb.Avatar.ImagePath,
+                    Avatar = QueryHelper.GetLocalDomain() + gameInDb.Avatar.ImagePath,
                     gameInDb.Developer,
                     gameInDb.MetaScore,
                     gameInDb.UserScore,

@@ -1,4 +1,6 @@
-﻿namespace Teeleh.Models.Dtos
+﻿using Teeleh.Models.Enums;
+
+namespace Teeleh.Models.Dtos
 {
     public class ImageDto
     {
@@ -7,11 +9,7 @@
         public string ImagePath { get; set; }
         public ImageType Type { get; set; }
 
-        public enum ImageType
-        {
-            AVATAR,
-            COVER
-        }
+        
     }
 
 }

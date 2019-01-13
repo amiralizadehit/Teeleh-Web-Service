@@ -6,6 +6,7 @@ using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.ViewModels;
 using Teeleh.Utilities;
+using Teeleh.WApi.Helper;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -30,25 +31,7 @@ namespace Teeleh.WApi.Controllers
         public IHttpActionResult GetUsers()
         {
             
-            return Ok(db.Users.Select(q => new
-            {
-                q.FirstName,
-                q.LastName,
-                q.CreatedAt,
-                q.Email,
-                q.PhoneNumber,
-                q.PSNId,
-                q.XBOXLive,
-                q.State,
-                Sessions = q.Sessions.Select(s => new
-                {
-                    s.ActivationMoment,
-                    s.DeactivationMoment,
-                    s.UniqueCode,
-                    s.State,
-                })
-
-            }).ToList());
+            return Ok(db.Users.Select(QueryHelper.GetUserQuery()).ToList());
         }
 
 
@@ -67,7 +50,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 Session session = await db.Sessions.Include(c => c.User)
-                    .SingleOrDefaultAsync(q => q.SessionKey == sessionInfoObject.SessionKey);
+                    .SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
                 if (session == null)
                 {
                     return NotFound();
@@ -537,8 +520,7 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                Session session = await db.Sessions.Include(u=>u.User).SingleOrDefaultAsync(q =>
-                    q.SessionKey == sessionInfoObj.SessionKey && q.State == SessionState.Active);
+                Session session = await db.Sessions.Include(u=>u.User).SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObj));
 
                 if (session != null)
                 {
@@ -574,49 +556,3 @@ namespace Teeleh.WApi.Controllers
         }
     }
 }
-
-/* /// <summary>
-         /// Further information of user is sent to this end-point
-         /// </summary>
-         /// <param name="SessionKey"></param>
-         /// <param name="FirstName"></param>
-         /// <param name="LastName"></param>
-         /// <param name="Password"></param>
-         /// <returns>Http Status Code</returns>
-         [HttpPost]
-         [Route("api/users/userfurtherinfo")]
-         public async Task<IHttpActionResult> UserInfo(UserFurtherInfoViewModel userFurtherInfo)
-         {
-             if (ModelState.IsValid)
-             {
-                 Session session =
-                     await db.Sessions.SingleOrDefaultAsync(f =>
-                         f.SessionKey == userFurtherInfo.SessionKey && f.State == SessionState.Active);
-                 if (session != null)
-                 {
-                     User userInDb = session.User;
-                     userInDb.FirstName = userFurtherInfo.FirstName;
-                     userInDb.LastName = userFurtherInfo.LastName;
-                     userInDb.Password = HasherHelper.sha256_hash(userFurtherInfo.Password);
-                     userInDb.Email = userFurtherInfo.Email;
-                     userInDb.IsDeleted = false;
-                     userInDb.UpdatedAt = DateTime.Now;
- 
-                     await db.SaveChangesAsync();
-                     return Json(new
-                     {
-                         HttpStatusCode = HttpStatusCode.OK
-                     });
-                 }
- 
-                 return Json(new
-                 {
-                     HttpStatusCode = HttpStatusCode.NotAcceptable
-                 });
-             }
- 
-             return Json(new
-             {
-                 HttpStatusCode = HttpStatusCode.BadRequest
-             });
-         }*/

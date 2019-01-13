@@ -35,6 +35,8 @@ namespace Teeleh.Models
 
         public virtual List<Advertisement> Advertisements { get; set; }
 
+        public List<Request> Requests { get; set; }
+
         public int ForgetPassCode { get; set; }
 
         public SessionState State { get; set; }

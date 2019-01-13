@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.ViewModels;
+using Teeleh.WApi.Helper;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -24,26 +25,7 @@ namespace Teeleh.WApi.Controllers
         public IHttpActionResult GetSessions()
         {
 
-            return Ok(db.Sessions.Select(s=>new
-            {
-                s.Id,
-                s.SessionKey,
-                s.ActivationMoment,
-                s.DeactivationMoment,
-                s.State,
-                s.UniqueCode,
-                User = new
-                {
-                    s.User.FirstName,
-                    s.User.LastName,
-                    s.User.CreatedAt,
-                    s.User.Email,
-                    s.User.PhoneNumber,
-                    s.User.PSNId,
-                    s.User.XBOXLive,
-                    s.User.State
-                }
-            }).ToList());
+            return Ok(db.Sessions.Select(QueryHelper.GetSessionQuery()).ToList());
         }
 
 
@@ -63,9 +45,7 @@ namespace Teeleh.WApi.Controllers
                 var session =
                     await db
                         .Sessions
-                        .Where(q => q.Id == pendingSession.SessionId)
-                        .Where(q => q.Nonce == pendingSession.Nounce)
-                        .Where(q => q.State == SessionState.Pending)
+                        .Where(QueryHelper.GetPendingSessionQuery(pendingSession))
                         .SingleOrDefaultAsync();
                 if (session == null)
                 {
@@ -100,15 +80,14 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPut]
         [Route("api/sessions/deactive")]
-        public async Task<IHttpActionResult> Deactive(DeactiveSessionViewModel deactiveSession)
+        public async Task<IHttpActionResult> Deactive(SessionInfoObject sessionInfo)
         {
             if (ModelState.IsValid)
             {
                 var session =
                     await db
                         .Sessions
-                        .Where(q => q.Id == deactiveSession.SessionId)
-                        .Where(q => q.SessionKey == deactiveSession.SessionKey)
+                        .Where(QueryHelper.GetSessionValidationQuery(sessionInfo))
                         .SingleOrDefaultAsync();
                 if (session == null)
                 {

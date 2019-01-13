@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Teeleh.Models.Enums;
 
 namespace Teeleh.Models.Dtos
 {
@@ -13,15 +14,10 @@ namespace Teeleh.Models.Dtos
         public float? MinPrice { get; set; }
         public int? LocationCityId { get; set; }
         public int? LocationProvinceId { get; set; }
-        public Advertisement.MediaType? MedType { get; set; }
+        public Enums.MediaType? MedType { get; set; }
         public int? PageNumber { get; set; }
         public Sort? Sort { get; set; }
     }
 
-    public enum Sort
-    {
-        PRICE_ASCENDING,
-        PRICE_DESCENDING,
-        NEWEST
-    }
+    
 }

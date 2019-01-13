@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Remoting.Channels;
 using System.Web;
 using System.Web.Mvc;
+using Teeleh.Models.Enums;
 
 namespace Teeleh.Models
 {
@@ -15,11 +16,6 @@ namespace Teeleh.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public enum ImageType
-        {
-            AVATAR,
-            COVER,
-            USER_IMAGE
-        }
+        
     }
 }
