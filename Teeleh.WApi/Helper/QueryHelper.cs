@@ -12,7 +12,7 @@ namespace Teeleh.WApi.Helper
     public class QueryHelper
     {
         private static string localDomain = "http://" + HttpContext.Current.Request.Url.Host;
-            
+
 
         public static string GetLocalDomain()
         {
@@ -24,7 +24,6 @@ namespace Teeleh.WApi.Helper
 
         public static Expression<Func<Advertisement, object>> GetAdvertisementQuery()
         {
-
             return a => new
             {
                 Id = a.Id,
@@ -57,6 +56,37 @@ namespace Teeleh.WApi.Helper
         public static Expression<Func<Advertisement, bool>> GetAdvertisementValidationQuery()
         {
             return g => g.isDeleted == false;
+        }
+
+        ///////////////////// Requests Queries //////////////////////////////////////////
+
+        public static Expression<Func<Request, object>> GetRequestQuery()
+        {
+            return r => new
+            {
+                r.Id,
+                Game = r.Game.Name,
+                Avatar = localDomain + r.Game.Avatar.ImagePath,
+                Platform = r.Platforms.Select(p => p.Id),
+                Location = new
+                {
+                    Province = r.LocationProvinces.Select(p => p.Id),
+                    City = r.LocationCities.Select(c => c.Id),
+                    Region = r.LocationRegions.Select(d => d.Id),
+                },
+                MinPrice = r.MinPrice,
+                MaxPrice = r.MaxPrice,
+                IsDeleted = r.IsDeleted,
+                FilterType = r.FilterType,
+                RequestMode = r.ReqMode,
+                CreatedAt = r.CreatedAt,
+                UpdateAt = r.UpdatedAt
+            };
+        }
+
+        public static Expression<Func<Request, bool>> GetRequestValidationQuery()
+        {
+            return g => g.IsDeleted == false;
         }
 
         //////////////////// Sessions Queries ///////////////////////////////////////////
@@ -103,7 +133,6 @@ namespace Teeleh.WApi.Helper
 
         public static Expression<Func<Game, object>> GetGameQuery()
         {
-
             return x => new
             {
                 Id = x.Id,
@@ -162,9 +191,7 @@ namespace Teeleh.WApi.Helper
                     s.UniqueCode,
                     s.State,
                 })
-
             };
         }
-
     }
 }

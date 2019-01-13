@@ -81,6 +81,7 @@
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\IDPairDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
+    <Compile Include="Dtos\RequestCreateDto.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="Image.cs" />
@@ -243,6 +244,14 @@
     <Compile Include="Migrations\201901122302142_AddingRelations.Designer.cs">
       <DependentUpon>201901122302142_AddingRelations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901130214479_AddingUserToRequestModel.cs" />
+    <Compile Include="Migrations\201901130214479_AddingUserToRequestModel.Designer.cs">
+      <DependentUpon>201901130214479_AddingUserToRequestModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901130323143_SomeChangesToRequestModl.cs" />
+    <Compile Include="Migrations\201901130323143_SomeChangesToRequestModl.Designer.cs">
+      <DependentUpon>201901130323143_SomeChangesToRequestModl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -397,6 +406,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901122302142_AddingRelations.resx">
       <DependentUpon>201901122302142_AddingRelations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901130214479_AddingUserToRequestModel.resx">
+      <DependentUpon>201901130214479_AddingUserToRequestModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901130323143_SomeChangesToRequestModl.resx">
+      <DependentUpon>201901130323143_SomeChangesToRequestModl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

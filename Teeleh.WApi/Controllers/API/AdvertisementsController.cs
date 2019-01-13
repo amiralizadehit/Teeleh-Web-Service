@@ -121,12 +121,12 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/advertisements/me")]
-        public async Task<IHttpActionResult> GetAdvertisements(SessionInfoObject pair)
+        public async Task<IHttpActionResult> GetAdvertisements(SessionInfoObject sessionInfoObject)
         {
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -143,7 +143,7 @@ namespace Teeleh.WApi.Controllers
 
 
         /// <summary>
-        /// This endpoint creates an advertisementCreate with given information.
+        /// This endpoint creates an advertisement with the given information.
         /// </summary>
         /// <returns>200 : Advertisement Created |
         /// 401 : Session info not found |
@@ -237,7 +237,7 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// This endpoint cancels an advertisement with given id.
+        /// This endpoint deletes an advertisement with given id.
         /// </summary>
         /// <returns>200 : Ok |
         /// 401 : Session info not found |
@@ -278,32 +278,35 @@ namespace Teeleh.WApi.Controllers
         /// 404 : Advertisement Not Found |
         /// 400 : Bad Request
         /// </returns>
-        /*[Route("api/advertisements/detail/{id}")]
+        [Route("api/advertisements/detail/{id}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Detail(int id)
+        public async Task<IHttpActionResult> Detail(int id)                 //Some dummy algorithm has been implemented
         {
-            var advertisementInDb = db.Advertisements.Where(a => a.Id == id && a.isDeleted == false).
-                Select(f=>new
+            var advertisementInDb = await db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery()).SingleOrDefaultAsync(c=>c.Id==id);
+
+            if (advertisementInDb != null)
+            {
+                var game = advertisementInDb.Game;
+                var toQuery = db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery()).Where(a=> a.Id != id);
+                var similarAds = toQuery.Where(a => a.Game.Id == game.Id).Take(10);
+                if (similarAds.Count() < 4)
                 {
-                    UserImage = f.UserImage.ImagePath,
-                    Caption = f.Caption,
-                    Map = new
+                    var numLeft = 4 - similarAds.Count();
+                    var toAdd = toQuery.Where(a => a.LocationCityId == advertisementInDb.LocationCityId).Take(numLeft);
+                    similarAds = similarAds.Concat(toAdd);
+                    if (toAdd.Count() < numLeft)
                     {
-                        Latitude = f.Latitude,
-                        Longitude = f.Longitude,
-                    },
-                    Adtype = f.MedType,
-                    Location = f.LocationRegion,
-                    Platform = f.Platform.FirstName,
-                    Similar = db.Advertisements.Where(a=>a.GameId==f.GameId)
+                        var numLeft2 = numLeft - toAdd.Count();
+                        var toAdd2 = toQuery.Where(a => a.Game.Developer == game.Developer).Take(numLeft2);
+                        similarAds = similarAds.Concat(toAdd2);
+                    }
+                }
 
-                });
-
+                var result = similarAds.Select(QueryHelper.GetAdvertisementQuery()).ToList();
+                return Ok(result);
+            }
+                
             return NotFound();
-        }*/
-
-
-        ////////////
-        
+        }        
     }
 }

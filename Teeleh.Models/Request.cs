@@ -9,15 +9,20 @@ namespace Teeleh.Models
     public class Request
     {
         public int Id { get; set; }
+
+        public User User { get; set; }
+
         public Game Game { get; set; }
 
-        public List<Platform> Platform { get; set; }
+        public int GameId { get; set; }
+
+        public List<Platform> Platforms { get; set; }
 
         public FilterType FilterType { get; set; }
 
-        public List<Location> LocationProvince { get; set; }
-        public List<Location> LocationCity { get; set; }
-        public List<Location> LocationRegion { get; set; }
+        public List<Location> LocationProvinces { get; set; }
+        public List<Location> LocationCities { get; set; }
+        public List<Location> LocationRegions { get; set; }
         
         
         public RequestMode ReqMode { get; set; }
