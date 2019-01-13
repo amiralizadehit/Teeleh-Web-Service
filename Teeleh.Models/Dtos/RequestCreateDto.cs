@@ -23,15 +23,15 @@ namespace Teeleh.Models.Dtos
         [Required]
         public int FilterType { get; set; }
 
-        public List<int> SelectedProvinces { get; set; }
-        public List<int> SelectedCities { get; set; }
-        public List<int> SelectedRegions { get; set; }
+        public int? LocationProvince { get; set; }
+        public int? LocationCity { get; set; }
+        public int? LocationRegion { get; set; }
 
         [Required]
         public int ReqMode { get; set; }
 
-        public float MinPrice { get; set; }
-        public float MaxPrice { get; set; }
+        public float? MinPrice { get; set; }
+        public float? MaxPrice { get; set; }
 
     }
 }

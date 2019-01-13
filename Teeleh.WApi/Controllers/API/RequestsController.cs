@@ -91,10 +91,6 @@ namespace Teeleh.WApi.Controllers.API
                 {
                     var user = session.User;
 
-                    var selectedProvinces = db.Locations.Where(g => requestCreate.SelectedProvinces.Contains(g.Id)).ToList();
-                    var selectedCities = db.Locations.Where(g => requestCreate.SelectedCities.Contains(g.Id)).ToList();
-                    var selectedRegions = db.Locations.Where(g => requestCreate.SelectedRegions.Contains(g.Id)).ToList();
-
                     var selectedPlatforms = db.Platforms.Where(g => requestCreate.SelectedPlatforms.Contains(g.Id)).ToList();
 
                     var new_request = new Request()
@@ -102,9 +98,9 @@ namespace Teeleh.WApi.Controllers.API
                         GameId = requestCreate.GameId,
                         FilterType = (FilterType)requestCreate.FilterType,
                         ReqMode = (RequestMode)requestCreate.ReqMode,
-                        LocationCities = selectedCities,
-                        LocationProvinces = selectedProvinces,
-                        LocationRegions = selectedRegions,
+                        LocationCityId = requestCreate.LocationCity,
+                        LocationProvinceId = requestCreate.LocationProvince,
+                        LocationRegionId = requestCreate.LocationRegion,
                         User = user,
                         MaxPrice = requestCreate.MaxPrice,
                         MinPrice = requestCreate.MinPrice,

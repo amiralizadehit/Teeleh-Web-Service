@@ -10,8 +10,12 @@ namespace Teeleh.Models
         public int Id { get; set; }
         public float Price { get; set; }
         public GameRegion GameReg { get; set; }
+
+        [Required]
         public virtual User User { get; set; }
+        [Required]
         public virtual Game Game { get; set; }
+
         public virtual Platform Platform { get; set; }
 
 
@@ -37,8 +41,8 @@ namespace Teeleh.Models
         [Required]
         public string PlatformId { get; set; }
 
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
         public string Caption { get; set; }
 

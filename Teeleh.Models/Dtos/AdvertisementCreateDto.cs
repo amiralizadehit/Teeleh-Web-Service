@@ -31,8 +31,10 @@ namespace Teeleh.Models.Dtos
         public int GameReg { get; set; }
 
         public string UserImage { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+
         public string Caption { get; set; }
 
         [Required]

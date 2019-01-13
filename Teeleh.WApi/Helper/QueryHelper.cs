@@ -70,9 +70,9 @@ namespace Teeleh.WApi.Helper
                 Platform = r.Platforms.Select(p => p.Id),
                 Location = new
                 {
-                    Province = r.LocationProvinces.Select(p => p.Id),
-                    City = r.LocationCities.Select(c => c.Id),
-                    Region = r.LocationRegions.Select(d => d.Id),
+                    Province = r.LocationProvince,
+                    City = r.LocationCity,
+                    Region = r.LocationRegion
                 },
                 MinPrice = r.MinPrice,
                 MaxPrice = r.MaxPrice,

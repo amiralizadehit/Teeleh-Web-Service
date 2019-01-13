@@ -252,6 +252,18 @@
     <Compile Include="Migrations\201901130323143_SomeChangesToRequestModl.Designer.cs">
       <DependentUpon>201901130323143_SomeChangesToRequestModl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901131820339_ChangingLocationPropInReq.cs" />
+    <Compile Include="Migrations\201901131820339_ChangingLocationPropInReq.Designer.cs">
+      <DependentUpon>201901131820339_ChangingLocationPropInReq.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901131832517_SomeChangesInRequiredAttr.cs" />
+    <Compile Include="Migrations\201901131832517_SomeChangesInRequiredAttr.Designer.cs">
+      <DependentUpon>201901131832517_SomeChangesInRequiredAttr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901131844533_OptionalLongitudeLatitude.cs" />
+    <Compile Include="Migrations\201901131844533_OptionalLongitudeLatitude.Designer.cs">
+      <DependentUpon>201901131844533_OptionalLongitudeLatitude.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -412,6 +424,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901130323143_SomeChangesToRequestModl.resx">
       <DependentUpon>201901130323143_SomeChangesToRequestModl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901131820339_ChangingLocationPropInReq.resx">
+      <DependentUpon>201901131820339_ChangingLocationPropInReq.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901131832517_SomeChangesInRequiredAttr.resx">
+      <DependentUpon>201901131832517_SomeChangesInRequiredAttr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901131844533_OptionalLongitudeLatitude.resx">
+      <DependentUpon>201901131844533_OptionalLongitudeLatitude.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
