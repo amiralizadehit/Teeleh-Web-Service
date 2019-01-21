@@ -9,6 +9,7 @@ using System.Web.Http.Results;
 using System.Web.Mvc;
 using Teeleh.Models;
 using Teeleh.Models.CustomValidation.Website;
+using Teeleh.Models.Enums;
 using Teeleh.Models.Panel;
 using Teeleh.Models.ViewModels;
 using Teeleh.Models.ViewModels.Website_View_Models;
@@ -133,7 +134,7 @@ namespace Teeleh.WApi.Controllers
         var sessions = db.AdminSessions.Where(s => s.AdminId == admin.Id);
         foreach (var adminSession in sessions)
         {
-            adminSession.State = SessionState.Deactivate;
+            adminSession.State = SessionState.DEACTIVE;
         }
 
             var secretKey = RandomHelper.RandomString(15);
@@ -142,7 +143,7 @@ namespace Teeleh.WApi.Controllers
                 Admin = admin,
                 InitMoment = DateTime.Now,
                 SessionKey = secretKey,
-                State = SessionState.Active
+                State = SessionState.ACTIVE
             };
             Session["SessionKey"] = secretKey;
             Session["UserId"] = admin.Id;

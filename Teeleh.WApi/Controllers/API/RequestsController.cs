@@ -110,7 +110,7 @@ namespace Teeleh.WApi.Controllers.API
                         IsDeleted = false,
                     };
                     db.Requests.Add(new_request);
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
 
                     return Ok(new_request.Id);
                 }

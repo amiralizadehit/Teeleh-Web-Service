@@ -13,7 +13,7 @@ namespace Teeleh.Models
 
         [Required]
         public virtual User User { get; set; }
-        [Required]
+
         public virtual Game Game { get; set; }
 
         public virtual Platform Platform { get; set; }

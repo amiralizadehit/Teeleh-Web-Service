@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 using Teeleh.Models;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 
 namespace Teeleh.WApi.Helper
@@ -45,6 +46,10 @@ namespace Teeleh.WApi.Helper
                 CreatedAt = a.CreatedAt,
                 Age = SqlFunctions.DateDiff("minute", a.CreatedAt, DateTime.Now),
                 Price = a.Price,
+                Information = new{
+                    PhoneNumber = a.User.PhoneNumber,
+                    Email = a.User.Email,
+            },
                 ExchangeGames = a.ExchangeGames.Select(g => new
                 {
                     Name = g.Game.Name,
@@ -119,14 +124,14 @@ namespace Teeleh.WApi.Helper
         {
             return s => s.SessionKey == seesionInfo.SessionKey &&
                         s.Id == seesionInfo.SessionId &&
-                        s.State == SessionState.Active;
+                        s.State == SessionState.ACTIVE;
         }
 
         public static Expression<Func<Session, bool>> GetPendingSessionQuery(PendingSessionViewModel pendingSession)
         {
             return s => s.Id == pendingSession.SessionId
                         && s.Nonce == pendingSession.Nounce
-                        && s.State == SessionState.Pending;
+                        && s.State == SessionState.PENDING;
         }
 
         //////////////////// Games Queries //////////////////////////////////////////////

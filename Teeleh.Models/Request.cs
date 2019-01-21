@@ -15,8 +15,10 @@ namespace Teeleh.Models
         [Required]
         public User User { get; set; }
 
-        [Required]
+        
         public Game Game { get; set; }
+
+        [Required]
         public int GameId { get; set; }
 
         public List<Platform> Platforms { get; set; }

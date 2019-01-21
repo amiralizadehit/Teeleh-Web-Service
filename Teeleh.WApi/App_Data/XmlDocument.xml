@@ -635,6 +635,15 @@
             400 : Bad Request 
             </returns>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.SessionsController.SetFCMToken(Teeleh.Models.Dtos.FCMTokenDto)">
+            <summary>
+            You can set Firebase Cloud Messaging token using this endpoint with given session information.
+            </summary>
+            <returns>200 : Ok (FCM token updated) |
+            404 : No Session Found (Wrong SessionId or SessionKey) |
+            400 : Bad Request 
+            </returns>
+        </member>
         <member name="T:Teeleh.WApi.Controllers.UsersController">
             <summary>
             This class is used to manage client requests related to users.
@@ -722,7 +731,7 @@
             It is used to get all active sessions of a user
             </summary>
             <returns>200 : Ok |
-            406 : No Session Found With Given SessionKey |
+            404 : No Session Found With Given SessionKey |
             400 : Bad Request 
             </returns>
         </member>

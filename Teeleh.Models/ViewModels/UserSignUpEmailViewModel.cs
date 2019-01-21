@@ -24,6 +24,10 @@ namespace Teeleh.Models.ViewModels
             [Required]
             public string Email { get; set; }
 
-            public string UniqueCode { get; set; }
+            public string FCMToken { get; set; }
+
+            public int SessionPlatform { get; set; }
+
+        public string UniqueCode { get; set; }
         }
 }

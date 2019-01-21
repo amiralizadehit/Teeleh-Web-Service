@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teeleh.Models;
+using Teeleh.Models.Dtos;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 using Teeleh.WApi.Helper;
 
@@ -52,10 +54,10 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //Wrong Nounce Entered
                 }
 
-                session.User.State = SessionState.Active;
+                session.User.State = SessionState.ACTIVE;
                 session.User.UpdatedAt = DateTime.Now;
                 session.ActivationMoment = DateTime.Now;
-                session.State = SessionState.Active;
+                session.State = SessionState.ACTIVE;
 
                 await db.SaveChangesAsync();
 
@@ -95,12 +97,39 @@ namespace Teeleh.WApi.Controllers
                 }
 
                 session.DeactivationMoment = DateTime.Now;
-                session.State = SessionState.Deactivate;
+                session.State = SessionState.DEACTIVE;
                 await db.SaveChangesAsync();
 
                 return Ok();
             }
 
+            return BadRequest();
+        }
+
+
+        /// <summary>
+        /// You can set Firebase Cloud Messaging token using this endpoint with given session information.
+        /// </summary>
+        /// <returns>200 : Ok (FCM token updated) |
+        /// 404 : No Session Found (Wrong SessionId or SessionKey) |
+        /// 400 : Bad Request 
+        /// </returns>
+        [HttpPost]
+        [Route("api/sessions/fcm/set")]
+        public async Task<IHttpActionResult> SetFCMToken(FCMTokenDto fcmFcmTokenDto)
+        {
+            if (ModelState.IsValid)
+            {
+                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(fcmFcmTokenDto.session));
+
+                if (session != null)
+                {
+                    session.FCMToke = fcmFcmTokenDto.token;
+                    return Ok();
+                }
+
+                return NotFound();
+            }
             return BadRequest();
         }
     }

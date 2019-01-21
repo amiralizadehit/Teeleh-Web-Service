@@ -18,5 +18,9 @@ namespace Teeleh.Models.ViewModels
 
         public string UniqueCode { get; set; }
 
+        public string FCMToken { get; set; }
+
+        public int SessionPlatform { get; set; }
+
     }
 }

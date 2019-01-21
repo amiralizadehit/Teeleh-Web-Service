@@ -77,6 +77,7 @@
     <Compile Include="CustomValidation\Website\SessionTimeoutAttribute.cs" />
     <Compile Include="Dtos\AdvertisementCreateDto.cs" />
     <Compile Include="Dtos\AdvertisementPageDto.cs" />
+    <Compile Include="Dtos\FCMTokenDto.cs" />
     <Compile Include="Dtos\Filter.cs" />
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\IDPairDto.cs" />
@@ -264,6 +265,10 @@
     <Compile Include="Migrations\201901131844533_OptionalLongitudeLatitude.Designer.cs">
       <DependentUpon>201901131844533_OptionalLongitudeLatitude.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901211959081_AddingFCMToken.cs" />
+    <Compile Include="Migrations\201901211959081_AddingFCMToken.Designer.cs">
+      <DependentUpon>201901211959081_AddingFCMToken.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -433,6 +438,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901131844533_OptionalLongitudeLatitude.resx">
       <DependentUpon>201901131844533_OptionalLongitudeLatitude.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901211959081_AddingFCMToken.resx">
+      <DependentUpon>201901211959081_AddingFCMToken.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

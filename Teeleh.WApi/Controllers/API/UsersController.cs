@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teeleh.Models;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 using Teeleh.Utilities;
 using Teeleh.WApi.Helper;
@@ -114,17 +115,19 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                if (user.State == SessionState.Active)
+                if (user.State == SessionState.ACTIVE)
                 {
                     var sessionKey = RandomHelper.RandomString(32);
 
                     Session newSession = new Session()
                     {
                         Nonce = null,
-                        State = SessionState.Active,
+                        State = SessionState.ACTIVE,
                         InitMoment = DateTime.Now,
                         ActivationMoment = DateTime.Now,
                         SessionKey = sessionKey,
+                        FCMToke = loginInfo.FCMToken,
+                        SessionPlatform = (SessionPlatform)loginInfo.SessionPlatform,
                         UniqueCode = loginInfo.UniqueCode,
                         User = user
                     };
@@ -189,7 +192,7 @@ namespace Teeleh.WApi.Controllers
                         Password = HasherHelper.sha256_hash(userSignUp.Password),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
-                        State = SessionState.Pending
+                        State = SessionState.PENDING
                     };
 
                     db.Users.Add(user);
@@ -197,9 +200,11 @@ namespace Teeleh.WApi.Controllers
                     session = new Session()
                     {
                         Nonce = randomNounce,
-                        State = SessionState.Pending,
+                        State = SessionState.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
+                        FCMToke = userSignUp.FCMToken,
+                        SessionPlatform = (SessionPlatform)userSignUp.SessionPlatform,
                         UniqueCode = userSignUp.UniqueCode,
                         User = user
                     };
@@ -210,20 +215,22 @@ namespace Teeleh.WApi.Controllers
                 }
                 else
                 {
-                    if (user.State == SessionState.Pending) //multiple requests
+                    if (user.State == SessionState.PENDING) //multiple requests
                     {
                         db.Sessions
                             .Where(q => q.UniqueCode == userSignUp.UniqueCode)
-                            .Where(q => q.State == SessionState.Pending)
+                            .Where(q => q.State == SessionState.PENDING)
                             .ToList()
-                            .ForEach(q => q.State = SessionState.Abolished);
+                            .ForEach(q => q.State = SessionState.ABOLISHED);
 
                         session = new Session()
                         {
                             Nonce = randomNounce,
-                            State = SessionState.Pending,
+                            State = SessionState.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
+                            FCMToke = userSignUp.FCMToken,
+                            SessionPlatform = (SessionPlatform)userSignUp.SessionPlatform,
                             UniqueCode = userSignUp.UniqueCode,
                             User = user
                         };
@@ -233,7 +240,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                     }
-                    else if (user.State == SessionState.Active) //already registered user - use login form
+                    else if (user.State == SessionState.ACTIVE) //already registered user - use login form
                     {
                         return Conflict();
                     }
@@ -294,7 +301,7 @@ namespace Teeleh.WApi.Controllers
                         Password = HasherHelper.sha256_hash(userSignUpEmail.Password),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
-                        State = SessionState.Pending
+                        State = SessionState.PENDING
                     };
 
                     db.Users.Add(user);
@@ -302,9 +309,11 @@ namespace Teeleh.WApi.Controllers
                     session = new Session()
                     {
                         Nonce = randomNounce,
-                        State = SessionState.Pending,
+                        State = SessionState.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
+                        FCMToke = userSignUpEmail.FCMToken,
+                        SessionPlatform = (SessionPlatform)userSignUpEmail.SessionPlatform,
                         UniqueCode = userSignUpEmail.UniqueCode,
                         User = user
                     };
@@ -315,20 +324,22 @@ namespace Teeleh.WApi.Controllers
                 }
                 else
                 {
-                    if (user.State == SessionState.Pending) //multiple requests
+                    if (user.State == SessionState.PENDING) //multiple requests
                     {
                         db.Sessions
                             .Where(q => q.UniqueCode == userSignUpEmail.UniqueCode)
-                            .Where(q => q.State == SessionState.Pending)
+                            .Where(q => q.State == SessionState.PENDING)
                             .ToList()
-                            .ForEach(q => q.State = SessionState.Abolished);
+                            .ForEach(q => q.State = SessionState.ABOLISHED);
 
                         session = new Session()
                         {
                             Nonce = randomNounce,
-                            State = SessionState.Pending,
+                            State = SessionState.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
+                            FCMToke = userSignUpEmail.FCMToken,
+                            SessionPlatform = (SessionPlatform)userSignUpEmail.SessionPlatform,
                             UniqueCode = userSignUpEmail.UniqueCode,
                             User = user
                         };
@@ -338,7 +349,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                     }
-                    else if (user.State == SessionState.Active) //already registered user - use login form
+                    else if (user.State == SessionState.ACTIVE) //already registered user - use login form
                     {
                         return Conflict();
                     }
@@ -398,7 +409,7 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //user not found
                 }
 
-                if (user.State==SessionState.Active)
+                if (user.State==SessionState.ACTIVE)
                 {
                     var email = user.Email;
                     user.ForgetPassCode = randomNounce;
@@ -454,7 +465,7 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                if (user.State==SessionState.Active)
+                if (user.State==SessionState.ACTIVE)
                 {
                     user.ForgetPassCode = randomNounce;
 
@@ -511,7 +522,7 @@ namespace Teeleh.WApi.Controllers
         /// It is used to get all active sessions of a user
         /// </summary>
         /// <returns>200 : Ok |
-        /// 406 : No Session Found With Given SessionKey |
+        /// 404 : No Session Found With Given SessionKey |
         /// 400 : Bad Request 
         /// </returns>
         [HttpPost]
@@ -537,11 +548,15 @@ namespace Teeleh.WApi.Controllers
                     );
                 }
 
-                return Conflict();
+                return NotFound();
             }
 
             return BadRequest();
         }
+
+
+
+
 
 
         /// <summary>
