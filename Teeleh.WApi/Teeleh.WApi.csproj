@@ -279,6 +279,7 @@
     <Compile Include="Controllers\API\AdvertisementsController.cs" />
     <Compile Include="Controllers\API\GamesController.cs" />
     <Compile Include="Controllers\API\LocationController.cs" />
+    <Compile Include="Controllers\API\NotificationsController.cs" />
     <Compile Include="Controllers\API\RequestsController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

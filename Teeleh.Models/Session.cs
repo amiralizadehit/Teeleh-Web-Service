@@ -20,7 +20,7 @@ namespace Teeleh.Models
         public string UniqueCode { get; set; }
         public SessionState State { get; set; }
 
-        public string FCMToke { get; set; }
+        public string FCMToken { get; set; }
 
         public SessionPlatform SessionPlatform { get; set; }
 

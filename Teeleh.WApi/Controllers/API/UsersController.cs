@@ -126,7 +126,7 @@ namespace Teeleh.WApi.Controllers
                         InitMoment = DateTime.Now,
                         ActivationMoment = DateTime.Now,
                         SessionKey = sessionKey,
-                        FCMToke = loginInfo.FCMToken,
+                        FCMToken = loginInfo.FCMToken,
                         SessionPlatform = (SessionPlatform)loginInfo.SessionPlatform,
                         UniqueCode = loginInfo.UniqueCode,
                         User = user
@@ -203,7 +203,7 @@ namespace Teeleh.WApi.Controllers
                         State = SessionState.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
-                        FCMToke = userSignUp.FCMToken,
+                        FCMToken = userSignUp.FCMToken,
                         SessionPlatform = (SessionPlatform)userSignUp.SessionPlatform,
                         UniqueCode = userSignUp.UniqueCode,
                         User = user
@@ -229,7 +229,7 @@ namespace Teeleh.WApi.Controllers
                             State = SessionState.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
-                            FCMToke = userSignUp.FCMToken,
+                            FCMToken = userSignUp.FCMToken,
                             SessionPlatform = (SessionPlatform)userSignUp.SessionPlatform,
                             UniqueCode = userSignUp.UniqueCode,
                             User = user
@@ -312,7 +312,7 @@ namespace Teeleh.WApi.Controllers
                         State = SessionState.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
-                        FCMToke = userSignUpEmail.FCMToken,
+                        FCMToken = userSignUpEmail.FCMToken,
                         SessionPlatform = (SessionPlatform)userSignUpEmail.SessionPlatform,
                         UniqueCode = userSignUpEmail.UniqueCode,
                         User = user
@@ -338,7 +338,7 @@ namespace Teeleh.WApi.Controllers
                             State = SessionState.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
-                            FCMToke = userSignUpEmail.FCMToken,
+                            FCMToken = userSignUpEmail.FCMToken,
                             SessionPlatform = (SessionPlatform)userSignUpEmail.SessionPlatform,
                             UniqueCode = userSignUpEmail.UniqueCode,
                             User = user

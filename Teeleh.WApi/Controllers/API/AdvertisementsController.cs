@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -14,6 +15,7 @@ using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
+using Teeleh.Utilities;
 using Teeleh.WApi.Helper;
 using Image = System.Drawing.Image;
 
@@ -227,6 +229,14 @@ namespace Teeleh.WApi.Controllers
                     }
 
                     await db.SaveChangesAsync();
+
+                    // Broadcasting
+
+                    new Thread(delegate () {
+                        Broadcast(advertisementCreate);
+                    }).Start();
+
+
                     return Ok(new_advertisement.Id);
                 }
 
@@ -307,6 +317,60 @@ namespace Teeleh.WApi.Controllers
             }
                 
             return NotFound();
-        }        
+        }
+
+
+
+        private void Broadcast(AdvertisementCreateDto advertisementCreate)
+        {
+            var adPrice = advertisementCreate.Price;
+            var exchangeGamesCounts = advertisementCreate.ExchangeGames.Count;
+
+            var query = db.Requests.Where(QueryHelper.GetRequestValidationQuery())
+                .Where(s => s.GameId == advertisementCreate.GameId);
+
+            if (adPrice != 0 && exchangeGamesCounts > 0)
+            {
+                query = query.Where(r => r.ReqMode == RequestMode.ALL);
+            }
+            else if (adPrice == 0 && exchangeGamesCounts > 0)
+            {
+                query = query.Where(r => r.ReqMode == RequestMode.JUST_EXCHANGE);
+            }
+            else
+            {
+                query = query.Where(r => r.ReqMode == RequestMode.JUST_SELL);
+            }
+
+            if ((MediaType)advertisementCreate.MedType == MediaType.NEW)
+            {
+                query = query.Where(r => r.FilterType == FilterType.JUST_NEW);
+            }
+            else
+            {
+                query = query.Where(r => r.FilterType == FilterType.JUST_SECOND_HAND);
+            }
+
+            if (query.Any())
+            {
+                foreach (var request in query)
+                {
+                    var requestUser = request.User;
+                    var userSessions = requestUser.Sessions;
+                    foreach (var userSession in userSessions)
+                    {
+                        if (userSession.State == SessionState.ACTIVE)
+                        {
+                            var fcmToken = userSession.FCMToken;
+                            if (fcmToken != null)
+                            {
+                                NotificationHelper.SendNotification(fcmToken);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
     }
 }

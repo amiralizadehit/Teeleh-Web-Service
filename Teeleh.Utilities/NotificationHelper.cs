@@ -1,104 +1,72 @@
-﻿using Kavenegar;
-using System;
-using System.Net.Mail;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace Teeleh.Utilities
 {
     public class NotificationHelper
     {
-        //Email
-        private static string ZohoMailAddress= "noreply@teelehdev.ir";
-        private static string ZohoMailPassword= "teeleh2018Abc";
-        private static string ZohoMailHost= "smtp.zoho.com";
 
-        //Kavenegar Spec
-        private static string KavenegarApiKey = "5058466E65505161535A63627539584B592F753769773D3D";
-        private static string KavenegarSenderNumber = "10000066600600 ";
+        //Firebase Spec
+        private static string ServerAPIKey =
+            "AAAAoqnTIRs:APA91bERde3Q6GxZi8OXIUPeQlDGfCt3DiwAWVzatf7jS0IfE-9ZALfAGqsoTWnYw9eYPVlhnnb25uzz2m9K1QuplJC1wqvo5mVQIxNFjCH2Pp5EoZW62cju8uF2d0qph5CNSJeoxEKQ";
 
-        //Twilio Spec
-        private static string TwilioAccountSid = "AC52512b29616508da13ce38f06646e2dc";
-        private static string authToken = "de66d3f1f115e706bafa4cada80a863a";
+        private static string SenderID = "698633888027";
 
-        public enum EmailMode
+
+        public static Exception SendNotification(string token)
         {
-            VERIFICATION,
-            PASSWORD_RECOVERY
-        }
+            var data = new
+            {
+                to = token,
+                data = new
+                {
+                    message = "Hi your test notification works",
+                    title = "Teeleh"
+                }
+            };
 
-        public enum SMSMode
-        {
-            VERIFICATION,
-            PASSWORD_RECOVERY
-        }
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            Byte[] byteArray = Encoding.UTF8.GetBytes(json);
 
-        //Kavenegar
-        public static Exception SendSMS_K(string token, string reciever, SMSMode mode)
-        {
             try
             {
-                var api = new KavenegarApi(KavenegarApiKey);
-                switch (mode)
-                {
-                    case SMSMode.VERIFICATION:
-                        api.VerifyLookup(reciever, token, "TeelehVerification");
-                        break;
-                    case SMSMode.PASSWORD_RECOVERY:
-                        api.VerifyLookup(reciever, token, "TeelehForgetPassword");
-                        break;
-                }
+
+                WebRequest tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
+                tRequest.Method = "post";
+                tRequest.ContentType = "application/json";
+                tRequest.Headers.Add($"Authorization: key={ServerAPIKey}");
+                tRequest.Headers.Add($"Sender: id={SenderID}");
+
+                tRequest.ContentLength = byteArray.Length;
+                Stream stream = tRequest.GetRequestStream();
+                stream.Write(byteArray, 0, byteArray.Length);
+                stream.Close();
+
+                WebResponse response = tRequest.GetResponse();
+                stream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(stream);
+
+                string responseFromServer = reader.ReadToEnd();
+
+                reader.Close();
+                stream.Close();
+                response.Close();
+
                 return null;
             }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
 
-        public static void CodeVerificationEmail(string token, string receiver, EmailMode mode)
-        {
-            string bodyDefault = "";
-            string mailSubject = "";
-            switch (mode)
+            catch (Exception ex)
             {
-                case EmailMode.VERIFICATION:
-                    bodyDefault = "Your verification code is : ";
-                    mailSubject = "Teeleh Verification Code";
-                    break;
-                case EmailMode.PASSWORD_RECOVERY:
-                    bodyDefault = "Your password recovery code is : ";
-                    mailSubject = "Teeleh Password Recovery";
-                    break;
+                return ex;
             }
 
-            string body = bodyDefault + token;
-            SmtpClient smtpClient = new SmtpClient(ZohoMailHost);
-            var mail = new MailMessage();
-            mail.From = new MailAddress(ZohoMailAddress);
-            mail.To.Add(receiver);
-            mail.Subject = mailSubject;
-            mail.IsBodyHtml = true;
-            mail.Body = body;
-            smtpClient.Port = 587;
-            smtpClient.Credentials = new System.Net.NetworkCredential(ZohoMailAddress, ZohoMailPassword);
-            smtpClient.EnableSsl = true;
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.Send(mail);
         }
-
-
-
-
-
-
-        /*public static bool CodeVerificationSMS_T(string token, string receiver)
-        {
-            TwilioClient.Init(TwilioAccountSid, authToken);
-
-            var message = MessageResource.Create(
-                body: "Your Teeleh verification code is :" + Environment.NewLine + token,
-                from: new Twilio.Types.PhoneNumber("+15017122661"),
-                to: new Twilio.Types.PhoneNumber(receiver)
-            );
-        }*/
     }
 }
