@@ -125,6 +125,7 @@ namespace Teeleh.WApi.Controllers
                 if (session != null)
                 {
                     session.FCMToken = fcmFcmTokenDto.token;
+                    db.SaveChanges();
                     return Ok();
                 }
 

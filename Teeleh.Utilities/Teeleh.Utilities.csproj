@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HasherHelper.cs" />
+    <Compile Include="MessageHelper.cs" />
     <Compile Include="NotificationHelper.cs" />
     <Compile Include="RandomHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

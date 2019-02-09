@@ -78,4 +78,13 @@ namespace Teeleh.Models.Enums
 
     public enum SessionPlatform { ANDROID, IOS, WEB }
 
+
+    //////////////////////////////////////////////////// Notifications ///////////////////////////////////////////////
+
+    public enum NotificationStatus
+    {
+        SEEN,
+        UNSEEN
+    }
+
 }

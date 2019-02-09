@@ -19,7 +19,7 @@ namespace Teeleh.Utilities
         private static string SenderID = "698633888027";
 
 
-        public static Exception SendNotification(string token)
+        public static Exception SendRequestNotification(string token, string gameAvatar, string gameName, int advertisementId)
         {
             var data = new
             {

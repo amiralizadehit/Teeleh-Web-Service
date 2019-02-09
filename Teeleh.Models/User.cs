@@ -40,10 +40,16 @@ namespace Teeleh.Models
 
         public int ForgetPassCode { get; set; }
 
+
         public SessionState State { get; set; }
+
         public DateTime? CreatedAt { get; set; }
+
         public DateTime? UpdatedAt { get; set; }
+
         public bool IsDeleted { get; set; }
+
+        public List<Notification> Notifications { get; set; }
 
 
         [ForeignKey("User_Id")]

@@ -11,18 +11,18 @@ namespace Teeleh.WApi.Controllers.API
     public class NotificationsController:ApiController
     {
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("api/notifications/send")]
         public IHttpActionResult Send(DummyDto dto)
         {
-            var result = NotificationHelper.SendNotification(dto.token);
+            var result = NotificationHelper.SendRequestNotification(dto.token);
             if (result == null)
             {
                 return Ok();
             }
 
             return InternalServerError();
-        }
+        }*/
 
     }
 }

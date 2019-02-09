@@ -23,12 +23,18 @@ namespace Teeleh.Models
                 .WithMany(e=>e.Advertisements)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Notification>()
+                .HasRequired(n => n.Advertisement)
+                .WithMany(e => e.Notifications)
+                .WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Platform> Platforms { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }

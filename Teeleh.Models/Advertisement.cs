@@ -50,6 +50,9 @@ namespace Teeleh.Models
         public MediaType MedType { get; set; }
 
         public virtual List<Exchange> ExchangeGames { get; set; }
+
+        public List<Notification> Notifications { get; set; }
+
         public bool isDeleted { get; set; }
 
         public DateTime CreatedAt { get; set; }

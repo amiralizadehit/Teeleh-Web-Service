@@ -270,7 +270,20 @@
     <Compile Include="Migrations\201901211959081_AddingFCMToken.Designer.cs">
       <DependentUpon>201901211959081_AddingFCMToken.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902091128070_AddNotificationModel.cs" />
+    <Compile Include="Migrations\201902091128070_AddNotificationModel.Designer.cs">
+      <DependentUpon>201902091128070_AddNotificationModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902091721454_NotificationModel.cs" />
+    <Compile Include="Migrations\201902091721454_NotificationModel.Designer.cs">
+      <DependentUpon>201902091721454_NotificationModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902091828277_ChangingNotificationModel.cs" />
+    <Compile Include="Migrations\201902091828277_ChangingNotificationModel.Designer.cs">
+      <DependentUpon>201902091828277_ChangingNotificationModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Request.cs" />
@@ -442,6 +455,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901211959081_AddingFCMToken.resx">
       <DependentUpon>201901211959081_AddingFCMToken.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902091128070_AddNotificationModel.resx">
+      <DependentUpon>201902091128070_AddNotificationModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902091721454_NotificationModel.resx">
+      <DependentUpon>201902091721454_NotificationModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902091828277_ChangingNotificationModel.resx">
+      <DependentUpon>201902091828277_ChangingNotificationModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

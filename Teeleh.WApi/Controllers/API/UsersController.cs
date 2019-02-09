@@ -252,12 +252,12 @@ namespace Teeleh.WApi.Controllers
 
                 if (receptorMail != null) //Mail
                 {
-                    NotificationHelper.CodeVerificationEmail(token, receptorMail, NotificationHelper.EmailMode.VERIFICATION);
+                    MessageHelper.CodeVerificationEmail(token, receptorMail, MessageHelper.EmailMode.VERIFICATION);
                 }
 
                 if (receptorPhone!=null)
                 {
-                    if (NotificationHelper.SendSMS_K(token, receptorPhone, NotificationHelper.SMSMode.VERIFICATION) != null) //SMS
+                    if (MessageHelper.SendSMS_K(token, receptorPhone, MessageHelper.SMSMode.VERIFICATION) != null) //SMS
                     {
                         return InternalServerError();
                     }
@@ -357,7 +357,7 @@ namespace Teeleh.WApi.Controllers
 
                 var receptor = userSignUpEmail.Email;
                 var token = randomNounce.ToString();
-                NotificationHelper.CodeVerificationEmail(token, receptor, NotificationHelper.EmailMode.VERIFICATION);
+                MessageHelper.CodeVerificationEmail(token, receptor, MessageHelper.EmailMode.VERIFICATION);
                 
                 return Json(new
                 {
@@ -421,11 +421,11 @@ namespace Teeleh.WApi.Controllers
 
                     if (isEmail) //mail
                     {
-                        NotificationHelper.CodeVerificationEmail(token, email, NotificationHelper.EmailMode.PASSWORD_RECOVERY);
+                        MessageHelper.CodeVerificationEmail(token, email, MessageHelper.EmailMode.PASSWORD_RECOVERY);
                     }
                     else
                     {
-                        if (NotificationHelper.SendSMS_K(token, receptor,NotificationHelper.SMSMode.PASSWORD_RECOVERY) != null) //SMS
+                        if (MessageHelper.SendSMS_K(token, receptor,MessageHelper.SMSMode.PASSWORD_RECOVERY) != null) //SMS
                         {
                             return InternalServerError();
                         }
@@ -473,7 +473,7 @@ namespace Teeleh.WApi.Controllers
 
                     var receptor = email;
                     var token = randomNounce.ToString();
-                    NotificationHelper.CodeVerificationEmail(token, receptor, NotificationHelper.EmailMode.PASSWORD_RECOVERY);
+                    MessageHelper.CodeVerificationEmail(token, receptor, MessageHelper.EmailMode.PASSWORD_RECOVERY);
 
                     return Ok();
                 }
