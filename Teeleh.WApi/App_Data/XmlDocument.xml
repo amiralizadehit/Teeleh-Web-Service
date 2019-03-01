@@ -566,6 +566,16 @@
             <returns>200 : sent 
             </returns>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.GetUserInfo(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            It is used for fetching information of a specific user. (User profile page)
+            </summary>
+            /// <returns>
+            200 : OK |
+            400 : Bad Request |
+            404 : User Not Found
+            </returns>
+        </member>
         <member name="M:Teeleh.WApi.Controllers.API.RequestsController.GetRequests">
             <summary>
             This endpoint returns a list of all requests.
@@ -654,16 +664,6 @@
             Returns a list of all users.
             </summary>
             <returns>List of users</returns>
-        </member>
-        <member name="M:Teeleh.WApi.Controllers.UsersController.GetUserInfo(Teeleh.Models.ViewModels.SessionInfoObject)">
-            <summary>
-            It is used for fetching information of a specific user. (User profile page)
-            </summary>
-            /// <returns>
-            200 : OK |
-            400 : Bad Request |
-            404 : User Not Found
-            </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.Login(Teeleh.Models.ViewModels.LoginViewModel)">
             <summary>

@@ -36,44 +36,7 @@ namespace Teeleh.WApi.Controllers
         }
 
 
-        /// <summary>
-        /// It is used for fetching information of a specific user. (User profile page)
-        /// </summary>
-        /// /// <returns>
-        /// 200 : OK |
-        /// 400 : Bad Request |
-        /// 404 : User Not Found
-        /// </returns>
-        [HttpPost]
-        [Route("api/users/getuserinfo")]
-        public async Task<IHttpActionResult> GetUserInfo(SessionInfoObject sessionInfoObject)
-        {
-            if (ModelState.IsValid)
-            {
-                Session session = await db.Sessions.Include(c => c.User)
-                    .SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
-                if (session == null)
-                {
-                    return NotFound();
-                }
-
-                User user = session.User;
-
-                UserInfoViewModel userInfo = new UserInfoViewModel()
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    //UserAvatar = user.UserImage.AvatarImage,
-                    PSNId = user.PSNId,
-                    XBOXLive = user.XBOXLive
-                };
-
-                return Ok(userInfo);
-            }
-
-            return BadRequest();
-        }
+        
 
         ////////////////////////// User Login /////////////////////////////
         /// <summary>

@@ -8,7 +8,7 @@
         public byte[] UserAvatar { get; set; }
         public string PSNId { get; set; }
         public string XBOXLive { get; set; }
-
+        public string PhoneNumber { get; set; }
     }
 
 }
