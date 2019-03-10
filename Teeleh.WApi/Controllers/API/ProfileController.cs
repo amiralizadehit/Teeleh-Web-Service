@@ -27,7 +27,7 @@ namespace Teeleh.WApi.Controllers.API
         /// /// <returns>
         /// 200 : OK |
         /// 400 : Bad Request |
-        /// 404 : User Not Found
+        /// 401 : Session info not found
         /// </returns>
         [HttpPost]
         [Route("api/profile/me")]
@@ -35,11 +35,11 @@ namespace Teeleh.WApi.Controllers.API
         {
             if (ModelState.IsValid)
             {
-                Session session = await db.Sessions.Include(c => c.User)
-                    .SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                Session session =
+                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
                 if (session == null)
                 {
-                    return NotFound();
+                    return Unauthorized();
                 }
 
                 User user = session.User;
@@ -55,6 +55,73 @@ namespace Teeleh.WApi.Controllers.API
                 };
 
                 return Ok(info);
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// It is used for updating user's profile information
+        /// </summary>
+        /// /// <returns>
+        /// 200 : OK |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/profile/edit")]
+        public async Task<IHttpActionResult> EditProfile(UserInfoViewModel userInfo)
+        {
+            if (ModelState.IsValid)
+            {
+                Session session =
+                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(userInfo.SessionInfo));
+                if (session == null)
+                {
+                    return Unauthorized();
+                }
+
+                User user = session.User;
+                user.FirstName = userInfo.FirstName;
+                user.LastName = userInfo.LastName;
+                user.PSNId = userInfo.PSNId;
+                user.XBOXLive = userInfo.XBOXLive;
+
+                await db.SaveChangesAsync();
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+        /// <summary>
+        /// It is used for changing the password of a user.
+        /// </summary>
+        /// /// <returns>
+        /// 200 : OK |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/profile/edit/password")]
+        public async Task<IHttpActionResult> ChangePassword(UserPasswordViewModel userpass)
+        {
+            if (ModelState.IsValid)
+            {
+                Session session =
+                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(userpass.SessionInfo));
+
+                if (session == null)
+                {
+                    return Unauthorized();
+                }
+
+                User user = session.User;
+                var newPassword = Utilities.HasherHelper.sha256_hash(userpass.Password);
+                user.Password = newPassword;
+                await db.SaveChangesAsync();
+
+                return Ok();
+
             }
 
             return BadRequest();

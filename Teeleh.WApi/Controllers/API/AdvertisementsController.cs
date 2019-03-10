@@ -28,7 +28,6 @@ namespace Teeleh.WApi.Controllers
     public class AdvertisementsController : ApiController
     {
         private AppDbContext db;
-    
 
 
         public AdvertisementsController()
@@ -45,7 +44,6 @@ namespace Teeleh.WApi.Controllers
         [Route("api/advertisements")]
         public IHttpActionResult GetAdvertisements()
         {
-            
             var advertisements = db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
                 .Select(QueryHelper.GetAdvertisementQuery()).ToList();
 
@@ -134,13 +132,14 @@ namespace Teeleh.WApi.Controllers
                 {
                     var user = sessionInDb.User;
                     var advertisement = db.Advertisements
-                        .Where(QueryHelper.GetAdvertisementValidationQuery()).Where(c=>c.User.Id == user.Id)
+                        .Where(QueryHelper.GetAdvertisementValidationQuery()).Where(c => c.User.Id == user.Id)
                         .Select(QueryHelper.GetAdvertisementQuery()).ToList();
                     return Ok(advertisement);
-
                 }
+
                 return Unauthorized();
             }
+
             return BadRequest();
         }
 
@@ -159,42 +158,24 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var session = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(advertisementCreate.SessionInfo));
+                    db.Sessions.SingleOrDefaultAsync(
+                        QueryHelper.GetSessionValidationQuery(advertisementCreate.SessionInfo));
                 if (session != null)
                 {
                     var user = session.User;
-                    Models.Image imageInDb = null;
 
-                    if (!string.IsNullOrEmpty(advertisementCreate.UserImage))
+
+                    var isImageEmpty = string.IsNullOrEmpty(advertisementCreate.UserImage);
+
+                    Models.Image userImage = null;
+                    if (!isImageEmpty)
                     {
-                        Image image;
-                        var byteArray = Convert.FromBase64String(advertisementCreate.UserImage);
-                        Directory.CreateDirectory(
-                            HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id));
-                        string folderPath =
-                            HttpContext.Current.Server.MapPath("~/Image/Advertisements/" + user.Id + "/");
-                        string fileName = "UserImage" + "_" + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") + ".jpg";
-                        string imagePath = folderPath + fileName;
-                        string dbPath = "/Image/Advertisements/" + user.Id + "/" + fileName;
-                        using (MemoryStream mStream = new MemoryStream(byteArray))
-                        {
-                            image = Image.FromStream(mStream);
-                            image.Save(imagePath, ImageFormat.Jpeg);
-                        }
-
-                        imageInDb = new Models.Image()
-                        {
-                            Name = "User" + "_" + session.User.Id + "Ad",
-                            ImagePath = dbPath,
-                            Type = ImageType.USER_IMAGE,
-                            CreatedAt = DateTime.Now,
-                            UpdatedAt = DateTime.Now
-                        };
-                        db.Images.Add(imageInDb);
-                        await db.SaveChangesAsync();
+                        //we write user's uploaded image in memory
+                        userImage = ImageHandler.StoreImage(db, user.Id, advertisementCreate.UserImage);
                     }
 
-                    var new_advertisement = new Advertisement()
+
+                    var newAdvertisement = new Advertisement()
                     {
                         User = user,
                         MedType = (MediaType) advertisementCreate.MedType,
@@ -208,21 +189,21 @@ namespace Teeleh.WApi.Controllers
                         Price = advertisementCreate.Price,
                         PlatformId = advertisementCreate.PlatformId,
                         Caption = advertisementCreate.Caption,
-                        UserImage = imageInDb,
+                        UserImage = userImage,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
                     };
-                    db.Advertisements.Add(new_advertisement);
 
-                    await db.SaveChangesAsync();
+                    db.Advertisements.Add(newAdvertisement);
 
-                    if (advertisementCreate.ExchangeGames.Count != 0) //we have some games to exchange
+
+                    if (advertisementCreate.ExchangeGames.Count > 0) //we have some games to exchange
                     {
                         foreach (var game in advertisementCreate.ExchangeGames)
                         {
                             var newExchange = new Exchange()
                             {
-                                AdvertisementId = new_advertisement.Id,
+                                AdvertisementId = newAdvertisement.Id,
                                 GameId = game
                             };
                             db.Exchanges.Add(newExchange);
@@ -230,12 +211,12 @@ namespace Teeleh.WApi.Controllers
                     }
 
                     await db.SaveChangesAsync();
-
                     // Broadcasting
 
-                    NotificationHandler.CheckForNotification(db, advertisementCreate, new_advertisement.Id);
-                  
-                    return Ok(new_advertisement.Id);
+                    NotificationHandler.BroadcastNewAdvertisement(db, newAdvertisement);
+
+
+                    return Ok(newAdvertisement.Id);
                 }
 
                 return Unauthorized();
@@ -243,6 +224,92 @@ namespace Teeleh.WApi.Controllers
 
             return BadRequest();
         }
+
+        /// <summary>
+        /// This endpoint edits an advertisement
+        /// </summary>
+        /// <returns>200 : Ok |
+        /// 401 : Session info not found |
+        /// 400 : Bad Request |
+        /// 404 : Advertisement not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/advertisements/edit")]
+        public async Task<IHttpActionResult> Edit(AdvertisementEditDto editAd)
+        {
+            if (ModelState.IsValid)
+            {
+                var session = await
+                    db.Sessions.SingleOrDefaultAsync(
+                        QueryHelper.GetSessionValidationQuery(editAd.SessionInfo));
+                if (session != null)
+                {
+                    var user = session.User;
+                    var adInDb =
+                        db.Advertisements.Include(d=>d.UserImage).SingleOrDefault(a => a.Id == editAd.Id && a.User.Id == user.Id);
+
+                    if (adInDb != null)
+                    {
+                        var isImageEmpty = string.IsNullOrEmpty(editAd.UserImage);
+
+                        //we check if a user has lowered the price of an advertisement to some degree.
+                        var isHot = editAd.Price <= adInDb.Price * 3 / 4;
+
+                        //We want to know if a user has uploaded a new image for his/her advertisement 
+                        if (!isImageEmpty)
+                        {
+                            adInDb.UserImage = ImageHandler.StoreImage(db, user.Id, editAd.UserImage);
+                        }
+                        else
+                        {
+                            adInDb.UserImage = null;
+                            
+                        }
+
+                        adInDb.MedType = (MediaType) editAd.MedType;
+                        adInDb.Latitude = editAd.Latitude;
+                        adInDb.Longitude = editAd.Longitude;
+                        adInDb.LocationRegionId = editAd.LocationRegionId;
+                        adInDb.LocationCityId = editAd.LocationCityId;
+                        adInDb.LocationProvinceId = editAd.LocationProvinceId;
+                        adInDb.Price = editAd.Price;
+                        adInDb.Caption = editAd.Caption;
+                        adInDb.UpdatedAt = DateTime.Now;
+
+                        //first we have to get rid of old exchange records in database
+                        db.Exchanges.RemoveRange(db.Exchanges.Where(x => x.AdvertisementId == adInDb.Id));
+
+                        if (editAd.ExchangeGames.Count > 0) //we have some games to exchange
+                        {
+                            foreach (var game in editAd.ExchangeGames)
+                            {
+                                var newExchange = new Exchange()
+                                {
+                                    AdvertisementId = adInDb.Id,
+                                    GameId = game
+                                };
+                                db.Exchanges.Add(newExchange);
+                            }
+                        }
+
+
+                        await db.SaveChangesAsync();
+
+                        // we re-broadcast this advertisement
+                        NotificationHandler.BroadcastOldAdvertisement(db,adInDb,isHot);
+
+                        return Ok();
+                    }
+
+                    return NotFound();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
 
         /// <summary>
         /// This endpoint deletes an advertisement with given id.
@@ -253,7 +320,7 @@ namespace Teeleh.WApi.Controllers
         /// 404 : Advertisement not found
         /// </returns>
         [HttpPost]
-        [Route("api/advertisements/cancel")]
+        [Route("api/advertisements/delete")]
         public async Task<IHttpActionResult> Delete(IDPairDto pair)
         {
             if (ModelState.IsValid)
@@ -288,14 +355,15 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [Route("api/advertisements/detail/{id}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Detail(int id)                 //Some dummy algorithm has been implemented
+        public async Task<IHttpActionResult> Detail(int id) //Some dummy algorithm has been implemented
         {
-            var advertisementInDb = await db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery()).SingleOrDefaultAsync(c=>c.Id==id);
-
+            var advertisementInDb = await db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
+                .SingleOrDefaultAsync(c => c.Id == id);
             if (advertisementInDb != null)
             {
                 var game = advertisementInDb.Game;
-                var toQuery = db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery()).Where(a=> a.Id != id);
+                var toQuery = db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
+                    .Where(a => a.Id != id);
                 var similarAds = toQuery.Where(a => a.Game.Id == game.Id).Take(10);
                 if (similarAds.Count() < 4)
                 {
@@ -313,12 +381,8 @@ namespace Teeleh.WApi.Controllers
                 var result = similarAds.Select(QueryHelper.GetAdvertisementQuery()).ToList();
                 return Ok(result);
             }
-                
+
             return NotFound();
         }
-
-
-
-        
     }
 }

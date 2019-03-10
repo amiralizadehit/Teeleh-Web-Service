@@ -301,6 +301,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\API\SessionsController.cs" />
     <Compile Include="Controllers\API\UsersController.cs" />
+    <Compile Include="Functions\ImageHandler.cs" />
     <Compile Include="Functions\NotificationHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

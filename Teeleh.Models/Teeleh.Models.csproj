@@ -76,8 +76,7 @@
     <Compile Include="CustomValidation\PhoneOrEmail.cs" />
     <Compile Include="CustomValidation\Website\SessionTimeoutAttribute.cs" />
     <Compile Include="Dtos\AdvertisementCreateDto.cs" />
-    <Compile Include="Dtos\AdvertisementPageDto.cs" />
-    <Compile Include="Dtos\DummyDto.cs" />
+    <Compile Include="Dtos\AdvertisementEditDto.cs" />
     <Compile Include="Dtos\FCMTokenDto.cs" />
     <Compile Include="Dtos\Filter.cs" />
     <Compile Include="Dtos\GameDto.cs" />
@@ -292,6 +291,7 @@
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ForgotPasswordVerificationViewModel.cs" />
+    <Compile Include="ViewModels\UserPasswordViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\AdminLoginViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\AdminViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\GameFormViewModel.cs" />

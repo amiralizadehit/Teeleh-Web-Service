@@ -72,50 +72,47 @@ namespace Teeleh.WApi.Controllers
             {
                 return HttpNotFound();
             }
-            else
+            var genres = db.Genres.Select(g => new
             {
-                var genres = db.Genres.Select(g => new
-                {
-                    GenreId = g.Id,
-                    GenreName = g.Name
-                }).ToList();
+                GenreId = g.Id,
+                GenreName = g.Name
+            }).ToList();
 
-                var platforms = db.Platforms.Select(p => new
-                {
-                    PlatformId = p.Id,
-                    PlatformName = p.Name
-                }).ToList();
+            var platforms = db.Platforms.Select(p => new
+            {
+                PlatformId = p.Id,
+                PlatformName = p.Name
+            }).ToList();
 
-                viewModel.Platforms = new MultiSelectList(platforms, "PlatformId", "PlatformName");
-                List<string> supportedPlatformsIds = new List<string>();
+            viewModel.Platforms = new MultiSelectList(platforms, "PlatformId", "PlatformName");
+            List<string> supportedPlatformsIds = new List<string>();
 
-                foreach (var gameSupportedPlatform in game.SupportedPlatforms)
-                {
-                    supportedPlatformsIds.Add(gameSupportedPlatform.Id);
-                }
+            foreach (var gameSupportedPlatform in game.SupportedPlatforms)
+            {
+                supportedPlatformsIds.Add(gameSupportedPlatform.Id);
+            }
 
-                viewModel.SelectedPlatforms = supportedPlatformsIds;
-                List<int> genreIds = new List<int>();
-                foreach (var gameGenre in game.Genres)
-                {
-                    genreIds.Add(gameGenre.Id);
-                }
+            viewModel.SelectedPlatforms = supportedPlatformsIds;
+            List<int> genreIds = new List<int>();
+            foreach (var gameGenre in game.Genres)
+            {
+                genreIds.Add(gameGenre.Id);
+            }
            
 
-                viewModel.Genres = new MultiSelectList(genres, "GenreId", "GenreName");
-                viewModel.SelectedGenres = genreIds;
-                viewModel.Developer = game.Developer;
-                viewModel.MetaScore = game.MetaScore;
-                viewModel.Name = game.Name;
-                viewModel.OnlineCapability = game.OnlineCapability;
-                viewModel.ReleaseDate = game.ReleaseDate.ToString("d MMM yyyy");
-                viewModel.Publisher = game.Publisher;
-                viewModel.ESRBRating = game.Rating;
-                viewModel.UserScore = game.UserScore;
-                viewModel.Id = id;
+            viewModel.Genres = new MultiSelectList(genres, "GenreId", "GenreName");
+            viewModel.SelectedGenres = genreIds;
+            viewModel.Developer = game.Developer;
+            viewModel.MetaScore = game.MetaScore;
+            viewModel.Name = game.Name;
+            viewModel.OnlineCapability = game.OnlineCapability;
+            viewModel.ReleaseDate = game.ReleaseDate.ToString("d MMM yyyy");
+            viewModel.Publisher = game.Publisher;
+            viewModel.ESRBRating = game.Rating;
+            viewModel.UserScore = game.UserScore;
+            viewModel.Id = id;
 
-                return View("Create", viewModel);
-            }
+            return View("Create", viewModel);
         }
 
         [SessionTimeout]

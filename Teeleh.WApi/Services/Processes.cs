@@ -30,11 +30,17 @@ namespace Teeleh.WApi.Services
                 
                     foreach (var userSession in userSessions)
                     {
-                        if (userSession.State != SessionState.ACTIVE) continue;
-                        var fcmToken = userSession.FCMToken;
-                        if (fcmToken == null) continue;
-                        var game = db.Games.Single(g => g.Id == notification.Advertisement.GameId);
-                        NotificationHelper.SendRequestNotification(fcmToken, game.Avatar.ImagePath, game.Name, notification.AdvertisementId);
+                        if (userSession.State == SessionState.ACTIVE)
+                        {
+                            var fcmToken = userSession.FCMToken;
+                            if (fcmToken != null)
+                            {
+                                var game = db.Games.Single(g => g.Id == notification.Advertisement.GameId);
+                                NotificationHelper.SendRequestNotification(fcmToken, game.Avatar.ImagePath, game.Name, notification.AdvertisementId);
+                            }
+                        }
+                        
+                        
                     }
                 
                 }

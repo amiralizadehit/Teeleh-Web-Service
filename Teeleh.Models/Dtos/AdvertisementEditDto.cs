@@ -1,26 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Teeleh.Models.Migrations;
 using Teeleh.Models.ViewModels;
-
 
 namespace Teeleh.Models.Dtos
 {
-    public class AdvertisementCreateDto
+    public class AdvertisementEditDto
     {
-        [Required]
-        public SessionInfoObject SessionInfo { get; set; }
+        [Required] public SessionInfoObject SessionInfo { get; set; }
 
+        [Required] public int Id { get; set; }
 
         public float Price { get; set; }
-
-        [Required]
-        public int GameId { get; set; }
-
-        [Required]
-        public string PlatformId { get; set; }
-
-
-        public int? LocationRegionId { get; set; }
 
         [Required]
         public int LocationCityId { get; set; }
@@ -28,8 +23,7 @@ namespace Teeleh.Models.Dtos
         [Required]
         public int LocationProvinceId { get; set; }
 
-        [Required]
-        public int GameReg { get; set; }
+        public int? LocationRegionId { get; set; }
 
         public string UserImage { get; set; }
 
@@ -43,6 +37,5 @@ namespace Teeleh.Models.Dtos
         public int MedType { get; set; }
 
         public List<int> ExchangeGames { get; set; }
-
     }
 }
