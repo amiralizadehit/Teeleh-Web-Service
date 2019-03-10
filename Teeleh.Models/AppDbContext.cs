@@ -14,6 +14,9 @@ namespace Teeleh.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+
+            //modelBuilder.Entity<Advertisement>().HasMany(m => m.Similars).WithMany();
+
             modelBuilder.Entity<Exchange>()
                 .HasRequired(a => a.Advertisement)
                 .WithMany(e=>e.ExchangeGames)

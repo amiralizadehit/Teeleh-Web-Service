@@ -53,9 +53,12 @@ namespace Teeleh.Models
 
         public List<Notification> Notifications { get; set; }
 
+        public List<Advertisement> Similars { get; set; }
+
         public bool isDeleted { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
         public DateTime UpdatedAt { get; set; }
 
         

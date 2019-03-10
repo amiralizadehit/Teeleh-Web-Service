@@ -281,6 +281,10 @@
     <Compile Include="Migrations\201902091828277_ChangingNotificationModel.Designer.cs">
       <DependentUpon>201902091828277_ChangingNotificationModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903101608516_AddingSimilarsToAdvertisements.cs" />
+    <Compile Include="Migrations\201903101608516_AddingSimilarsToAdvertisements.Designer.cs">
+      <DependentUpon>201903101608516_AddingSimilarsToAdvertisements.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
@@ -464,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902091828277_ChangingNotificationModel.resx">
       <DependentUpon>201902091828277_ChangingNotificationModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903101608516_AddingSimilarsToAdvertisements.resx">
+      <DependentUpon>201903101608516_AddingSimilarsToAdvertisements.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
