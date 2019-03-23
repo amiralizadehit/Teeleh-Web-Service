@@ -501,15 +501,6 @@
             400 : Bad Request
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements(Teeleh.Models.ViewModels.SessionInfoObject)">
-            <summary>
-            This endpoint returns a list of advertisements owned by a user specified by given session information.
-            </summary>
-            <returns>200 : sent |
-            400 : Bad Request |
-            401 : Session info not found
-            </returns>
-        </member>
         <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Create(Teeleh.Models.Dtos.AdvertisementCreateDto)">
             <summary>
             This endpoint creates an advertisement with the given information.
@@ -611,15 +602,6 @@
             This endpoint returns a list of all requests.
             </summary>
             <returns>200 : sent
-            </returns>
-        </member>
-        <member name="M:Teeleh.WApi.Controllers.API.RequestsController.GetRequests(Teeleh.Models.ViewModels.SessionInfoObject)">
-            <summary>
-            This endpoint returns a list of requests owned by a user specified by given session information.
-            </summary>
-            <returns>200 : sent |
-            400 : Bad Request |
-            401 : Session info not found
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.API.RequestsController.Create(Teeleh.Models.Dtos.RequestCreateDto)">
@@ -765,28 +747,63 @@
             400 : Bad Request 
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.UsersController.GetCount">
+        <member name="M:Teeleh.WApi.Controllers.UsersController.GetAdvertisements(Teeleh.Models.ViewModels.SessionInfoObject)">
             <summary>
-            Returns number of users
+            This endpoint returns a list of advertisements owned by a user specified by given session information.
             </summary>
-            <returns>Number of users</returns>
+            <returns>200 : sent |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.GetBookmarkedAdvertisements(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            This endpoint returns a list of advertisements saved by a user specified by given session information.
+            </summary>
+            <returns>200 : Sent |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.CreateAdvertisementBookmark(Teeleh.Models.Dtos.IDPairDto)">
+            <summary>
+            This endpoint creates a new bookmark 
+            </summary>
+            <returns>200 : Created |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.GetRequests(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            This endpoint returns a list of requests owned by a user specified by given session information.
+            </summary>
+            <returns>200 : sent |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
         </member>
         <member name="M:Teeleh.WApi.Functions.ImageHandler.StoreImage(Teeleh.Models.AppDbContext,System.Int32,System.String)">
             <summary>
             This helper function store uploaded images in memory
             </summary>
         </member>
-        <member name="M:Teeleh.WApi.Functions.NotificationHandler.BroadcastNewAdvertisement(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
+        <member name="T:Teeleh.WApi.Functions.NotificationGenerator">
+            <summary>
+            This static class is responsible for making new notifications for the users.
+            </summary>
+        </member>
+        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.BroadcastNewAdvertisement(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
             <summary>
             This helper function broadcasts newly-created advertisements
             </summary>
         </member>
-        <member name="M:Teeleh.WApi.Functions.NotificationHandler.BroadcastOldAdvertisement(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement,System.Boolean)">
+        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.BroadcastOldAdvertisement(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement,System.Boolean)">
             <summary>
             This helper function broadcasts edited advertisements
             </summary>
         </member>
-        <member name="M:Teeleh.WApi.Functions.NotificationHandler.GetMatchedRequests(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
+        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.GetMatchedRequests(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
             <summary>
             This helper function finds which request matches this advertisement
             </summary>

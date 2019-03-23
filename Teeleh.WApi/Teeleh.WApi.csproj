@@ -302,11 +302,10 @@
     <Compile Include="Controllers\API\SessionsController.cs" />
     <Compile Include="Controllers\API\UsersController.cs" />
     <Compile Include="Functions\ImageHandler.cs" />
-    <Compile Include="Functions\NotificationHandler.cs" />
+    <Compile Include="Functions\NotificationGenerator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\QueryHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Hangfire\Dashboard_Authorization\AuthorizationFilter.cs" />
     <Compile Include="Services\Hangfire\Dashboard_Authorization\ForceSessionModule.cs" />
@@ -623,6 +622,7 @@
     <Content Include="Views\Shared\_CustomLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Helper\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -10,8 +10,8 @@ using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
-using Teeleh.WApi.Helper;
 
 namespace Teeleh.WApi.Controllers.API
 {
@@ -39,37 +39,7 @@ namespace Teeleh.WApi.Controllers.API
             return Ok(requests);
         }
 
-        /// <summary>
-        /// This endpoint returns a list of requests owned by a user specified by given session information.
-        /// </summary>
-        /// <returns>200 : sent |
-        /// 400 : Bad Request |
-        /// 401 : Session info not found
-        /// </returns>
-        [HttpPost]
-        [Route("api/requests/me")]
-        public async Task<IHttpActionResult> GetRequests(SessionInfoObject sessionInfoObject)
-        {
-            if (ModelState.IsValid)
-            {
-                var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
-                if (sessionInDb != null)
-                {
-                    var user = sessionInDb.User;
-                    var requests = db.Requests
-
-                        .Where(QueryHelper.GetRequestValidationQuery()).Where(c => c.User.Id == user.Id)
-                        .Select(QueryHelper.GetRequestQuery()).ToList();
-                    return Ok(requests);
-
-                }
-
-                return Unauthorized();
-            }
-
-            return BadRequest();
-        }
+        
 
         /// <summary>
         /// This endpoint creates a request with the given information.
@@ -145,11 +115,12 @@ namespace Teeleh.WApi.Controllers.API
                     db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
                 if (sessionInDb != null)
                 {
-                    var requestInDb = db.Requests.SingleOrDefault(a => a.Id == pair.Id);
+                    var userId = sessionInDb.User.Id;
+                    var requestInDb = db.Requests.SingleOrDefault(a => a.Id == pair.Id && a.User.Id == userId);
                     if (requestInDb != null)
                     {
                         requestInDb.IsDeleted = true;
-                        await db.SaveChangesAsync();
+                        db.SaveChanges();
                         return Ok();
                     }
 

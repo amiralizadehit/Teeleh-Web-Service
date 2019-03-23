@@ -15,7 +15,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/notifications/send")]
         public IHttpActionResult Send(DummyDto dto)
         {
-            var result = NotificationHelper.SendRequestNotification(dto.token);
+            var result = NotificationSender.SendRequestNotification(dto.token);
             if (result == null)
             {
                 return Ok();

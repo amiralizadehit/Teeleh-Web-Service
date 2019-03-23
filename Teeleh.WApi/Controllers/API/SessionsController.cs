@@ -6,8 +6,8 @@ using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
-using Teeleh.WApi.Helper;
 
 namespace Teeleh.WApi.Controllers
 {

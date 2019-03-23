@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Teeleh.Models;
-using Teeleh.WApi.Helper;
+using Teeleh.Models.Helper;
 
 
 namespace Teeleh.WApi.Controllers.API

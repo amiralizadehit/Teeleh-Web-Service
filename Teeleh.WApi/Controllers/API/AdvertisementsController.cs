@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.SqlServer;
+using System.Data.Entity.Validation;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -14,10 +15,10 @@ using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
 using Teeleh.Utilities;
 using Teeleh.WApi.Functions;
-using Teeleh.WApi.Helper;
 using Image = System.Drawing.Image;
 
 namespace Teeleh.WApi.Controllers
@@ -113,35 +114,7 @@ namespace Teeleh.WApi.Controllers
         }
 
 
-        /// <summary>
-        /// This endpoint returns a list of advertisements owned by a user specified by given session information.
-        /// </summary>
-        /// <returns>200 : sent |
-        /// 400 : Bad Request |
-        /// 401 : Session info not found
-        /// </returns>
-        [HttpPost]
-        [Route("api/advertisements/me")]
-        public async Task<IHttpActionResult> GetAdvertisements(SessionInfoObject sessionInfoObject)
-        {
-            if (ModelState.IsValid)
-            {
-                var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
-                if (sessionInDb != null)
-                {
-                    var user = sessionInDb.User;
-                    var advertisement = db.Advertisements
-                        .Where(QueryHelper.GetAdvertisementValidationQuery()).Where(c => c.User.Id == user.Id)
-                        .Select(QueryHelper.GetAdvertisementQuery()).ToList();
-                    return Ok(advertisement);
-                }
-
-                return Unauthorized();
-            }
-
-            return BadRequest();
-        }
+        
 
 
         /// <summary>
@@ -213,7 +186,7 @@ namespace Teeleh.WApi.Controllers
                     await db.SaveChangesAsync();
                     // Broadcasting
 
-                    NotificationHandler.BroadcastNewAdvertisement(db, newAdvertisement);
+                    NotificationGenerator.BroadcastNewAdvertisement(db, newAdvertisement);
 
 
                     return Ok(newAdvertisement.Id);
@@ -246,7 +219,8 @@ namespace Teeleh.WApi.Controllers
                 {
                     var user = session.User;
                     var adInDb =
-                        db.Advertisements.Include(d=>d.UserImage).SingleOrDefault(a => a.Id == editAd.Id && a.User.Id == user.Id);
+                        db.Advertisements.Include(d => d.UserImage)
+                            .SingleOrDefault(a => a.Id == editAd.Id && a.User.Id == user.Id);
 
                     if (adInDb != null)
                     {
@@ -263,7 +237,6 @@ namespace Teeleh.WApi.Controllers
                         else
                         {
                             adInDb.UserImage = null;
-                            
                         }
 
                         adInDb.MedType = (MediaType) editAd.MedType;
@@ -296,7 +269,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                         // we re-broadcast this advertisement
-                        NotificationHandler.BroadcastOldAdvertisement(db,adInDb,isHot);
+                        NotificationGenerator.BroadcastOldAdvertisement(db, adInDb, isHot);
 
                         return Ok();
                     }
@@ -327,13 +300,16 @@ namespace Teeleh.WApi.Controllers
             {
                 var sessionInDb = await
                     db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
+
                 if (sessionInDb != null)
                 {
-                    var advertisementInDb = db.Advertisements.SingleOrDefault(a => a.Id == pair.Id);
+                    var userId = sessionInDb.User.Id;
+                    var advertisementInDb =
+                        db.Advertisements.SingleOrDefault(a => a.Id == pair.Id && a.User.Id == userId);
                     if (advertisementInDb != null)
                     {
                         advertisementInDb.isDeleted = true;
-                        await db.SaveChangesAsync();
+                        db.SaveChanges();
                         return Ok();
                     }
 

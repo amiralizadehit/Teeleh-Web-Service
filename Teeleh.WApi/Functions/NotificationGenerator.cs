@@ -6,12 +6,15 @@ using System.Web;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Utilities;
-using Teeleh.WApi.Helper;
 
 namespace Teeleh.WApi.Functions
 {
-    public class NotificationHandler
+    /// <summary>
+    /// This static class is responsible for making new notifications for the users.
+    /// </summary>
+    public class NotificationGenerator
     {
         /// <summary>
         /// This helper function broadcasts newly-created advertisements
@@ -24,19 +27,24 @@ namespace Teeleh.WApi.Functions
             if (!requests.Any()) return; //we don't have any request matching this advertisement.
             foreach (var request in requests)
             {
-                var user = request.User;
+                var requestUser = request.User;
+                var advertisementUser = advertisement.User;
 
-                //TODO: Here we have to make sure that advertisement creator and request creator are not the same.
-
-                //No one has received this notification before
-                var newNotification = new Notification()
+               //Here we have to make sure that advertisement creator and request creator are not the same.
+                if (requestUser.Id != advertisementUser.Id)
                 {
-                    AdvertisementId = advertisement.Id,
-                    CreatedAt = DateTime.Now,
-                    UserId = user.Id,
-                    Status = NotificationStatus.UNSEEN
-                };
-                db.Notifications.Add(newNotification);
+                    //No one has received this notification before
+                    var newNotification = new Notification()
+                    {
+                        AdvertisementId = advertisement.Id,
+                        CreatedAt = DateTime.Now,
+                        UserId = requestUser.Id,
+                        Message = "آگهی مورد نظر شما موجود شد",
+                        Status = NotificationStatus.UNSEEN,
+                        Type = NotificationType.ADVERTISEMENT
+                    };
+                    db.Notifications.Add(newNotification);
+                }
             }
 
             db.SaveChanges();
@@ -76,20 +84,29 @@ namespace Teeleh.WApi.Functions
                 if (!hasReceived)
                 {
                     //this is the first time user gets this notification
-                    //TODO: Here we have to make sure that advertisement creator and request creator are not the same.
 
-                    var newNotification = new Notification()
+                    //Here we have to make sure that advertisement creator and request creator are not the same.
+                    var requestUser = request.User;
+                    var advertisementUser = advertisement.User;
+
+                    if (requestUser.Id != advertisementUser.Id)
                     {
-                        AdvertisementId = advertisement.Id,
-                        CreatedAt = DateTime.Now,
-                        UserId = user.Id,
-                        Status = NotificationStatus.UNSEEN
-                    };
-                    db.Notifications.Add(newNotification);
+                        var newNotification = new Notification()
+                        {
+                            AdvertisementId = advertisement.Id,
+                            CreatedAt = DateTime.Now,
+                            UserId = user.Id,
+                            Message = "آگهی انتخابی شما تخفیف خورده است",
+                            Status = NotificationStatus.UNSEEN,
+                            Type = NotificationType.ADVERTISEMENT
+                        };
+                        db.Notifications.Add(newNotification);
+                    }
                 }
             }
             db.SaveChanges();
         }
+
 
         /// <summary>
         /// This helper function finds which request matches this advertisement

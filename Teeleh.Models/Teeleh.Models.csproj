@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Advertisement.cs" />
     <Compile Include="AppDbContext.cs" />
+    <Compile Include="AdBookmark.cs" />
     <Compile Include="CustomValidation\PhoneOrEmail.cs" />
     <Compile Include="CustomValidation\Website\SessionTimeoutAttribute.cs" />
     <Compile Include="Dtos\AdvertisementCreateDto.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Dtos\RequestCreateDto.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Exchange.cs" />
+    <Compile Include="Helper\QueryHelper.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Genre.cs" />
@@ -285,7 +287,18 @@
     <Compile Include="Migrations\201903101608516_AddingSimilarsToAdvertisements.Designer.cs">
       <DependentUpon>201903101608516_AddingSimilarsToAdvertisements.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903231133037_ChangingNotificationModel1.cs" />
+    <Compile Include="Migrations\201903231133037_ChangingNotificationModel1.Designer.cs">
+      <DependentUpon>201903231133037_ChangingNotificationModel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903231202175_AddingAdBookmarksModel.cs" />
+    <Compile Include="Migrations\201903231202175_AddingAdBookmarksModel.Designer.cs">
+      <DependentUpon>201903231202175_AddingAdBookmarksModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Notification Object\AdNotification.cs" />
+    <Compile Include="Notification Object\CasualNotification.cs" />
+    <Compile Include="Notification Object\NotificationObject.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
@@ -317,12 +330,6 @@
     <None Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Teeleh.Utilities\Teeleh.Utilities.csproj">
-      <Project>{bc7fae28-04f9-4816-8341-45c64550306c}</Project>
-      <Name>Teeleh.Utilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201808210908035_Init.resx">
@@ -471,6 +478,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903101608516_AddingSimilarsToAdvertisements.resx">
       <DependentUpon>201903101608516_AddingSimilarsToAdvertisements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903231133037_ChangingNotificationModel1.resx">
+      <DependentUpon>201903231133037_ChangingNotificationModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903231202175_AddingAdBookmarksModel.resx">
+      <DependentUpon>201903231202175_AddingAdBookmarksModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,7 @@ namespace Teeleh.Models
                 .HasRequired(a => a.Advertisement)
                 .WithMany(e=>e.ExchangeGames)
                 .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Advertisement>()
                 .HasRequired(g=>g.LocationProvince)
                 .WithMany(e=>e.Advertisements)
@@ -29,6 +30,11 @@ namespace Teeleh.Models
             modelBuilder.Entity<Notification>()
                 .HasRequired(n => n.Advertisement)
                 .WithMany(e => e.Notifications)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<AdBookmark>()
+                .HasRequired(a=>a.Advertisement)
+                .WithMany(e=>e.SavedByUsers)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);
@@ -45,6 +51,7 @@ namespace Teeleh.Models
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
+        public DbSet<AdBookmark> AdBookmarks { get; set; }
 
         // Teeleh 
         public DbSet<Admin> Admins { get; set; }

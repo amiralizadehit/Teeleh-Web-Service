@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
-using Teeleh.Models;
 using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 
-namespace Teeleh.WApi.Helper
+namespace Teeleh.Models.Helper
 {
     public class QueryHelper
     {
@@ -23,8 +21,9 @@ namespace Teeleh.WApi.Helper
 
         ///////////////////// Advertisements Queries /////////////////////////////////////
 
-        public static Expression<Func<Advertisement, object>> GetAdvertisementQuery()
+        public static Expression<System.Func<Advertisement, object>> GetAdvertisementQuery()
         {
+
             return a => new
             {
                 Id = a.Id,
@@ -37,8 +36,11 @@ namespace Teeleh.WApi.Helper
                 GameRegion = a.GameReg,
                 Location = new
                 {
+                    ProvinceId = a.LocationProvinceId,
                     Province = a.LocationProvince.Name,
+                    CityId = a.LocationCityId,
                     City = a.LocationCity.Name,
+                    RegionId = a.LocationRegionId,
                     Region = a.LocationRegion.Name,
                     Latitude = a.Latitude,
                     Longitude = a.Longitude
@@ -52,20 +54,21 @@ namespace Teeleh.WApi.Helper
             },
                 ExchangeGames = a.ExchangeGames.Select(g => new
                 {
+                    Id = g.GameId,
                     Name = g.Game.Name,
                     Avatar = localDomain + g.Game.Avatar.ImagePath
                 })
             };
         }
 
-        public static Expression<Func<Advertisement, bool>> GetAdvertisementValidationQuery()
+        public static Expression<System.Func<Advertisement, bool>> GetAdvertisementValidationQuery()
         {
             return g => g.isDeleted == false;
         }
 
         ///////////////////// Requests Queries //////////////////////////////////////////
 
-        public static Expression<Func<Request, object>> GetRequestQuery()
+        public static Expression<System.Func<Request, object>> GetRequestQuery()
         {
             return r => new
             {
@@ -89,14 +92,14 @@ namespace Teeleh.WApi.Helper
             };
         }
 
-        public static Expression<Func<Request, bool>> GetRequestValidationQuery()
+        public static Expression<System.Func<Request, bool>> GetRequestValidationQuery()
         {
             return g => g.IsDeleted == false;
         }
 
         //////////////////// Sessions Queries ///////////////////////////////////////////
 
-        public static Expression<Func<Session, object>> GetSessionQuery()
+        public static Expression<System.Func<Session, object>> GetSessionQuery()
         {
             return s => new
             {
@@ -120,14 +123,14 @@ namespace Teeleh.WApi.Helper
             };
         }
 
-        public static Expression<Func<Session, bool>> GetSessionValidationQuery(SessionInfoObject seesionInfo)
+        public static Expression<System.Func<Session, bool>> GetSessionValidationQuery(SessionInfoObject seesionInfo)
         {
             return s => s.SessionKey == seesionInfo.SessionKey &&
                         s.Id == seesionInfo.SessionId &&
                         s.State == SessionState.ACTIVE;
         }
 
-        public static Expression<Func<Session, bool>> GetPendingSessionQuery(PendingSessionViewModel pendingSession)
+        public static Expression<System.Func<Session, bool>> GetPendingSessionQuery(PendingSessionViewModel pendingSession)
         {
             return s => s.Id == pendingSession.SessionId
                         && s.Nonce == pendingSession.Nounce
@@ -136,7 +139,7 @@ namespace Teeleh.WApi.Helper
 
         //////////////////// Games Queries //////////////////////////////////////////////
 
-        public static Expression<Func<Game, object>> GetGameQuery()
+        public static Expression<System.Func<Game, object>> GetGameQuery()
         {
             return x => new
             {
@@ -156,7 +159,7 @@ namespace Teeleh.WApi.Helper
 
         //////////////////// Locations Queries //////////////////////////////////////////
 
-        public static Expression<Func<Location, object>> GetLocationQuery()
+        public static Expression<System.Func<Location, object>> GetLocationQuery()
         {
             return b => new
             {
@@ -165,19 +168,19 @@ namespace Teeleh.WApi.Helper
             };
         }
 
-        public static Expression<Func<Location, bool>> GetLocationValidationQuery(int? id, Location.LocationType type)
+        public static Expression<System.Func<Location, bool>> GetLocationValidationQuery(int? id, Location.LocationType type)
         {
             return l => l.ParentId == id && l.Type == type;
         }
 
-        public static Expression<Func<Location, bool>> GetLocationValidationQuery(Location.LocationType type)
+        public static Expression<System.Func<Location, bool>> GetLocationValidationQuery(Location.LocationType type)
         {
             return l => l.Type == type;
         }
 
-        //////////////////// User Queries //////////////////////////////////////////
+        //////////////////// Users Queries //////////////////////////////////////////
 
-        public static Expression<Func<User, object>> GetUserQuery()
+        public static Expression<System.Func<User, object>> GetUserQuery()
         {
             return q => new
             {
@@ -197,6 +200,15 @@ namespace Teeleh.WApi.Helper
                     s.State,
                 })
             };
+        }
+
+        //////////////////// AdBookmarks Queries //////////////////////////////////////
+
+        public static Expression<System.Func<AdBookmark, bool>> GetAdBookmarksValidationQuery(int userId)
+        {
+            //validation and authorization
+            return b => b.IsDeleted == false 
+                        && b.UserId==userId;
         }
     }
 }

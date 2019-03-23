@@ -18,7 +18,6 @@ namespace Teeleh.Models
 
         public virtual Platform Platform { get; set; }
 
-
         public virtual Location LocationRegion { get; set; }
 
         public virtual Location LocationCity { get; set; }
@@ -52,6 +51,8 @@ namespace Teeleh.Models
         public virtual List<Exchange> ExchangeGames { get; set; }
 
         public List<Notification> Notifications { get; set; }
+
+        public List<AdBookmark> SavedByUsers { get; set; }
 
         public List<Advertisement> Similars { get; set; }
 

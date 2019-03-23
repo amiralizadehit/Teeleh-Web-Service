@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teeleh.Models;
+using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
 using Teeleh.Utilities;
-using Teeleh.WApi.Helper;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -489,7 +490,7 @@ namespace Teeleh.WApi.Controllers
         /// 400 : Bad Request 
         /// </returns>
         [HttpPost]
-        [Route("api/users/getusersessions")]
+        [Route("api/users/sessions/me")]
         public async Task<IHttpActionResult> GetUserSessions(SessionInfoObject sessionInfoObj)
         {
             if (ModelState.IsValid)
@@ -518,8 +519,134 @@ namespace Teeleh.WApi.Controllers
         }
 
 
+        /// <summary>
+        /// This endpoint returns a list of advertisements owned by a user specified by given session information.
+        /// </summary>
+        /// <returns>200 : sent |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/advertisements/me")]
+        public async Task<IHttpActionResult> GetAdvertisements(SessionInfoObject sessionInfoObject)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var advertisement = db.Advertisements
+                        .Where(QueryHelper.GetAdvertisementValidationQuery()).Where(c => c.User.Id == user.Id)
+                        .Select(QueryHelper.GetAdvertisementQuery()).ToList();
+                    return Ok(advertisement);
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
 
 
+
+        /// <summary>
+        /// This endpoint returns a list of advertisements saved by a user specified by given session information.
+        /// </summary>
+        /// <returns>200 : Sent |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/advertisements/bookmark/me")]
+        public async Task<IHttpActionResult> GetBookmarkedAdvertisements(SessionInfoObject sessionInfoObject)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;               
+                    return Ok(user.GetAdBookmark(db).ToList());
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+
+        /// <summary>
+        /// This endpoint creates a new bookmark 
+        /// </summary>
+        /// <returns>200 : Created |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/advertisements/bookmark/create")]
+        public async Task<IHttpActionResult> CreateAdvertisementBookmark(IDPairDto pair)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    user.CreateAdBookmark(db, pair.Id);
+                    db.SaveChanges();
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+
+        /// <summary>
+        /// This endpoint returns a list of requests owned by a user specified by given session information.
+        /// </summary>
+        /// <returns>200 : sent |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/requests/me")]
+        public async Task<IHttpActionResult> GetRequests(SessionInfoObject sessionInfoObject)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var requests = db.Requests
+
+                        .Where(QueryHelper.GetRequestValidationQuery()).Where(c => c.User.Id == user.Id)
+                        .Select(QueryHelper.GetRequestQuery()).ToList();
+                    return Ok(requests);
+
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+
+        [HttpPost]
+        [Route("api/users/advertisements/bookmarked")]
 
 
         /// <summary>

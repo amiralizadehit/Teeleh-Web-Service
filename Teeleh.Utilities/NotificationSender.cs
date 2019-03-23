@@ -6,10 +6,12 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using Teeleh.Models;
+using Teeleh.Models.Notification_Object;
 
 namespace Teeleh.Utilities
 {
-    public class NotificationHelper
+    public class NotificationSender
     {
 
         //Firebase Spec
@@ -19,15 +21,15 @@ namespace Teeleh.Utilities
         private static string SenderID = "698633888027";
 
 
-        public static Exception SendRequestNotification(string token, string gameAvatar, string gameName, int advertisementId)
+        public static Exception SendRequestNotification(string token, NotificationObject notification)
         {
             var data = new
             {
                 to = token,
                 data = new
                 {
-                    message = "Hi your test notification works",
-                    title = "Teeleh"
+                    title = "Teeleh",
+                    body = notification,
                 }
             };
 

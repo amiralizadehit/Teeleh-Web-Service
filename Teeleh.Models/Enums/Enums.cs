@@ -87,4 +87,10 @@ namespace Teeleh.Models.Enums
         UNSEEN
     }
 
+    public enum NotificationType
+    {
+        CASUAL,
+        ADVERTISEMENT
+    }
+
 }
