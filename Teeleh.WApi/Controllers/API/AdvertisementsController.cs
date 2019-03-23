@@ -51,6 +51,7 @@ namespace Teeleh.WApi.Controllers
             return Ok(advertisements);
         }
 
+
         /// <summary>
         /// This endpoint returns a list of advertisements filtered by given filter object.
         /// </summary>
@@ -113,8 +114,6 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
-
-        
 
 
         /// <summary>

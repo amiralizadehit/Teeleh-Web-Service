@@ -86,6 +86,14 @@ namespace Teeleh.Models
             };
             db.AdBookmarks.Add(bookmark);
         }
+
+        public void DeleteAdBookmark(AppDbContext db, int advertisementId)
+        {
+            var bookmarkInDb = db.AdBookmarks.SingleOrDefault(a => a.UserId == Id 
+                                                 && a.AdvertisementId == advertisementId);
+            if(bookmarkInDb!=null)
+                bookmarkInDb.IsDeleted = true;
+        }
     }
 
     

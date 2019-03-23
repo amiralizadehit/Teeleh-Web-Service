@@ -581,7 +581,7 @@ namespace Teeleh.WApi.Controllers
 
 
         /// <summary>
-        /// This endpoint creates a new bookmark 
+        /// This endpoint creates a new bookmark for the advertisement specified with Id and the user specified by given session information.
         /// </summary>
         /// <returns>200 : Created |
         /// 400 : Bad Request |
@@ -599,6 +599,36 @@ namespace Teeleh.WApi.Controllers
                 {
                     var user = sessionInDb.User;
                     user.CreateAdBookmark(db, pair.Id);
+                    db.SaveChanges();
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+        /// <summary>
+        /// This endpoint deletes an advertisement bookmark
+        /// </summary>
+        /// <returns>200 : Deleted |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/advertisements/bookmark/delete")]
+        public async Task<IHttpActionResult> RemoveAdvertisementBookmark(IDPairDto pair)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    user.DeleteAdBookmark(db, pair.Id);
                     db.SaveChanges();
                     return Ok();
                 }
@@ -643,10 +673,6 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
-
-
-        [HttpPost]
-        [Route("api/users/advertisements/bookmarked")]
 
 
         /// <summary>
