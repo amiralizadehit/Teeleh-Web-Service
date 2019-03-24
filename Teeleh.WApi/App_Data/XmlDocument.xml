@@ -776,7 +776,16 @@
         </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.RemoveAdvertisementBookmark(Teeleh.Models.Dtos.IDPairDto)">
             <summary>
-            This endpoint deletes an advertisement bookmark
+            This endpoint deletes an advertisement bookmark of the user specified with given information.
+            </summary>
+            <returns>200 : Deleted |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.RemoveAllAdvertisementBookmark(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            This endpoint deletes aal advertisement bookmarks for the user specified with given information.
             </summary>
             <returns>200 : Deleted |
             400 : Bad Request |

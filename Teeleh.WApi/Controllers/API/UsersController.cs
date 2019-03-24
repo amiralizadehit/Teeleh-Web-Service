@@ -611,7 +611,7 @@ namespace Teeleh.WApi.Controllers
 
 
         /// <summary>
-        /// This endpoint deletes an advertisement bookmark
+        /// This endpoint deletes an advertisement bookmark of the user specified with given information.
         /// </summary>
         /// <returns>200 : Deleted |
         /// 400 : Bad Request |
@@ -629,6 +629,43 @@ namespace Teeleh.WApi.Controllers
                 {
                     var user = sessionInDb.User;
                     user.DeleteAdBookmark(db, pair.Id);
+                    db.SaveChanges();
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+
+
+        /// <summary>
+        /// This endpoint deletes aal advertisement bookmarks for the user specified with given information.
+        /// </summary>
+        /// <returns>200 : Deleted |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/advertisements/bookmark/delete/all")]
+        public async Task<IHttpActionResult> RemoveAllAdvertisementBookmark(SessionInfoObject session)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var advertisementIds = user.SavedAdvertisements.Select(b => b.AdvertisementId);
+
+                    foreach (var advertisementId in advertisementIds)
+                    {
+                        user.DeleteAdBookmark(db, advertisementId);
+                    }
                     db.SaveChanges();
                     return Ok();
                 }

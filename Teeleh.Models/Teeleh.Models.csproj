@@ -295,6 +295,10 @@
     <Compile Include="Migrations\201903231202175_AddingAdBookmarksModel.Designer.cs">
       <DependentUpon>201903231202175_AddingAdBookmarksModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903240940507_ChangingAdBookmarksModel.cs" />
+    <Compile Include="Migrations\201903240940507_ChangingAdBookmarksModel.Designer.cs">
+      <DependentUpon>201903240940507_ChangingAdBookmarksModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification Object\AdNotification.cs" />
     <Compile Include="Notification Object\CasualNotification.cs" />
@@ -484,6 +488,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903231202175_AddingAdBookmarksModel.resx">
       <DependentUpon>201903231202175_AddingAdBookmarksModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903240940507_ChangingAdBookmarksModel.resx">
+      <DependentUpon>201903240940507_ChangingAdBookmarksModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

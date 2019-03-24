@@ -77,14 +77,24 @@ namespace Teeleh.Models
 
         public void CreateAdBookmark(AppDbContext db, int advertisementId)
         {
-            var bookmark = new AdBookmark()
+            var bookmarkInDb = db.AdBookmarks.SingleOrDefault(b => b.AdvertisementId == advertisementId
+                                                                   && b.UserId == Id);
+            if (bookmarkInDb == null)
             {
-                AdvertisementId = advertisementId,
-                UserId = Id,
-                CreatedAt = DateTime.Now,
-                IsDeleted = false
-            };
-            db.AdBookmarks.Add(bookmark);
+                var bookmark = new AdBookmark()
+                {
+                    AdvertisementId = advertisementId,
+                    UserId = Id,
+                    CreatedAt = DateTime.Now,
+                    IsDeleted = false
+                };
+                db.AdBookmarks.Add(bookmark);
+            }
+            else
+            {
+                bookmarkInDb.IsDeleted = false;
+            }
+            
         }
 
         public void DeleteAdBookmark(AppDbContext db, int advertisementId)
