@@ -6,8 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using Teeleh.Models;
-using Teeleh.Models.Notification_Object;
+using Teeleh.Utilities.Notification_Object;
 
 namespace Teeleh.Utilities
 {
@@ -70,5 +69,6 @@ namespace Teeleh.Utilities
             }
 
         }
+
     }
 }

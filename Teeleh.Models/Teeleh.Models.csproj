@@ -84,6 +84,7 @@
     <Compile Include="Dtos\IDPairDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
     <Compile Include="Dtos\RequestCreateDto.cs" />
+    <Compile Include="Dtos\StringPairDto.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="Helper\QueryHelper.cs" />
@@ -299,6 +300,10 @@
     <Compile Include="Migrations\201903240940507_ChangingAdBookmarksModel.Designer.cs">
       <DependentUpon>201903240940507_ChangingAdBookmarksModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904231719156_AddingTemporaryEmailAndPhoneNumber.cs" />
+    <Compile Include="Migrations\201904231719156_AddingTemporaryEmailAndPhoneNumber.Designer.cs">
+      <DependentUpon>201904231719156_AddingTemporaryEmailAndPhoneNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification Object\AdNotification.cs" />
     <Compile Include="Notification Object\CasualNotification.cs" />
@@ -491,6 +496,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903240940507_ChangingAdBookmarksModel.resx">
       <DependentUpon>201903240940507_ChangingAdBookmarksModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904231719156_AddingTemporaryEmailAndPhoneNumber.resx">
+      <DependentUpon>201904231719156_AddingTemporaryEmailAndPhoneNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

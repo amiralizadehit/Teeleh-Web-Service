@@ -6,8 +6,9 @@ using System.Web;
 using System.Data.Entity;
 using Teeleh.Models;
 using Teeleh.Models.Enums;
-using Teeleh.Models.Notification_Object;
 using Teeleh.Utilities;
+using Teeleh.Utilities.Enum;
+using Teeleh.Utilities.Notification_Object;
 
 namespace Teeleh.WApi.Services
 {
@@ -61,17 +62,16 @@ namespace Teeleh.WApi.Services
                                         notificationObject = new CasualNotification()
                                         {
                                             Id = notification.Id,
-                                            //Todo: Here we should add a default image for out casual notifications.
+                                            //Todo: Here we should add a default image for our casual notifications.
                                             Avatar = "",
                                             Message = notification.Message,
                                             type = NotificationType.CASUAL
                                         };
+                         
                                         break;
                                 }
                             }
                         }
-                        
-                        
                     }
                 
                 }

@@ -36,7 +36,7 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 Session session =
-                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(sessionInfoObject));
                 if (session == null)
                 {
                     return Unauthorized();
@@ -75,7 +75,7 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 Session session =
-                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(userInfo.SessionInfo));
+                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(userInfo.SessionInfo));
                 if (session == null)
                 {
                     return Unauthorized();
@@ -108,7 +108,7 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 Session session =
-                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(userpass.SessionInfo));
+                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(userpass.SessionInfo));
 
                 if (session == null)
                 {

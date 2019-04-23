@@ -39,7 +39,7 @@ namespace Teeleh.WApi.Controllers
 
         
 
-        ////////////////////////// User Login /////////////////////////////
+        ////////////////////////// User Account Management /////////////////////////////
         /// <summary>
         /// It is used for user login.
         /// </summary>
@@ -116,8 +116,6 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
-
-        /////////////////////////  User SignUp ////////////////////////////
 
         /// <summary>
         /// It is used for user sign up with given information. (uses SMS/Email for Two-Factor authentication) 
@@ -333,10 +331,6 @@ namespace Teeleh.WApi.Controllers
         }
 
 
-
-        ////////////////////// User Forget Password ///////////////////////
-
-
         /// <summary>
         /// It is used to send password recovery code via SMS/Email to users who have forgotten their passwords with given phone number/Email.
         /// </summary>
@@ -376,7 +370,7 @@ namespace Teeleh.WApi.Controllers
                 if (user.State==SessionState.ACTIVE)
                 {
                     var email = user.Email;
-                    user.ForgetPassCode = randomNounce;
+                    user.Token = randomNounce;
 
                     await db.SaveChangesAsync();
 
@@ -431,7 +425,7 @@ namespace Teeleh.WApi.Controllers
 
                 if (user.State==SessionState.ACTIVE)
                 {
-                    user.ForgetPassCode = randomNounce;
+                    user.Token = randomNounce;
 
                     await db.SaveChangesAsync();
 
@@ -465,14 +459,14 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 User user = await db.Users.SingleOrDefaultAsync(q =>
-                    q.ForgetPassCode == forgotPasswordVerificationViewModel.ForgetPassCode);
+                    q.Token == forgotPasswordVerificationViewModel.ForgetPassCode);
                 if (user == null)
                 {
                     return NotFound(); //Wrong Code
                 }
 
                 user.Password = HasherHelper.sha256_hash(forgotPasswordVerificationViewModel.Password);
-                user.ForgetPassCode = 0;
+                user.Token = 0;
                 await db.SaveChangesAsync();
 
                 return Ok();
@@ -481,6 +475,39 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
+
+
+
+        [HttpPost]
+        [Route("api/users/newphonenumber")]
+        public async Task<IHttpActionResult> NewPhoneNumber(StringPairDto stringDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(stringDto.session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var result = user.ChangePhoneNumber(stringDto.StringId);
+                    db.SaveChanges();
+
+                    if (!result)
+                    {
+                        return InternalServerError();
+                    }
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+       
+
+        ////////////////////////// User Sessions /////////////////////////////
 
         /// <summary>
         /// It is used to get all active sessions of a user
@@ -495,7 +522,7 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                Session session = await db.Sessions.Include(u=>u.User).SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObj));
+                Session session = await db.Sessions.Include(u=>u.User).SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(sessionInfoObj));
 
                 if (session != null)
                 {
@@ -519,6 +546,10 @@ namespace Teeleh.WApi.Controllers
         }
 
 
+
+        ///////////////////////////// User Advertisements /////////////////////////////////
+
+
         /// <summary>
         /// This endpoint returns a list of advertisements owned by a user specified by given session information.
         /// </summary>
@@ -533,7 +564,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(sessionInfoObject));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -565,7 +596,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(sessionInfoObject));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;               
@@ -594,7 +625,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -624,7 +655,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -656,7 +687,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -678,6 +709,8 @@ namespace Teeleh.WApi.Controllers
 
 
 
+        //////////////////////////////// User Requests ////////////////////////////////////
+
         /// <summary>
         /// This endpoint returns a list of requests owned by a user specified by given session information.
         /// </summary>
@@ -692,7 +725,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(sessionInfoObject));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(sessionInfoObject));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;

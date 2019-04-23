@@ -123,11 +123,12 @@ namespace Teeleh.Models.Helper
             };
         }
 
-        public static Expression<System.Func<Session, bool>> GetSessionValidationQuery(SessionInfoObject seesionInfo)
+        public static Expression<System.Func<Session, bool>> GetUserValidationQuery(SessionInfoObject seesionInfo)
         {
             return s => s.SessionKey == seesionInfo.SessionKey &&
                         s.Id == seesionInfo.SessionId &&
-                        s.State == SessionState.ACTIVE;
+                        s.State == SessionState.ACTIVE &&
+                        s.User.State ==SessionState.ACTIVE;
         }
 
         public static Expression<System.Func<Session, bool>> GetPendingSessionQuery(PendingSessionViewModel pendingSession)

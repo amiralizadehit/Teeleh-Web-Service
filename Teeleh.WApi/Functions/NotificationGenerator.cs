@@ -8,6 +8,7 @@ using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 using Teeleh.Utilities;
+using Teeleh.Utilities.Enum;
 
 namespace Teeleh.WApi.Functions
 {

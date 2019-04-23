@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teeleh.Models.Enums;
+using Teeleh.Utilities.Enum;
 
 namespace Teeleh.Models
 {

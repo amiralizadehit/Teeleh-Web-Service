@@ -131,7 +131,7 @@ namespace Teeleh.WApi.Controllers
             {
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(
-                        QueryHelper.GetSessionValidationQuery(advertisementCreate.SessionInfo));
+                        QueryHelper.GetUserValidationQuery(advertisementCreate.SessionInfo));
                 if (session != null)
                 {
                     var user = session.User;
@@ -213,7 +213,7 @@ namespace Teeleh.WApi.Controllers
             {
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(
-                        QueryHelper.GetSessionValidationQuery(editAd.SessionInfo));
+                        QueryHelper.GetUserValidationQuery(editAd.SessionInfo));
                 if (session != null)
                 {
                     var user = session.User;
@@ -298,7 +298,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionValidationQuery(pair.session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.session));
 
                 if (sessionInDb != null)
                 {

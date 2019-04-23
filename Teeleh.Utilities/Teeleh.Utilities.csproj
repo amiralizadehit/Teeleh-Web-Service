@@ -78,11 +78,5 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Teeleh.Models\Teeleh.Models.csproj">
-      <Project>{48370b23-c253-460b-9fcf-92e221862c02}</Project>
-      <Name>Teeleh.Models</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

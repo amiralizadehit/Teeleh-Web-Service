@@ -6,33 +6,30 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
+using Teeleh.Utilities;
 
 namespace Teeleh.Models
 {
     public class User
     {
-        
         //Properties
 
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(30)]
-        public string FirstName { get; set; }
+        [Required] [StringLength(30)] public string FirstName { get; set; }
 
-        [Required]
-        [StringLength(30)]
-        public string LastName { get; set; }
+        [Required] [StringLength(30)] public string LastName { get; set; }
 
 
-        [StringLength(11)]
-        public string PhoneNumber { get; set; }
+        [StringLength(11)] public string PhoneNumber { get; set; }
 
-        [Required]
-        public string Password { get; set; }
+        [StringLength(11)] public string TemporaryPhoneNumber { get; set; }
 
-        [EmailAddress]
-        public string Email { get; set; }
+        [Required] public string Password { get; set; }
+
+        [EmailAddress] public string Email { get; set; }
+
+        [EmailAddress] public string TemporaryEmail { get; set; }
 
         public string PSNId { get; set; }
 
@@ -44,7 +41,7 @@ namespace Teeleh.Models
 
         public List<Request> Requests { get; set; }
 
-        public int ForgetPassCode { get; set; }
+        public int? Token { get; set; }
 
         public SessionState State { get; set; }
 
@@ -54,8 +51,7 @@ namespace Teeleh.Models
 
         public List<Notification> Notifications { get; set; }
 
-        [ForeignKey("User_Id")]
-        public virtual List<Session> Sessions { get; set; }
+        [ForeignKey("User_Id")] public virtual List<Session> Sessions { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 
@@ -68,10 +64,10 @@ namespace Teeleh.Models
         {
             var advertisements = db.AdBookmarks
                 .Where(QueryHelper.GetAdBookmarksValidationQuery(Id))
-                .Select(a=>a.Advertisement)
+                .Select(a => a.Advertisement)
                 .Where(QueryHelper.GetAdvertisementValidationQuery())
                 .Select(QueryHelper.GetAdvertisementQuery());
-            
+
             return advertisements;
         }
 
@@ -94,17 +90,30 @@ namespace Teeleh.Models
             {
                 bookmarkInDb.IsDeleted = false;
             }
-            
         }
 
         public void DeleteAdBookmark(AppDbContext db, int advertisementId)
         {
-            var bookmarkInDb = db.AdBookmarks.SingleOrDefault(a => a.UserId == Id 
-                                                 && a.AdvertisementId == advertisementId);
-            if(bookmarkInDb!=null)
+            var bookmarkInDb = db.AdBookmarks.SingleOrDefault(a => a.UserId == Id
+                                                                   && a.AdvertisementId == advertisementId);
+            if (bookmarkInDb != null)
                 bookmarkInDb.IsDeleted = true;
         }
-    }
 
-    
+        public bool ChangePhoneNumber(string newPhoneNumber)
+        {
+            bool result = true;
+            TemporaryPhoneNumber = newPhoneNumber;
+            Token = RandomHelper.RandomInt(10000, 99999);
+
+            if (PhoneNumber != null)
+                if (MessageHelper.SendSMS_K(Token.ToString(), PhoneNumber, MessageHelper.SMSMode.VERIFICATION) != null)
+                    result = false;
+            if (Email != null)
+                MessageHelper.CodeVerificationEmail(Token.ToString(), PhoneNumber,
+                    MessageHelper.EmailMode.VERIFICATION);
+
+            return result;
+        }
+    }
 }
