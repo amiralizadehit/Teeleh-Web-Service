@@ -8,12 +8,8 @@ using Teeleh.Models.ViewModels;
 
 namespace Teeleh.Models.Dtos
 {
-    public class RequestCreateDto
+    public class RequestCreateDto :PairDto
     {
-
-        [Required]
-        public SessionInfoObject SeesionInfoObject { get; set; }
-
         [Required]
         public int GameId { get; set; }
 

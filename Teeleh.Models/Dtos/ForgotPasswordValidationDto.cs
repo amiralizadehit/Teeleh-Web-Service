@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Teeleh.Models.ViewModels
+namespace Teeleh.Models.Dtos
 {
-    public class ForgotPasswordVerificationViewModel
+    public class ForgotPasswordValidationDto
     {
         [Required]
         [Range(10000, 99999)]

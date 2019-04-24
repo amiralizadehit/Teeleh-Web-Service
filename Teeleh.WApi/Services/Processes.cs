@@ -36,7 +36,7 @@ namespace Teeleh.WApi.Services
                     foreach (var userSession in userSessions)
                     {
                         //we want to make sure that we send notification to an active session
-                        if (userSession.State == SessionState.ACTIVE)
+                        if (userSession.State == State.ACTIVE)
                         {
                             var fcmToken = userSession.FCMToken;
                             if (fcmToken != null)

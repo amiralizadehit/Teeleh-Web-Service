@@ -5,12 +5,9 @@ using Teeleh.Models.ViewModels;
 
 namespace Teeleh.Models.Dtos
 {
-    public class AdvertisementCreateDto
+    public class AdvertisementCreateDto :PairDto
     {
-        [Required]
-        public SessionInfoObject SessionInfo { get; set; }
-
-
+       
         public float Price { get; set; }
 
         [Required]

@@ -639,12 +639,12 @@
             </summary>
             <returns>List of all sessions</returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.SessionsController.Active(Teeleh.Models.ViewModels.PendingSessionViewModel)">
+        <member name="M:Teeleh.WApi.Controllers.SessionsController.Active(Teeleh.Models.Dtos.NoncePairDto)">
             <summary>
             Actives created session for user with given phoneNumber and nonce then returns SessionId and SessionKey.
             </summary>
             <returns>200 : Ok (User Confirmed Successfully - Session Info Sent) |
-            404 : No Session Found (Wrong Nounce Entered) |
+            404 : No Session Found (Wrong Nonce Entered) |
             400 : Bad Request 
             </returns>
         </member>
@@ -657,7 +657,7 @@
             400 : Bad Request 
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.SessionsController.SetFCMToken(Teeleh.Models.Dtos.FCMTokenDto)">
+        <member name="M:Teeleh.WApi.Controllers.SessionsController.SetFCMToken(Teeleh.Models.Dtos.TokenPairDto)">
             <summary>
             You can set Firebase Cloud Messaging token using this endpoint with given session information.
             </summary>
@@ -677,7 +677,7 @@
             </summary>
             <returns>List of users</returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.UsersController.Login(Teeleh.Models.ViewModels.LoginViewModel)">
+        <member name="M:Teeleh.WApi.Controllers.UsersController.Login(Teeleh.Models.Dtos.LoginDto)">
             <summary>
             It is used for user login.
             </summary>
@@ -729,7 +729,7 @@
             400 : Bad Request
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.UsersController.ForgotPasswordReset(Teeleh.Models.ViewModels.ForgotPasswordVerificationViewModel)">
+        <member name="M:Teeleh.WApi.Controllers.UsersController.ForgotPasswordReset(Teeleh.Models.Dtos.ForgotPasswordValidationDto)">
             <summary>
             It is used to change the old password of users who have forgotten their passwords.
             </summary>

@@ -2,7 +2,9 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Web.Http;
+using System.Web.UI;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
@@ -50,7 +52,7 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/users/login")]
-        public async Task<IHttpActionResult> Login(LoginViewModel loginInfo)
+        public async Task<IHttpActionResult> Login(LoginDto loginInfo)
         {
             if (ModelState.IsValid)
             {
@@ -79,14 +81,14 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                if (user.State == SessionState.ACTIVE)
+                if (user.State == State.ACTIVE)
                 {
                     var sessionKey = RandomHelper.RandomString(32);
 
                     Session newSession = new Session()
                     {
                         Nonce = null,
-                        State = SessionState.ACTIVE,
+                        State = State.ACTIVE,
                         InitMoment = DateTime.Now,
                         ActivationMoment = DateTime.Now,
                         SessionKey = sessionKey,
@@ -154,7 +156,7 @@ namespace Teeleh.WApi.Controllers
                         Password = HasherHelper.sha256_hash(userSignUp.Password),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
-                        State = SessionState.PENDING
+                        State = State.PENDING
                     };
 
                     db.Users.Add(user);
@@ -162,7 +164,7 @@ namespace Teeleh.WApi.Controllers
                     session = new Session()
                     {
                         Nonce = randomNounce,
-                        State = SessionState.PENDING,
+                        State = State.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
                         FCMToken = userSignUp.FCMToken,
@@ -177,18 +179,19 @@ namespace Teeleh.WApi.Controllers
                 }
                 else
                 {
-                    if (user.State == SessionState.PENDING) //multiple requests
+                    if (user.State == State.PENDING) //multiple requests
                     {
+                        // We abolish the old sessions first, then we create new sessions
                         db.Sessions
                             .Where(q => q.UniqueCode == userSignUp.UniqueCode)
-                            .Where(q => q.State == SessionState.PENDING)
+                            .Where(q => q.State == State.PENDING)
                             .ToList()
-                            .ForEach(q => q.State = SessionState.ABOLISHED);
+                            .ForEach(q => q.State = State.ABOLISHED);
 
                         session = new Session()
                         {
                             Nonce = randomNounce,
-                            State = SessionState.PENDING,
+                            State = State.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
                             FCMToken = userSignUp.FCMToken,
@@ -202,7 +205,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                     }
-                    else if (user.State == SessionState.ACTIVE) //already registered user - use login form
+                    else if (user.State == State.ACTIVE) //already registered user - use login form
                     {
                         return Conflict();
                     }
@@ -227,7 +230,8 @@ namespace Teeleh.WApi.Controllers
 
                 return Json(new
                 {
-                    SessionId = session?.Id ?? -1
+                    SessionId = session?.Id ?? -1,
+                    SessionKey = session?.SessionKey ?? null
                 });
             }
 
@@ -263,7 +267,7 @@ namespace Teeleh.WApi.Controllers
                         Password = HasherHelper.sha256_hash(userSignUpEmail.Password),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
-                        State = SessionState.PENDING
+                        State = State.PENDING
                     };
 
                     db.Users.Add(user);
@@ -271,7 +275,7 @@ namespace Teeleh.WApi.Controllers
                     session = new Session()
                     {
                         Nonce = randomNounce,
-                        State = SessionState.PENDING,
+                        State = State.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
                         FCMToken = userSignUpEmail.FCMToken,
@@ -286,18 +290,18 @@ namespace Teeleh.WApi.Controllers
                 }
                 else
                 {
-                    if (user.State == SessionState.PENDING) //multiple requests
+                    if (user.State == State.PENDING) //multiple requests
                     {
                         db.Sessions
                             .Where(q => q.UniqueCode == userSignUpEmail.UniqueCode)
-                            .Where(q => q.State == SessionState.PENDING)
+                            .Where(q => q.State == State.PENDING)
                             .ToList()
-                            .ForEach(q => q.State = SessionState.ABOLISHED);
+                            .ForEach(q => q.State = State.ABOLISHED);
 
                         session = new Session()
                         {
                             Nonce = randomNounce,
-                            State = SessionState.PENDING,
+                            State = State.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
                             FCMToken = userSignUpEmail.FCMToken,
@@ -311,7 +315,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                     }
-                    else if (user.State == SessionState.ACTIVE) //already registered user - use login form
+                    else if (user.State == State.ACTIVE) //already registered user - use login form
                     {
                         return Conflict();
                     }
@@ -357,7 +361,7 @@ namespace Teeleh.WApi.Controllers
                 else
                 {
                      user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == phoneOrMail);
-                    isEmail = false;
+                     isEmail = false;
                 }
                 
                 var randomNounce = RandomHelper.RandomInt(10000, 99999);
@@ -367,10 +371,10 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //user not found
                 }
 
-                if (user.State==SessionState.ACTIVE)
+                if (user.State==State.ACTIVE)
                 {
                     var email = user.Email;
-                    user.Token = randomNounce;
+                    user.SecurityToken = randomNounce;
 
                     await db.SaveChangesAsync();
 
@@ -423,9 +427,9 @@ namespace Teeleh.WApi.Controllers
                     return NotFound();
                 }
 
-                if (user.State==SessionState.ACTIVE)
+                if (user.State==State.ACTIVE)
                 {
-                    user.Token = randomNounce;
+                    user.SecurityToken = randomNounce;
 
                     await db.SaveChangesAsync();
 
@@ -451,22 +455,22 @@ namespace Teeleh.WApi.Controllers
         /// 404 : User Not Found (Wrong Code Entered) |
         /// 400 : Bad Request
         /// </returns>
-        [HttpPut]
+        [HttpPost]
         [Route("api/users/forgotpassword")]
         public async Task<IHttpActionResult> ForgotPasswordReset(
-            ForgotPasswordVerificationViewModel forgotPasswordVerificationViewModel)
+            ForgotPasswordValidationDto forgotPasswordValidationDto)
         {
             if (ModelState.IsValid)
             {
                 User user = await db.Users.SingleOrDefaultAsync(q =>
-                    q.Token == forgotPasswordVerificationViewModel.ForgetPassCode);
+                    q.SecurityToken == forgotPasswordValidationDto.ForgetPassCode);
                 if (user == null)
                 {
                     return NotFound(); //Wrong Code
                 }
 
-                user.Password = HasherHelper.sha256_hash(forgotPasswordVerificationViewModel.Password);
-                user.Token = 0;
+                user.Password = HasherHelper.sha256_hash(forgotPasswordValidationDto.Password);
+                user.SecurityToken = 0;
                 await db.SaveChangesAsync();
 
                 return Ok();
@@ -479,24 +483,25 @@ namespace Teeleh.WApi.Controllers
 
 
         [HttpPost]
-        [Route("api/users/newphonenumber")]
-        public async Task<IHttpActionResult> NewPhoneNumber(StringPairDto stringDto)
+        [Route("api/users/phone/new")]
+        public async Task<IHttpActionResult> NewPhoneNumber(PhoneNumberPairDto stringDto)
         {
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(stringDto.session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(stringDto.Session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
-                    var result = user.ChangePhoneNumber(stringDto.StringId);
-                    db.SaveChanges();
+                    //result = (mailSent, smsSent)
+                    var result = user.ChangePhoneNumber(stringDto.PhoneNumber);
+                    await db.SaveChangesAsync();
 
-                    if (!result)
+                    return Ok(new
                     {
-                        return InternalServerError();
-                    }
-                    return Ok();
+                        SMS = result.Item2, //smsSent
+                        Mail = result.Item1, //mailSent
+                    });
                 }
 
                 return Unauthorized();
@@ -505,7 +510,38 @@ namespace Teeleh.WApi.Controllers
             return BadRequest();
         }
 
-       
+
+
+        [HttpPost]
+        [Route("api/users/phone/validate")]
+        public async Task<IHttpActionResult> ValidateNewPhoneNumber(NoncePairDto nonceDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(nonceDto.Session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var result = user.ValidateNewPhoneNumber(nonceDto.Nonce);
+                    if (result)
+                        return Ok();
+                    else
+                    {
+                        return NotFound(); //Wrong Nonce
+                    }
+
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+
+
 
         ////////////////////////// User Sessions /////////////////////////////
 
@@ -625,7 +661,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.Session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -655,7 +691,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pair.Session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;

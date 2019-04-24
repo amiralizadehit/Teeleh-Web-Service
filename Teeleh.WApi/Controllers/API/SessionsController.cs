@@ -35,12 +35,12 @@ namespace Teeleh.WApi.Controllers
         /// Actives created session for user with given phoneNumber and nonce then returns SessionId and SessionKey.
         /// </summary>
         /// <returns>200 : Ok (User Confirmed Successfully - Session Info Sent) |
-        /// 404 : No Session Found (Wrong Nounce Entered) |
+        /// 404 : No Session Found (Wrong Nonce Entered) |
         /// 400 : Bad Request 
         /// </returns>
-        [HttpPut]
+        [HttpPost]
         [Route("api/sessions/active")]
-        public async Task<IHttpActionResult> Active(PendingSessionViewModel pendingSession)
+        public async Task<IHttpActionResult> Active(NoncePairDto pendingSession)
         {
             if (ModelState.IsValid)
             {
@@ -51,13 +51,13 @@ namespace Teeleh.WApi.Controllers
                         .SingleOrDefaultAsync();
                 if (session == null)
                 {
-                    return NotFound(); //Wrong Nounce Entered
+                    return NotFound(); //Wrong Nonce Entered
                 }
 
-                session.User.State = SessionState.ACTIVE;
+                session.User.State = State.ACTIVE;
                 session.User.UpdatedAt = DateTime.Now;
                 session.ActivationMoment = DateTime.Now;
-                session.State = SessionState.ACTIVE;
+                session.State = State.ACTIVE;
 
                 await db.SaveChangesAsync();
 
@@ -80,7 +80,7 @@ namespace Teeleh.WApi.Controllers
         /// 404 : No Session Found (Wrong SessionId or SessionKey) |
         /// 400 : Bad Request 
         /// </returns>
-        [HttpPut]
+        [HttpPost]
         [Route("api/sessions/deactive")]
         public async Task<IHttpActionResult> Deactive(SessionInfoObject sessionInfo)
         {
@@ -97,7 +97,7 @@ namespace Teeleh.WApi.Controllers
                 }
 
                 session.DeactivationMoment = DateTime.Now;
-                session.State = SessionState.DEACTIVE;
+                session.State = State.DEACTIVE;
                 await db.SaveChangesAsync();
 
                 return Ok();
@@ -116,15 +116,15 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/sessions/fcm/set")]
-        public async Task<IHttpActionResult> SetFCMToken(FCMTokenDto fcmFcmTokenDto)
+        public async Task<IHttpActionResult> SetFCMToken(TokenPairDto tokenPairDto)
         {
             if (ModelState.IsValid)
             {
-                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(fcmFcmTokenDto.session));
+                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(tokenPairDto.Session));
 
                 if (session != null)
                 {
-                    session.FCMToken = fcmFcmTokenDto.token;
+                    session.FCMToken = tokenPairDto.Token;
                     db.SaveChanges();
                     return Ok();
                 }

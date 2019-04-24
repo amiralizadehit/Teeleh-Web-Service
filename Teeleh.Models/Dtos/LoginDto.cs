@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Teeleh.Models.CustomValidation;
 
-namespace Teeleh.Models.ViewModels
+namespace Teeleh.Models.Dtos
 {
-    public class LoginViewModel
+    public class LoginDto
     {
         [StringLength(11)]
         [Phone]

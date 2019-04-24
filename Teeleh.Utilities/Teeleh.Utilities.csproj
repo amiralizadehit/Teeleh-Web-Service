@@ -70,6 +70,10 @@
   <ItemGroup>
     <Compile Include="HasherHelper.cs" />
     <Compile Include="MessageHelper.cs" />
+    <Compile Include="Notification Object\AdNotification.cs" />
+    <Compile Include="Notification Object\CasualNotification.cs" />
+    <Compile Include="Enum\Enums.cs" />
+    <Compile Include="Notification Object\NotificationObject.cs" />
     <Compile Include="NotificationSender.cs" />
     <Compile Include="RandomHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,5 +82,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

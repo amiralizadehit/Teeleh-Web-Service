@@ -18,7 +18,7 @@ namespace Teeleh.Models
         [Required] [StringLength(32)] public string SessionKey { get; set; }
 
         public string UniqueCode { get; set; }
-        public SessionState State { get; set; }
+        public State State { get; set; }
 
         public string FCMToken { get; set; }
 

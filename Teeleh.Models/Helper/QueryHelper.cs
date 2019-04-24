@@ -3,6 +3,7 @@ using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 
@@ -127,15 +128,16 @@ namespace Teeleh.Models.Helper
         {
             return s => s.SessionKey == seesionInfo.SessionKey &&
                         s.Id == seesionInfo.SessionId &&
-                        s.State == SessionState.ACTIVE &&
-                        s.User.State ==SessionState.ACTIVE;
+                        s.State == State.ACTIVE &&
+                        s.User.State ==State.ACTIVE;
         }
 
-        public static Expression<System.Func<Session, bool>> GetPendingSessionQuery(PendingSessionViewModel pendingSession)
+        public static Expression<System.Func<Session, bool>> GetPendingSessionQuery(NoncePairDto pendingSession)
         {
-            return s => s.Id == pendingSession.SessionId
-                        && s.Nonce == pendingSession.Nounce
-                        && s.State == SessionState.PENDING;
+            return s => s.Id == pendingSession.Session.SessionId &&
+                        s.SessionKey == pendingSession.Session.SessionKey
+                        && s.Nonce == pendingSession.Nonce
+                        && s.State == State.PENDING;
         }
 
         //////////////////// Games Queries //////////////////////////////////////////////

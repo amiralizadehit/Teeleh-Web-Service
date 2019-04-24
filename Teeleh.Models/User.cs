@@ -41,9 +41,9 @@ namespace Teeleh.Models
 
         public List<Request> Requests { get; set; }
 
-        public int? Token { get; set; }
+        public int? SecurityToken { get; set; }
 
-        public SessionState State { get; set; }
+        public State State { get; set; }
 
         public virtual List<AdBookmark> SavedAdvertisements { get; set; }
 
@@ -60,6 +60,12 @@ namespace Teeleh.Models
 
         //Methods
 
+
+        /// <summary>
+        /// Returns all advertisement bookmarks of the user object it's called upon
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public IQueryable<object> GetAdBookmark(AppDbContext db)
         {
             var advertisements = db.AdBookmarks
@@ -71,6 +77,11 @@ namespace Teeleh.Models
             return advertisements;
         }
 
+        /// <summary>
+        /// Create an advertisement bookmark for the user it's called upon
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="advertisementId"></param>
         public void CreateAdBookmark(AppDbContext db, int advertisementId)
         {
             var bookmarkInDb = db.AdBookmarks.SingleOrDefault(b => b.AdvertisementId == advertisementId
@@ -92,6 +103,11 @@ namespace Teeleh.Models
             }
         }
 
+        /// <summary>
+        /// Delete the advertisement bookmark with specified Id of the user it's called upon
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="advertisementId"></param>
         public void DeleteAdBookmark(AppDbContext db, int advertisementId)
         {
             var bookmarkInDb = db.AdBookmarks.SingleOrDefault(a => a.UserId == Id
@@ -100,20 +116,59 @@ namespace Teeleh.Models
                 bookmarkInDb.IsDeleted = true;
         }
 
-        public bool ChangePhoneNumber(string newPhoneNumber)
+
+        /// <summary>
+        /// Set temporary phone number and send security token to the user it's called upon via Email and SMS (if possible)
+        /// </summary>
+        /// <param name="newPhoneNumber"></param>
+        /// <returns>(mailSent, smsSent)</returns>
+        public Tuple<bool, bool> ChangePhoneNumber(string newPhoneNumber)
         {
-            bool result = true;
+            bool mailSent = true;
+            bool smsSent = true;
             TemporaryPhoneNumber = newPhoneNumber;
-            Token = RandomHelper.RandomInt(10000, 99999);
+            SecurityToken = RandomHelper.RandomInt(10000, 99999);
 
             if (PhoneNumber != null)
-                if (MessageHelper.SendSMS_K(Token.ToString(), PhoneNumber, MessageHelper.SMSMode.VERIFICATION) != null)
-                    result = false;
+            {
+                if (MessageHelper.SendSMS_K(SecurityToken.ToString(), PhoneNumber,
+                        MessageHelper.SMSMode.VERIFICATION) != null)
+                    smsSent = false;
+            }
+            else
+            {
+                smsSent = false;
+            }
             if (Email != null)
-                MessageHelper.CodeVerificationEmail(Token.ToString(), PhoneNumber,
+            {
+                MessageHelper.CodeVerificationEmail(SecurityToken.ToString(), PhoneNumber,
                     MessageHelper.EmailMode.VERIFICATION);
+            }
+            else
+            {
+                mailSent = false;
+            }
 
-            return result;
+            return Tuple.Create(mailSent,smsSent);
+        }
+
+
+        /// <summary>
+        /// Checks whether token is equal to security token, is yes set the primary phone number with temporary.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public bool ValidateNewPhoneNumber(int token)
+        {
+            if (SecurityToken == token)
+            {
+                PhoneNumber = TemporaryPhoneNumber;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
