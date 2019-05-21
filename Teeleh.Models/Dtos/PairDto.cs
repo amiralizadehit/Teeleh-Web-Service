@@ -40,6 +40,12 @@ namespace Teeleh.Models.Dtos
         [EmailAddress]
         public string Email { get; set; }
     }
+
+    public class LocationPairDto : PairDto
+    {
+        public int ProvinceId { get; set; }
+        public int CityId { get; set; }
+    }
 }
 
 

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 using Teeleh.Utilities;
@@ -20,7 +21,6 @@ namespace Teeleh.Models
 
         [Required] [StringLength(30)] public string LastName { get; set; }
 
-
         [StringLength(11)] public string PhoneNumber { get; set; }
 
         [StringLength(11)] public string TemporaryPhoneNumber { get; set; }
@@ -34,6 +34,14 @@ namespace Teeleh.Models
         public string PSNId { get; set; }
 
         public string XBOXLive { get; set; }
+
+        public Location userProvince { get; set; }
+
+        public int? userProvinceId { get; set; }
+
+        public Location userCity { get; set; }
+
+        public int? userCityId { get; set; }
 
         public Image UserImage { get; set; }
 
@@ -56,7 +64,6 @@ namespace Teeleh.Models
         public DateTime? CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
-
 
         //Methods
 
@@ -118,46 +125,32 @@ namespace Teeleh.Models
 
 
         /// <summary>
-        /// Set temporary phone number and send security token to the user it's called upon via Email and SMS (if possible)
+        /// Set temporary phone number and send security token to the user's new phone number.
         /// </summary>
         /// <param name="newPhoneNumber"></param>
-        /// <returns>(mailSent, smsSent)</returns>
-        public Tuple<bool, bool> ChangePhoneNumber(string newPhoneNumber)
+        /// <returns>smsSent</returns>
+        public bool ChangePhoneNumber(string newPhoneNumber)
         {
-            bool mailSent = true;
             bool smsSent = true;
             TemporaryPhoneNumber = newPhoneNumber;
             SecurityToken = RandomHelper.RandomInt(10000, 99999);
-
-            if (PhoneNumber != null)
-            {
-                if (MessageHelper.SendSMS_K(SecurityToken.ToString(), PhoneNumber,
-                        MessageHelper.SMSMode.VERIFICATION) != null)
-                    smsSent = false;
-            }
-            else
+            if (MessageHelper.SendSMS_K(SecurityToken.ToString(), PhoneNumber,
+                    MessageHelper.SMSMode.VERIFICATION) != null)
             {
                 smsSent = false;
             }
-            if (Email != null)
-            {
-                MessageHelper.CodeVerificationEmail(SecurityToken.ToString(), PhoneNumber,
-                    MessageHelper.EmailMode.VERIFICATION);
-            }
-            else
-            {
-                mailSent = false;
-            }
-
-            return Tuple.Create(mailSent,smsSent);
+            return smsSent;
         }
 
 
         /// <summary>
-        /// Checks whether token is equal to security token, is yes set the primary phone number with temporary.
+        /// Checks whether token is equal to security token, if yes set the primary phone number with temporary.
         /// </summary>
         /// <param name="token"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// True : if old phone number has replaced with new one.
+        /// False : if old phone number has not replaced with new one.
+        /// </returns>
         public bool ValidateNewPhoneNumber(int token)
         {
             if (SecurityToken == token)
@@ -165,10 +158,49 @@ namespace Teeleh.Models
                 PhoneNumber = TemporaryPhoneNumber;
                 return true;
             }
-            else
-            {
                 return false;
-            }
         }
+
+
+        /// <summary>
+        /// Set user preferred location for both province and city.
+        /// </summary>
+        /// <param name="provinceId"></param>
+        /// <param name="cityId"></param>
+        public void SetUserLocation(int? provinceId, int? cityId)
+        {
+            this.userProvinceId = provinceId;
+            this.userCityId = cityId;
+        }
+
+        /// <summary>
+        /// Set temporary email and send security token to the user's new mail address.
+        /// </summary>
+        /// <param name="newEmail"></param>
+        public void ChangeEmail(string newEmail)
+        {
+            TemporaryEmail = newEmail;
+            SecurityToken = RandomHelper.RandomInt(10000, 99999);
+            MessageHelper.CodeVerificationEmail(SecurityToken.ToString(),newEmail,MessageHelper.EmailMode.VERIFICATION);
+        }
+
+        /// <summary>
+        /// Checks whether token is equal to security token, if yes set the primary email with temporary.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>
+        /// True : if old Email has been replaced with new one.
+        /// False : if old Email has not been replaced with new one.
+        /// </returns>
+        public bool ValidateNewEmail(int token)
+        {
+            if (SecurityToken == token)
+            {
+                Email = TemporaryEmail;
+                return true;
+            }
+            return false;
+        }
+
     }
 }
