@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
+using Teeleh.Models.Dtos;
 using Teeleh.Models.ViewModels;
 
 #if Handle_PageResultOfT
@@ -89,7 +90,7 @@ namespace Teeleh.WApi.Areas.HelpPage
             //// The sample will be generated as if the controller named "Values" and action named "Post" were returning a string.
             config.SetActualResponseType(typeof(SessionInfoObject), "Sessions", "Active");
             config.SetActualResponseType(typeof(SessionInfoObject), "Users", "Login");
-            config.SetActualResponseType(typeof(UserInfoViewModel), "Users", "GetUserInfo");
+            config.SetActualResponseType(typeof(UserInfoDto), "Users", "GetUserInfo");
         }
 
 #if Handle_PageResultOfT

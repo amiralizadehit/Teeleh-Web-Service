@@ -577,7 +577,50 @@
             401 : Session info not found
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.EditProfile(Teeleh.Models.ViewModels.UserInfoViewModel)">
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.NewPhoneNumber(Teeleh.Models.Dtos.PhoneNumberPairDto)">
+            <summary>
+            It is used to change the phone number of a user.
+            </summary>
+            <returns>
+            200: Ok(smsSent) |
+            401: Unauthorized (Session info not found) |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.NewEmail(Teeleh.Models.Dtos.EmailPairDto)">
+            <summary>
+            It is used to change the Email of a user.
+            </summary>
+            <returns>
+            200: Nonce Sent to New Email |
+            401: Unauthorized (Session info not found) |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.ValidateNewPhoneNumber(Teeleh.Models.Dtos.NoncePairDto)">
+            <summary>
+            This api evaluate the code sent to the user via their new phone number. (if everything is ok, it will set the new phone number)
+            </summary>
+            <returns>
+            200 : New Phone Number Replaced |
+            404 : Wrong Nonce Entered |
+            401 : User Not Found (Wrong Session Info) |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.ValidateNewEmail(Teeleh.Models.Dtos.NoncePairDto)">
+            <summary>
+            This api evaluate the code sent to the user via their new Email address. (if everything is ok, it will set the new Email)
+            </summary>
+            <param name="nonceDto"></param>
+            <returns>
+            200 : New Email Replaced |
+            404 : Wrong Nonce Entered |
+            401 : User Not Found (Wrong Session Info) |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.EditProfile(Teeleh.Models.Dtos.UserInfoDto)">
             <summary>
             It is used for updating user's profile information
             </summary>
@@ -587,7 +630,7 @@
             401 : Session info not found
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.ChangePassword(Teeleh.Models.ViewModels.UserPasswordViewModel)">
+        <member name="M:Teeleh.WApi.Controllers.API.ProfileController.ChangePassword(Teeleh.Models.Dtos.PasswordPairDto)">
             <summary>
             It is used for changing the password of a user.
             </summary>
@@ -740,7 +783,7 @@
         </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.GetUserSessions(Teeleh.Models.ViewModels.SessionInfoObject)">
             <summary>
-            It is used to get all active sessions of a user
+            It is used to get all active sessions of a user.
             </summary>
             <returns>200 : Ok |
             404 : No Session Found With Given SessionKey |

@@ -41,10 +41,24 @@ namespace Teeleh.Models.Dtos
         public string Email { get; set; }
     }
 
-    public class LocationPairDto : PairDto
+    public class PasswordPairDto : PairDto
     {
-        public int ProvinceId { get; set; }
-        public int CityId { get; set; }
+        [Required]
+        public string Password;
+    }
+
+    public class UserInfoDto : PairDto
+    {
+        [Required]
+        [StringLength(30)]
+        public string FirstName { get; set; }
+        [Required]
+        [StringLength(30)]
+        public string LastName { get; set; }
+        public int? ProvinceId { get; set; }
+        public int? CityId { get; set; }
+        public string PSNId { get; set; }
+        public string XBOXLive { get; set; }
     }
 }
 

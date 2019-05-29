@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
@@ -134,7 +135,7 @@ namespace Teeleh.Models
             bool smsSent = true;
             TemporaryPhoneNumber = newPhoneNumber;
             SecurityToken = RandomHelper.RandomInt(10000, 99999);
-            if (MessageHelper.SendSMS_K(SecurityToken.ToString(), PhoneNumber,
+            if (MessageHelper.SendSMS_K(SecurityToken.ToString(), newPhoneNumber,
                     MessageHelper.SMSMode.VERIFICATION) != null)
             {
                 smsSent = false;
@@ -163,14 +164,18 @@ namespace Teeleh.Models
 
 
         /// <summary>
-        /// Set user preferred location for both province and city.
+        /// Set user's information.
         /// </summary>
-        /// <param name="provinceId"></param>
-        /// <param name="cityId"></param>
-        public void SetUserLocation(int? provinceId, int? cityId)
+        public void SetUserInformation(UserInfoDto userInfo)
         {
-            this.userProvinceId = provinceId;
-            this.userCityId = cityId;
+            this.FirstName = userInfo.FirstName;
+            this.LastName = userInfo.LastName;
+
+            this.userProvinceId = userInfo.ProvinceId;
+            this.userCityId = userInfo.CityId;
+
+            this.XBOXLive = userInfo.XBOXLive;
+            this.PSNId = userInfo.PSNId;
         }
 
         /// <summary>
@@ -200,6 +205,17 @@ namespace Teeleh.Models
                 return true;
             }
             return false;
+        }
+
+
+        /// <summary>
+        /// Change Password of a user
+        /// </summary>
+        /// <param name="newPassword"></param>
+        public void ChangePassword(string newPassword)
+        {
+            var hashed = Utilities.HasherHelper.sha256_hash(newPassword);
+            this.Password = hashed;
         }
 
     }
