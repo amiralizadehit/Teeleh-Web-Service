@@ -51,13 +51,15 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ESRBRating)
-        @Html.EnumDropDownListFor(m => m.ESRBRating,"Choose One ...", new {@class = "form-control", @style= "padding-top: 2px;padding-bottom:2px;" })
+        @Html.EnumDropDownListFor(m => m.ESRBRating, "Choose One ...", new {@class = "form-control", @style = "padding-top: 2px;padding-bottom:2px;"})
         @Html.ValidationMessageFor(m => m.ESRBRating)
     </div>
     <div class="form-group">
         @Html.CheckBoxFor(m => m.OnlineCapability)
         @Html.LabelFor(m => m.OnlineCapability)
     </div>
+
+
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedGenres)
         <p class="alert alert-info">You can select multiple genres by holding down <strong>Ctrl</strong> button.</p>
@@ -70,13 +72,47 @@
         @Html.ListBoxFor(m => m.SelectedPlatforms, Model.Platforms, new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.SelectedPlatforms)
     </div>
+
+    @*<div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+        </div>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+        </div>
+    </div>*@
+
     <div>
         @Html.Label("Upload avatar photo")
-        <input type="file" name="ImageFile"/>
+        <input style="margin-bottom: 30px" type="file" name="AvatarImage"/>
+        <img class="avatar-preview"style="margin-bottom: 30px" src="@Model.AvatarImagePath" alt="Image"/>
+    </div>
+
+    <div>
+        @Html.Label("Upload cover photo")
+        <input style="margin-bottom: 30px" type="file" name="CoverImage"/>
+
+        @if (@Model.CoverImagePath != null)
+        {
+            @: <img class="cover-preview"style="margin-bottom: 30px" src="@Model.CoverImagePath" alt="Image"/>
+        }
+        else
+        {
+            <p class="alert-danger"> No cover photo has been uploaded yet!</p>
+        }
 
     </div>
+
+    <div>
+        @Html.Label("Upload gameplay images")
+        <input style="margin-bottom: 30px" type="file" name="GameplayImages" multiple/>
+    </div>
+
     @Html.HiddenFor(q => q.Id)
     <br/>
+
+
     <div>
         <button type="submit" class="btn btn-primary ">Save</button>
         @if (condition)
@@ -91,4 +127,3 @@
 {
     @Scripts.Render("~/bundles/jqueryval")
 }
-

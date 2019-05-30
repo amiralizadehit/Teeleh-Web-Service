@@ -18,7 +18,18 @@ namespace Teeleh.Models.ViewModels
         public string Name { get; set; }
 
        // [DisplayName("Upload avatar photo")]
-        public HttpPostedFileBase ImageFile { get; set; }
+        public HttpPostedFileBase AvatarImage { get; set; }
+
+        public HttpPostedFileBase CoverImage { get; set; }
+
+        public HttpPostedFileBase[] GameplayImages { get; set; }
+
+        //These are used for edit page
+        public string AvatarImagePath { get; set; }
+
+        public string CoverImagePath { get; set; }
+
+        public string[] GameplayImagesPath { get; set; }
 
 
         [Required(ErrorMessage = "You should select at least one platform for this game")]

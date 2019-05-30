@@ -310,6 +310,10 @@
     <Compile Include="Migrations\201905211435217_AddingPreferredLocationtoUserMode.Designer.cs">
       <DependentUpon>201905211435217_AddingPreferredLocationtoUserMode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905300815215_AddingMoreImagesToGames.cs" />
+    <Compile Include="Migrations\201905300815215_AddingMoreImagesToGames.Designer.cs">
+      <DependentUpon>201905300815215_AddingMoreImagesToGames.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
@@ -505,6 +509,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905211435217_AddingPreferredLocationtoUserMode.resx">
       <DependentUpon>201905211435217_AddingPreferredLocationtoUserMode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905300815215_AddingMoreImagesToGames.resx">
+      <DependentUpon>201905300815215_AddingMoreImagesToGames.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

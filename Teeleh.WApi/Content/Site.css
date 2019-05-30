@@ -66,6 +66,18 @@ img {
     border-radius: 2px;
 }
 
+.cover-preview {
+    height: 115px;
+    width: 200px;
+    border-width: 2px;
+    border-color: black;
+    border-style: dashed;
+}
+.avatar-preview {
+    height: 160px;
+    width: 125px;
+}
+
 .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
     vertical-align: middle;
     

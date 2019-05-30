@@ -6,19 +6,20 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    
     <link rel="shortcut icon" type="image/ico" href="~/Image/favicon.ico">
 </head>
 <body>
-@Html.Partial("_Navbar")
-<div class="container body-content">
-    @RenderBody()
-    <hr/>
-    <footer>
-        <p>&copy; @DateTime.Now.Year - All rights reserved for Teeleh</p>
-    </footer>
-</div>
+    @Html.Partial("_Navbar")
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - All rights reserved for Teeleh</p>
+        </footer>
+    </div>
 
-@Scripts.Render("~/bundles/lib")
-@RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/lib")
+    @RenderSection("scripts", required: false)
 </body>
 </html>

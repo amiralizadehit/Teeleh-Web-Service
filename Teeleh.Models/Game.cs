@@ -18,6 +18,10 @@ namespace Teeleh.Models
         [Required]
         public virtual Image Avatar { get; set; }
 
+        public virtual Image Cover { get; set; }
+
+        public virtual List<Image> GameplayImages { get; set; }
+
         public virtual List<Platform> SupportedPlatforms { get; set; }
 
         public List<Advertisement> Advertisements { get; set; }
@@ -28,7 +32,9 @@ namespace Teeleh.Models
 
         [Required]
         public DateTime ReleaseDate { get; set; }
+
         public int MetaScore { get; set; }
+
         public float UserScore { get; set; }
 
         public virtual List<Genre> Genres { get; set; }
