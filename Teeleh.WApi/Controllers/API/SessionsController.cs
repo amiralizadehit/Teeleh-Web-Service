@@ -54,10 +54,10 @@ namespace Teeleh.WApi.Controllers
                     return NotFound(); //Wrong Nonce Entered
                 }
 
-                session.User.State = State.ACTIVE;
+                session.User.State = UserState.ACTIVE;
                 session.User.UpdatedAt = DateTime.Now;
                 session.ActivationMoment = DateTime.Now;
-                session.State = State.ACTIVE;
+                session.State = SessionState.ACTIVE;
 
                 await db.SaveChangesAsync();
 
@@ -89,7 +89,7 @@ namespace Teeleh.WApi.Controllers
                 var session =
                     await db
                         .Sessions
-                        .Where(QueryHelper.GetUserValidationQuery(sessionInfo))
+                        .Where(QueryHelper.GetUserSessionValidationQuery(sessionInfo))
                         .SingleOrDefaultAsync();
                 if (session == null)
                 {
@@ -97,7 +97,7 @@ namespace Teeleh.WApi.Controllers
                 }
 
                 session.DeactivationMoment = DateTime.Now;
-                session.State = State.DEACTIVE;
+                session.State = SessionState.DEACTIVE;
                 await db.SaveChangesAsync();
 
                 return Ok();
@@ -120,7 +120,7 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(tokenPairDto.Session));
+                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(tokenPairDto.Session));
 
                 if (session != null)
                 {

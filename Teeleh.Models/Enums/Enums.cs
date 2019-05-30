@@ -73,8 +73,10 @@ namespace Teeleh.Models.Enums
     }
 
     ///////////////////////////////////////////////////// Session & User Enums //////////////////////////////////////////////
+    
+    public enum SessionState { PENDING, ACTIVE, DEACTIVE, ABOLISHED }
 
-    public enum State { PENDING, ACTIVE, DEACTIVE, ABOLISHED }
+    public enum UserState { PENDING, ACTIVE, DELETED, SUSPENDED }
 
     public enum SessionPlatform { ANDROID, IOS, WEB }
 

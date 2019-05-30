@@ -52,7 +52,7 @@ namespace Teeleh.Models
 
         public int? SecurityToken { get; set; }
 
-        public State State { get; set; }
+        public UserState State { get; set; }
 
         public virtual List<AdBookmark> SavedAdvertisements { get; set; }
 

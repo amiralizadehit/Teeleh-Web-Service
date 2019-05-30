@@ -134,7 +134,7 @@ namespace Teeleh.WApi.Controllers
         var sessions = db.AdminSessions.Where(s => s.AdminId == admin.Id);
         foreach (var adminSession in sessions)
         {
-            adminSession.State = State.DEACTIVE;
+            adminSession.State = SessionState.DEACTIVE;
         }
 
             var secretKey = RandomHelper.RandomString(15);
@@ -143,7 +143,7 @@ namespace Teeleh.WApi.Controllers
                 Admin = admin,
                 InitMoment = DateTime.Now,
                 SessionKey = secretKey,
-                State = State.ACTIVE
+                State = SessionState.ACTIVE
             };
             Session["SessionKey"] = secretKey;
             Session["UserId"] = admin.Id;

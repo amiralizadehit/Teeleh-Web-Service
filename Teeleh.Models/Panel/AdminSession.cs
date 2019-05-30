@@ -16,7 +16,7 @@ namespace Teeleh.Models.Panel
         public DateTime InitMoment { get; set; }
         public DateTime? DeactivationMoment { get; set; }
 
-        public State State { get; set; }
+        public SessionState State { get; set; }
 
         public Admin Admin { get; set; }
         public int AdminId { get; set; }

@@ -584,7 +584,8 @@
             <returns>
             200: Ok(smsSent) |
             401: Unauthorized (Session info not found) |
-            400 : Bad Request 
+            400 : Bad Request |
+            409 : User exists with same phone number
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.API.ProfileController.NewEmail(Teeleh.Models.Dtos.EmailPairDto)">
@@ -594,7 +595,8 @@
             <returns>
             200: Nonce Sent to New Email |
             401: Unauthorized (Session info not found) |
-            400 : Bad Request 
+            400 : Bad Request |
+            409 : User exists with same Email
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.API.ProfileController.ValidateNewPhoneNumber(Teeleh.Models.Dtos.NoncePairDto)">
@@ -727,7 +729,9 @@
             <returns>200 : Ok (User Logged in Successfully - Session Info Sent) |
             409 : Not Confirmed User |
             400 : Bad Request |
-            404 : Not Registered User
+            404 : Not Registered User |
+            403 : Suspended User |
+            410 : Deleted User
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.SignUp(Teeleh.Models.ViewModels.UserSignUpViewModel)">
@@ -737,7 +741,8 @@
             <returns>200 : Ok (User Created - SMS Sent - SessionId Returned) |
             500 : Internal Server Error (SMS Not Sent) |
             400 : Bad Request |
-            409 : Already Registered User
+            409 : Already Registered User |
+            403 : Suspended User
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.SignUp(Teeleh.Models.ViewModels.UserSignUpEmailViewModel)">
@@ -746,7 +751,8 @@
             </summary>
             <returns>200 : Ok (User Created - Email Sent - SessionId Returned) |
             400 : Bad Request |
-            409 : Already Registered User
+            409 : Already Registered User |
+            403 : Suspended User
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.ForgotPassword(System.String)">

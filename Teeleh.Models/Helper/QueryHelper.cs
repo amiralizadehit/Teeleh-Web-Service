@@ -124,12 +124,12 @@ namespace Teeleh.Models.Helper
             };
         }
 
-        public static Expression<System.Func<Session, bool>> GetUserValidationQuery(SessionInfoObject seesionInfo)
+        public static Expression<System.Func<Session, bool>> GetUserSessionValidationQuery(SessionInfoObject seesionInfo)
         {
             return s => s.SessionKey == seesionInfo.SessionKey &&
                         s.Id == seesionInfo.SessionId &&
-                        s.State == State.ACTIVE &&
-                        s.User.State ==State.ACTIVE;
+                        s.State == SessionState.ACTIVE &&
+                        s.User.State ==UserState.ACTIVE;
         }
 
         public static Expression<System.Func<Session, bool>> GetPendingSessionQuery(NoncePairDto pendingSession)
@@ -137,7 +137,7 @@ namespace Teeleh.Models.Helper
             return s => s.Id == pendingSession.Session.SessionId &&
                         s.SessionKey == pendingSession.Session.SessionKey
                         && s.Nonce == pendingSession.Nonce
-                        && s.State == State.PENDING;
+                        && s.State == SessionState.PENDING;
         }
 
         //////////////////// Games Queries //////////////////////////////////////////////

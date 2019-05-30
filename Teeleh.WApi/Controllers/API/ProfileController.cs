@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
+using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
 
@@ -37,7 +38,8 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 Session session =
-                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(sessionInfoObject));
+                    await db.Sessions.SingleOrDefaultAsync(
+                        QueryHelper.GetUserSessionValidationQuery(sessionInfoObject));
                 if (session == null)
                 {
                     return Unauthorized();
@@ -62,15 +64,14 @@ namespace Teeleh.WApi.Controllers.API
         }
 
 
-
-
         /// <summary>
         /// It is used to change the phone number of a user.
         /// </summary>
         /// <returns>
         /// 200: Ok(smsSent) |
         /// 401: Unauthorized (Session info not found) |
-        /// 400 : Bad Request 
+        /// 400 : Bad Request |
+        /// 409 : User exists with same phone number
         /// </returns>
         [HttpPost]
         [Route("api/profile/edit/phone")]
@@ -79,15 +80,23 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(stringDto.Session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(stringDto.Session));
+
                 if (sessionInDb != null)
                 {
-                    var user = sessionInDb.User;
-                    //result = smsSent
-                    var result = user.ChangePhoneNumber(stringDto.PhoneNumber);
-                    await db.SaveChangesAsync();
+                    var anyUser = await db.Users.SingleOrDefaultAsync(f => f.PhoneNumber == stringDto.PhoneNumber);
 
-                    return Ok(result);
+                    if (anyUser == null || anyUser.State == UserState.DELETED)
+                    {
+                        var user = sessionInDb.User;
+                        //result = smsSent
+                        var result = user.ChangePhoneNumber(stringDto.PhoneNumber);
+                        await db.SaveChangesAsync();
+
+                        return Ok(result);
+                    }
+
+                    return Conflict();
                 }
 
                 return Unauthorized();
@@ -97,14 +106,14 @@ namespace Teeleh.WApi.Controllers.API
         }
 
 
-
         /// <summary>
         /// It is used to change the Email of a user.
         /// </summary>
         /// <returns>
         /// 200: Nonce Sent to New Email |
         /// 401: Unauthorized (Session info not found) |
-        /// 400 : Bad Request 
+        /// 400 : Bad Request |
+        /// 409 : User exists with same Email
         /// </returns>
         [HttpPost]
         [Route("api/profile/edit/email")]
@@ -113,14 +122,21 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(pairDto.Session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(pairDto.Session));
                 if (sessionInDb != null)
                 {
-                    var user = sessionInDb.User;
-                    user.ChangeEmail(pairDto.Email);
-                    await db.SaveChangesAsync();
+                    var anyUser = await db.Users.SingleOrDefaultAsync(f => f.Email == pairDto.Email);
 
-                    return Ok();
+                    if (anyUser == null || anyUser.State == UserState.DELETED)
+                    {
+                        var user = sessionInDb.User;
+                        user.ChangeEmail(pairDto.Email);
+                        await db.SaveChangesAsync();
+
+                        return Ok();
+                    }
+
+                    return Conflict();
                 }
 
                 return Unauthorized();
@@ -146,7 +162,7 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(nonceDto.Session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(nonceDto.Session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -158,7 +174,6 @@ namespace Teeleh.WApi.Controllers.API
                     {
                         return NotFound(); //Wrong Nonce
                     }
-
                 }
 
                 return Unauthorized();
@@ -166,7 +181,6 @@ namespace Teeleh.WApi.Controllers.API
 
             return BadRequest();
         }
-
 
 
         /// <summary>
@@ -186,7 +200,7 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(nonceDto.Session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(nonceDto.Session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -207,7 +221,6 @@ namespace Teeleh.WApi.Controllers.API
         }
 
 
-
         /// <summary>
         /// It is used for updating user's profile information
         /// </summary>
@@ -223,7 +236,7 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(informationDto.Session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(informationDto.Session));
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
@@ -254,18 +267,20 @@ namespace Teeleh.WApi.Controllers.API
             if (ModelState.IsValid)
             {
                 Session session =
-                    await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserValidationQuery(passwordPair.Session));
+                    await db.Sessions.SingleOrDefaultAsync(
+                        QueryHelper.GetUserSessionValidationQuery(passwordPair.Session));
 
                 if (session == null)
                 {
                     return Unauthorized();
                 }
+
                 User user = session.User;
                 user.ChangePassword(passwordPair.Password);
                 await db.SaveChangesAsync();
                 return Ok();
-
             }
+
             return BadRequest();
         }
     }
