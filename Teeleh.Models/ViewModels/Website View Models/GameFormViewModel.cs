@@ -24,6 +24,8 @@ namespace Teeleh.Models.ViewModels
 
         public HttpPostedFileBase[] GameplayImages { get; set; }
 
+        public GameplayImageOption gameplayOption { get; set; }
+
         //These are used for edit page
         public string AvatarImagePath { get; set; }
 

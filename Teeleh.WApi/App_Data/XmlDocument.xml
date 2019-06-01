@@ -856,7 +856,7 @@
             </summary>
             <returns>Number of users</returns>
         </member>
-        <member name="M:Teeleh.WApi.Functions.ImageHandler.StoreImage(Teeleh.Models.AppDbContext,System.Int32,System.String)">
+        <member name="M:Teeleh.WApi.Functions.ImageHandler.StoreUserImage(Teeleh.Models.AppDbContext,System.Int32,System.String)">
             <summary>
             This helper function store uploaded images in memory
             </summary>
@@ -866,19 +866,25 @@
             This static class is responsible for making new notifications for the users.
             </summary>
         </member>
-        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.BroadcastNewAdvertisement(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
+        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.NewAdvertisementNotification(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
             <summary>
             This helper function broadcasts newly-created advertisements
             </summary>
         </member>
-        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.BroadcastOldAdvertisement(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement,System.Boolean)">
+        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.OldAdvertisementNotification(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement,System.Boolean)">
             <summary>
-            This helper function broadcasts edited advertisements
+            This helper function broadcasts edited advertisements.
             </summary>
+        </member>
+        <member name="M:Teeleh.WApi.Functions.NotificationGenerator.CasualNotification(Teeleh.Models.AppDbContext,System.String,System.String,Teeleh.Models.Image)">
+            <summary>
+            This helper function send casual notification to all active users.
+            </summary>
+            <param name="db"></param>
         </member>
         <member name="M:Teeleh.WApi.Functions.NotificationGenerator.GetMatchedRequests(Teeleh.Models.AppDbContext,Teeleh.Models.Advertisement)">
             <summary>
-            This helper function finds which request matches this advertisement
+            This helper function returns all the requests that match this advertisement.
             </summary>
         </member>
     </members>

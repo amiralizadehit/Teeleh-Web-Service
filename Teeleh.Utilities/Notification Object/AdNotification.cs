@@ -2,6 +2,6 @@
 {
     public class AdNotification : NotificationObject
     {
-        public int AdvertisementId;
+        public int? AdvertisementId;
     }
 }

@@ -72,13 +72,51 @@ img {
     border-width: 2px;
     border-color: black;
     border-style: dashed;
+    border-radius: 5px;
 }
 .avatar-preview {
     height: 160px;
     width: 125px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.gameplay-preview {
+    height: 180px;
+    width: 220px;
+    margin-bottom: 30px;
+    margin-right: 10px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
     vertical-align: middle;
     
 }
+.upload-image {
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.gameplay-image {
+    background-color: antiquewhite;
+}
+.cover-image {
+    background-color: #dbe8ff;
+}
+.avatar-image {
+    background-color: #f2d7e3;
+}
+.tools-section {
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.notification-sender {
+    background-color: #dbe8ff;
+}
+.tools-section-title {
+    text-align: center
+}
+

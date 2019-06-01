@@ -9,7 +9,7 @@
     bool condition = false;
     if (Model.Id != -1)
     {
-        condition = true;
+        condition = true; //edit
     }
 }
 
@@ -73,41 +73,51 @@
         @Html.ValidationMessageFor(m => m.SelectedPlatforms)
     </div>
 
-    @*<div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-        </div>
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-        </div>
-    </div>*@
-
-    <div>
+    <div class="upload-image avatar-image">
         @Html.Label("Upload avatar photo")
-        <input style="margin-bottom: 30px" type="file" name="AvatarImage"/>
-        <img class="avatar-preview"style="margin-bottom: 30px" src="@Model.AvatarImagePath" alt="Image"/>
+        <input style="margin-bottom: 30px" type="file" name="AvatarImage" accept=".jpg, .png"/>
+        @if (@Model.AvatarImagePath != null)
+        {
+            <img class="avatar-preview"style="margin-bottom: 30px" src="@Model.AvatarImagePath" alt="Image"/>
+        }
     </div>
 
-    <div>
+    <div class="upload-image cover-image">
         @Html.Label("Upload cover photo")
-        <input style="margin-bottom: 30px" type="file" name="CoverImage"/>
+        <input style="margin-bottom: 30px" type="file" name="CoverImage" accept=".jpg, .png"/>
 
         @if (@Model.CoverImagePath != null)
         {
             @: <img class="cover-preview"style="margin-bottom: 30px" src="@Model.CoverImagePath" alt="Image"/>
         }
-        else
-        {
-            <p class="alert-danger"> No cover photo has been uploaded yet!</p>
-        }
 
     </div>
 
-    <div>
+
+    <div class="upload-image gameplay-image">
         @Html.Label("Upload gameplay images")
-        <input style="margin-bottom: 30px" type="file" name="GameplayImages" multiple/>
+        <input style="margin-bottom: 30px" type="file" name="GameplayImages" accept=".jpg, .png" multiple/>
+        @if (@Model.GameplayImagesPath != null)
+        {
+            <div>
+                @foreach (var path in Model.GameplayImagesPath)
+                {
+                    <div style="display: inline-block">
+                        <img class="gameplay-preview" src="@path" alt="Image"/>
+                    </div>
+                }
+            </div>
+        }
+        @if (condition) //if it's not an edit page
+        {
+            <div style="margin-right: 10px">
+                @Html.RadioButtonFor(model => model.gameplayOption, 0, new {@style = "margin-right:3px"})Overwrite old images
+            </div>
+
+            <div style="margin-right: 10px">@Html.RadioButtonFor(model => model.gameplayOption, 1, new {@style = "margin-right:3px", @checked = true})Add to existing</div>
+        }
     </div>
+
 
     @Html.HiddenFor(q => q.Id)
     <br/>

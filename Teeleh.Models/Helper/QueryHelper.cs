@@ -53,7 +53,7 @@ namespace Teeleh.Models.Helper
                     PhoneNumber = a.User.PhoneNumber,
                     Email = a.User.Email,
             },
-                ExchangeGames = a.ExchangeGames.Select(g => new
+                ExchangeGames = a.ExchangeGames.Where(e=>e.Game.isDeleted==false).Select(g => new
                 {
                     Id = g.GameId,
                     Name = g.Game.Name,
@@ -64,8 +64,10 @@ namespace Teeleh.Models.Helper
 
         public static Expression<System.Func<Advertisement, bool>> GetAdvertisementValidationQuery()
         {
-            return g => g.isDeleted == false;
+            return g => g.isDeleted == false &&
+                        g.Game.isDeleted == false;
         }
+
 
         ///////////////////// Requests Queries //////////////////////////////////////////
 
@@ -95,7 +97,8 @@ namespace Teeleh.Models.Helper
 
         public static Expression<System.Func<Request, bool>> GetRequestValidationQuery()
         {
-            return g => g.IsDeleted == false;
+            return g => g.IsDeleted == false &&
+                        g.Game.isDeleted == false;
         }
 
         //////////////////// Sessions Queries ///////////////////////////////////////////
@@ -149,6 +152,8 @@ namespace Teeleh.Models.Helper
                 Id = x.Id,
                 Name = x.Name,
                 Image = localDomain + x.Avatar.ImagePath,
+                CoverImage = localDomain + x.Cover.ImagePath,
+                GameplayImages = x.GameplayImages.Select(g=>localDomain+g.ImagePath).ToList(),
                 UserScore = x.UserScore,
                 MetaScore = x.MetaScore,
                 OnlineCapability = x.OnlineCapability,
@@ -159,6 +164,12 @@ namespace Teeleh.Models.Helper
                 Platforms = x.SupportedPlatforms.Select(p => p.Name).ToList()
             };
         }
+
+        public static Expression<System.Func<Game, bool>> GetGameValidationQuery()
+        {
+            return g => g.isDeleted == false;
+        }
+
 
         //////////////////// Locations Queries //////////////////////////////////////////
 
@@ -204,6 +215,12 @@ namespace Teeleh.Models.Helper
                 })
             };
         }
+
+        public static Expression<System.Func<User, bool>> GetUserValidationQuery()
+        {
+            return u => u.IsDeleted == false;
+        }
+
 
         //////////////////// AdBookmarks Queries //////////////////////////////////////
 

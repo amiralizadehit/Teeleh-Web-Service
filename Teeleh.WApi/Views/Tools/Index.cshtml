@@ -1,0 +1,49 @@
+﻿@model Teeleh.Models.Dtos.CasualNotificationDto
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="margin-bottom: 40px">Tools</h2>
+
+@using (Ajax.BeginForm("SendNotification", "Tools", new AjaxOptions {OnSuccess = "OnSuccess",
+    OnFailure = "OnFailure"}, new{@enctype= "multipart/form-data" }))
+{
+    <div class="tools-section notification-sender">
+        <h4 class="tools-section-title"> Notification Sender </h4>
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title)
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control", autofocus = "autofocus" })
+            @Html.ValidationMessageFor(m => m.Title)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Message)
+            @Html.TextAreaFor(m => m.Message, new { @class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Message)
+        </div>
+        <div class="upload-image avatar-image">
+            @Html.Label("Upload avatar photo")
+            <input style="margin-bottom: 30px" type="file" name="Avatar" accept=".jpg, .png" />
+        </div>
+        <div>
+            <button type="submit" value="submit" class="btn btn-primary ">Send</button>
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+}
+
+<script type="text/javascript">
+    function OnSuccess(response) {
+        var result = response.result;
+        alert(result);
+    }
+    function OnFailure(response) {
+        alert("Error occured.");
+    }
+</script>

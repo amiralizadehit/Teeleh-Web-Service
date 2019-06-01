@@ -8,7 +8,7 @@ using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 using Teeleh.Utilities;
-using Teeleh.Utilities.Enum;
+
 
 namespace Teeleh.WApi.Functions
 {
@@ -20,7 +20,7 @@ namespace Teeleh.WApi.Functions
         /// <summary>
         /// This helper function broadcasts newly-created advertisements
         /// </summary>
-        public static void BroadcastNewAdvertisement(AppDbContext db, Advertisement advertisement)
+        public static void NewAdvertisementNotification(AppDbContext db, Advertisement advertisement)
         {
             //Here we get all the requests matching this advertisement
             var requests = GetMatchedRequests(db, advertisement);
@@ -37,8 +37,9 @@ namespace Teeleh.WApi.Functions
                     //No one has received this notification before
                     var newNotification = new Notification()
                     {
-                        AdvertisementId = advertisement.Id,
+                        //AdvertisementId = advertisement.Id,
                         CreatedAt = DateTime.Now,
+                        Title = "Teeleh",
                         UserId = requestUser.Id,
                         Message = "آگهی مورد نظر شما موجود شد",
                         Status = NotificationStatus.UNSEEN,
@@ -53,9 +54,9 @@ namespace Teeleh.WApi.Functions
 
 
         /// <summary>
-        /// This helper function broadcasts edited advertisements
+        /// This helper function broadcasts edited advertisements.
         /// </summary>
-        public static void BroadcastOldAdvertisement(AppDbContext db, Advertisement advertisement,
+        public static void OldAdvertisementNotification(AppDbContext db, Advertisement advertisement,
             bool resend = false)
         {
             //Here we get all the requests matching this advertisement
@@ -71,15 +72,15 @@ namespace Teeleh.WApi.Functions
                 //we should check if a user has already received a notification for this advertisement
                 foreach (var notification in user.Notifications)
                 {
-                    if (notification.AdvertisementId == advertisement.Id
-                    ) //this notification has been sent before to this user
-                    {
-                        hasReceived = true;
-                        if (resend)
-                            //here we resend the notification again.
-                            notification.Status = NotificationStatus.UNSEEN;
-                        break;
-                    }
+                    //if (notification.AdvertisementId == advertisement.Id
+                    //) //this notification has been sent before to this user
+                    //{
+                    //    hasReceived = true;
+                    //    if (resend)
+                    //        here we resend the notification again.
+                    //        notification.Status = NotificationStatus.UNSEEN;
+                    //    break;
+                    //}
                 }
 
                 if (!hasReceived)
@@ -94,8 +95,10 @@ namespace Teeleh.WApi.Functions
                     {
                         var newNotification = new Notification()
                         {
-                            AdvertisementId = advertisement.Id,
+                            //AdvertisementId = advertisement.Id,
+                            AvatarId = advertisement.Game.Avatar.Id,
                             CreatedAt = DateTime.Now,
+                            Title = "Teeleh",
                             UserId = user.Id,
                             Message = "آگهی انتخابی شما تخفیف خورده است",
                             Status = NotificationStatus.UNSEEN,
@@ -108,9 +111,33 @@ namespace Teeleh.WApi.Functions
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// This helper function send casual notification to all active users.
+        /// </summary>
+        /// <param name="db"></param>
+        public static void CasualNotification(AppDbContext db, string title, string message, Image avatar)
+        {
+            var users = db.Users.Where(QueryHelper.GetUserValidationQuery());
+            foreach (var user in users)
+            {
+                var newNotification = new Notification()
+                {
+                    CreatedAt = DateTime.Now,
+                    UserId = user.Id,
+                    Message = message,
+                    Title = title,
+                    Avatar = avatar,
+                    Status = NotificationStatus.UNSEEN,
+                    Type = NotificationType.CASUAL,
+                };
+                db.Notifications.Add(newNotification);
+            }
+            db.SaveChanges();
+        }
+
 
         /// <summary>
-        /// This helper function finds which request matches this advertisement
+        /// This helper function returns all the requests that match this advertisement.
         /// </summary>
         private static IQueryable<Request> GetMatchedRequests(AppDbContext db, Advertisement advertisement)
         {

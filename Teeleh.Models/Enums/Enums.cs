@@ -44,7 +44,9 @@ namespace Teeleh.Models.Enums
     {
         AVATAR,
         COVER,
-        USER_IMAGE
+        USER_IMAGE,
+        GAMEPLAY,
+        NOTIFICATOIN_IMAGE
     }
 
     ///////////////////////////////////////////////////// Filter Enums //////////////////////////////////////////////
@@ -81,7 +83,21 @@ namespace Teeleh.Models.Enums
     public enum SessionPlatform { ANDROID, IOS, WEB }
 
 
-
+    ///////////////////////////////////////////////////// Admin Page ///////////////////////////////////////////////////////
     
+    public enum GameplayImageOption { MAKE_NEW, ADD_TO_EXISTING}
 
+    //////////////////////////////////////////////////// Notifications ////////////////////////////////////////////////////
+
+    public enum NotificationStatus
+    {
+        SEEN,
+        UNSEEN
+    }
+
+    public enum NotificationType
+    {
+        CASUAL,
+        ADVERTISEMENT
+    }
 }

@@ -27,10 +27,10 @@ namespace Teeleh.Models
                 .WithMany(e=>e.Advertisements)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Notification>()
-                .HasRequired(n => n.Advertisement)
-                .WithMany(e => e.Notifications)
-                .WillCascadeOnDelete(false);
+            //modelBuilder.Entity<Notification>()
+            //    .HasRequired(n => n.Advertisement)
+            //    .WithMany(e => e.Notifications)
+            //    .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AdBookmark>()
                 .HasRequired(a=>a.Advertisement)

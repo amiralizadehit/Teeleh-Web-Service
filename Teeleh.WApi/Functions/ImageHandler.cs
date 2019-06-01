@@ -7,17 +7,17 @@ using System.Web;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
+using Teeleh.Utilities;
 using Image = System.Drawing.Image;
 
 namespace Teeleh.WApi.Functions
 {
     public class ImageHandler
     {
-
         /// <summary>
         /// This helper function store uploaded images in memory
         /// </summary>
-        public static Models.Image StoreImage(AppDbContext db, int Id, string imageToStore)
+        public static Models.Image StoreUserImage(AppDbContext db, int Id, string imageToStore)
         {
             Image image;
             string dbPath = "";
@@ -47,6 +47,5 @@ namespace Teeleh.WApi.Functions
             db.Images.Add(userImage);
             return userImage;
         }
-
     }
 }

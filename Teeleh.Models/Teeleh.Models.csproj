@@ -78,6 +78,7 @@
     <Compile Include="CustomValidation\Website\SessionTimeoutAttribute.cs" />
     <Compile Include="Dtos\AdvertisementCreateDto.cs" />
     <Compile Include="Dtos\AdvertisementEditDto.cs" />
+    <Compile Include="Dtos\CasualNotificationDto.cs" />
     <Compile Include="Dtos\PairDto.cs" />
     <Compile Include="Dtos\Filter.cs" />
     <Compile Include="Dtos\GameDto.cs" />
@@ -314,6 +315,30 @@
     <Compile Include="Migrations\201905300815215_AddingMoreImagesToGames.Designer.cs">
       <DependentUpon>201905300815215_AddingMoreImagesToGames.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906011448494_AddingDeleteFlagOnGames.cs" />
+    <Compile Include="Migrations\201906011448494_AddingDeleteFlagOnGames.Designer.cs">
+      <DependentUpon>201906011448494_AddingDeleteFlagOnGames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906011942024_SomeChangesToNotificationModel.cs" />
+    <Compile Include="Migrations\201906011942024_SomeChangesToNotificationModel.Designer.cs">
+      <DependentUpon>201906011942024_SomeChangesToNotificationModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906012057376_AddingNewChangesToNotification.cs" />
+    <Compile Include="Migrations\201906012057376_AddingNewChangesToNotification.Designer.cs">
+      <DependentUpon>201906012057376_AddingNewChangesToNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906012244079_adadada.cs" />
+    <Compile Include="Migrations\201906012244079_adadada.Designer.cs">
+      <DependentUpon>201906012244079_adadada.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906012249422_aasdadd.cs" />
+    <Compile Include="Migrations\201906012249422_aasdadd.Designer.cs">
+      <DependentUpon>201906012249422_aasdadd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906012302146_NullableAdvertisementForNotifications.cs" />
+    <Compile Include="Migrations\201906012302146_NullableAdvertisementForNotifications.Designer.cs">
+      <DependentUpon>201906012302146_NullableAdvertisementForNotifications.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
@@ -512,6 +537,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905300815215_AddingMoreImagesToGames.resx">
       <DependentUpon>201905300815215_AddingMoreImagesToGames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906011448494_AddingDeleteFlagOnGames.resx">
+      <DependentUpon>201906011448494_AddingDeleteFlagOnGames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906011942024_SomeChangesToNotificationModel.resx">
+      <DependentUpon>201906011942024_SomeChangesToNotificationModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906012057376_AddingNewChangesToNotification.resx">
+      <DependentUpon>201906012057376_AddingNewChangesToNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906012244079_adadada.resx">
+      <DependentUpon>201906012244079_adadada.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906012249422_aasdadd.resx">
+      <DependentUpon>201906012249422_aasdadd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906012302146_NullableAdvertisementForNotifications.resx">
+      <DependentUpon>201906012302146_NullableAdvertisementForNotifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

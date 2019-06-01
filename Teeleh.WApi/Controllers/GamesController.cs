@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Teeleh.Models;
 using Teeleh.Models.CustomValidation.Website;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
 using Teeleh.Models.ViewModels.Website_View_Models;
 using Teeleh.Utilities;
@@ -35,7 +36,7 @@ namespace Teeleh.WApi.Controllers
         public ActionResult Index()
         {
             //var games = db.Games.Include(p => p.SupportedPlatforms).Include(g => g.Genres).Include(a=>a.Avatar).ToList();
-            var games = db.Games.ToList();
+            var games = db.Games.Where(QueryHelper.GetGameValidationQuery()).ToList();
 
             var gamesViewModel = new List<GamePageViewModel>();
             foreach (var game in games)
@@ -98,6 +99,14 @@ namespace Teeleh.WApi.Controllers
                 genreIds.Add(gameGenre.Id);
             }
 
+            var num = game.GameplayImages.Count;
+            List<string> gameplayImages = new List<string>(num);
+            foreach (var image in game.GameplayImages)
+            {
+                gameplayImages.Add(Url.Content(image.ImagePath));
+            }
+            
+
 
             viewModel.Genres = new MultiSelectList(genres, "GenreId", "GenreName");
             viewModel.SelectedGenres = genreIds;
@@ -110,7 +119,9 @@ namespace Teeleh.WApi.Controllers
             viewModel.ESRBRating = game.Rating;
             viewModel.AvatarImagePath = Url.Content(game.Avatar.ImagePath);
             viewModel.CoverImagePath = (game.Cover == null) ? null : Url.Content(game.Cover.ImagePath);
+            viewModel.GameplayImagesPath = gameplayImages.ToArray();
             viewModel.UserScore = game.UserScore;
+
             viewModel.Id = id;
 
             return View("Create", viewModel);
@@ -119,8 +130,8 @@ namespace Teeleh.WApi.Controllers
         [SessionTimeout]
         public ActionResult Delete(int id)
         {
-            var gameToDelete = db.Games.Single(g => g.Id == id);
-            db.Games.Remove(gameToDelete);
+            var gameToDelete = db.Games.Include(f=>f.Avatar).Single(g => g.Id == id);
+            gameToDelete.isDeleted = true;
             db.SaveChanges();
 
             return RedirectToAction("Index", "Games");
@@ -178,7 +189,6 @@ namespace Teeleh.WApi.Controllers
                 return View("Create", viewModel);
             }
 
-            var gameName = viewModel.Name.Replace("?", "").Replace(":", "").TrimEnd().TrimStart();
             var folderRandomIndex = RandomHelper.RandomInt(0, 10000);
             bool defaultCoverUsed = false;
             bool defaultAvatarUsed = false;
@@ -207,7 +217,7 @@ namespace Teeleh.WApi.Controllers
             }
 
             string coverPhotoFilePath = "";
-            if (viewModel.AvatarImage != null)
+            if (viewModel.CoverImage != null)
             {
                 var fileRandomIndex = RandomHelper.RandomInt(0, 10000);
                 Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + folderRandomIndex));
@@ -224,6 +234,35 @@ namespace Teeleh.WApi.Controllers
                 //Here we set the default photo for cover image - coverPhotoFilePath= ...
                 coverPhotoFilePath = "/Image/Games/Default/DefaultCover.jpg";
                 defaultCoverUsed = true;
+            }
+
+            var num = viewModel.GameplayImages.Length;
+            List<Image> gameplayImages = new List<Image>(num);
+            if (num > 0)
+            {
+                Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + folderRandomIndex));
+                foreach (var viewModelGameplayImage in viewModel.GameplayImages)
+                {
+                    if (viewModelGameplayImage != null)
+                    {
+                        var fileRandomIndex = RandomHelper.RandomInt(0, 10000);
+                        var gameplayPhotoFileExtension = Path.GetExtension(viewModelGameplayImage.FileName);
+                        var gameplayPhotoFileName = fileRandomIndex + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
+                                                    gameplayPhotoFileExtension;
+                        var gameplayImage = new Image()
+                        {
+                            Name = viewModel.Name,
+                            ImagePath = "/Image/Games/" + folderRandomIndex + "/" + gameplayPhotoFileName,
+                            Type = ImageType.GAMEPLAY,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        };
+                        gameplayImages.Add(gameplayImage);
+                        gameplayPhotoFileName =
+                            Path.Combine(Server.MapPath("~/Image/Games/" + folderRandomIndex + "/"), gameplayPhotoFileName);
+                        viewModelGameplayImage.SaveAs(gameplayPhotoFileName);
+                    }
+                }
             }
 
 
@@ -250,6 +289,7 @@ namespace Teeleh.WApi.Controllers
                     UpdatedAt = DateTime.Now
                 };
 
+
                 var game = new Game
                 {
                     Name = viewModel.Name,
@@ -263,12 +303,12 @@ namespace Teeleh.WApi.Controllers
                     ReleaseDate = viewModel.GetReleaseDate(),
                     SupportedPlatforms = selectedPlatforms,
                     Avatar = avatarImage,
+                    GameplayImages = gameplayImages,
                     Cover = coverImage,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                 };
                 db.Games.Add(game);
-                db.Images.Add(avatarImage);
             }
             else //Edit
             {
@@ -333,6 +373,14 @@ namespace Teeleh.WApi.Controllers
                     }
                 }
 
+                if (viewModel.gameplayOption == GameplayImageOption.MAKE_NEW)
+                {
+                    foreach (var gameplayImage in gameInDb.GameplayImages.ToList())
+                    {
+                        db.Images.Remove(db.Images.Single(g => g.Id == gameplayImage.Id));
+                    }
+                }
+
 
                 gameInDb.Name = viewModel.Name;
                 gameInDb.Genres = selectedGenres;
@@ -345,6 +393,9 @@ namespace Teeleh.WApi.Controllers
                 gameInDb.ReleaseDate = viewModel.GetReleaseDate();
                 gameInDb.SupportedPlatforms = selectedPlatforms;
                 gameInDb.Avatar = avatarImageInDb;
+                gameInDb.GameplayImages = (viewModel.gameplayOption==GameplayImageOption.MAKE_NEW)
+                    ?gameplayImages
+                    :gameInDb.GameplayImages.Concat(gameplayImages).ToList();
                 gameInDb.Cover = coverImageInDb;
                 gameInDb.UpdatedAt = DateTime.Now;
             }

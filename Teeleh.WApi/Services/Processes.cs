@@ -7,7 +7,6 @@ using System.Data.Entity;
 using Teeleh.Models;
 using Teeleh.Models.Enums;
 using Teeleh.Utilities;
-using Teeleh.Utilities.Enum;
 using Teeleh.Utilities.Notification_Object;
 
 namespace Teeleh.WApi.Services
@@ -54,7 +53,7 @@ namespace Teeleh.WApi.Services
                                             Avatar = game.Avatar.ImagePath,
                                             AdvertisementId = notification.AdvertisementId,
                                             Message = notification.Message,
-                                            type = NotificationType.ADVERTISEMENT
+                                            //type = NotificationType.ADVERTISEMENT
                                         };
                                         NotificationSender.SendRequestNotification(fcmToken, notificationObject);
                                         break;
@@ -65,7 +64,7 @@ namespace Teeleh.WApi.Services
                                             //Todo: Here we should add a default image for our casual notifications.
                                             Avatar = "",
                                             Message = notification.Message,
-                                            type = NotificationType.CASUAL
+                                           // type = NotificationType.CASUAL
                                         };
                          
                                         break;

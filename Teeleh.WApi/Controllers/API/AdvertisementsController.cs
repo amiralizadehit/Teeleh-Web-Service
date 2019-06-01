@@ -143,7 +143,7 @@ namespace Teeleh.WApi.Controllers
                     if (!isImageEmpty)
                     {
                         //we write user's uploaded image in memory
-                        userImage = ImageHandler.StoreImage(db, user.Id, advertisementCreate.UserImage);
+                        userImage = ImageHandler.StoreUserImage(db, user.Id, advertisementCreate.UserImage);
                     }
 
 
@@ -185,7 +185,7 @@ namespace Teeleh.WApi.Controllers
                     await db.SaveChangesAsync();
                     // Broadcasting
 
-                    NotificationGenerator.BroadcastNewAdvertisement(db, newAdvertisement);
+                    NotificationGenerator.NewAdvertisementNotification(db, newAdvertisement);
 
 
                     return Ok(newAdvertisement.Id);
@@ -231,7 +231,7 @@ namespace Teeleh.WApi.Controllers
                         //We want to know if a user has uploaded a new image for his/her advertisement 
                         if (!isImageEmpty)
                         {
-                            adInDb.UserImage = ImageHandler.StoreImage(db, user.Id, editAd.UserImage);
+                            adInDb.UserImage = ImageHandler.StoreUserImage(db, user.Id, editAd.UserImage);
                         }
                         else
                         {
@@ -268,7 +268,7 @@ namespace Teeleh.WApi.Controllers
                         await db.SaveChangesAsync();
 
                         // we re-broadcast this advertisement
-                        NotificationGenerator.BroadcastOldAdvertisement(db, adInDb, isHot);
+                        NotificationGenerator.OldAdvertisementNotification(db, adInDb, isHot);
 
                         return Ok();
                     }
