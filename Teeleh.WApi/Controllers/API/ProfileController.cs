@@ -54,7 +54,14 @@ namespace Teeleh.WApi.Controllers.API
                     user.Email,
                     user.PhoneNumber,
                     user.PSNId,
-                    user.XBOXLive
+                    user.XBOXLive,
+                    Location  = new
+                    {
+                        ProvinceId = user.userProvinceId,
+                        Province = user.userProvince?.Name,
+                        CityId = user.userCityId,
+                        City= user.userCity?.Name
+                    }
                 };
 
                 return Ok(info);

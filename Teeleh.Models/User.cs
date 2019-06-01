@@ -36,11 +36,11 @@ namespace Teeleh.Models
 
         public string XBOXLive { get; set; }
 
-        public Location userProvince { get; set; }
+        public virtual Location userProvince { get; set; }
 
         public int? userProvinceId { get; set; }
 
-        public Location userCity { get; set; }
+        public virtual Location userCity { get; set; }
 
         public int? userCityId { get; set; }
 
