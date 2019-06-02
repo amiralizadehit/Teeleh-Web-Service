@@ -131,7 +131,7 @@ namespace Teeleh.WApi.Controllers
             {
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(
-                        QueryHelper.GetUserSessionValidationQuery(advertisementCreate.Session));
+                        QueryHelper.GetSessionObjectValidationQuery(advertisementCreate.Session));
                 if (session != null)
                 {
                     var user = session.User;
@@ -143,7 +143,7 @@ namespace Teeleh.WApi.Controllers
                     if (!isImageEmpty)
                     {
                         //we write user's uploaded image in memory
-                        userImage = ImageHandler.StoreUserImage(db, user.Id, advertisementCreate.UserImage);
+                        userImage = ImageHandler.CreateUserImage(db, user.Id, advertisementCreate.UserImage);
                     }
 
 
@@ -213,7 +213,7 @@ namespace Teeleh.WApi.Controllers
             {
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(
-                        QueryHelper.GetUserSessionValidationQuery(editAd.SessionInfo));
+                        QueryHelper.GetSessionObjectValidationQuery(editAd.SessionInfo));
                 if (session != null)
                 {
                     var user = session.User;
@@ -231,7 +231,7 @@ namespace Teeleh.WApi.Controllers
                         //We want to know if a user has uploaded a new image for his/her advertisement 
                         if (!isImageEmpty)
                         {
-                            adInDb.UserImage = ImageHandler.StoreUserImage(db, user.Id, editAd.UserImage);
+                            adInDb.UserImage = ImageHandler.CreateUserImage(db, user.Id, editAd.UserImage);
                         }
                         else
                         {
@@ -298,7 +298,7 @@ namespace Teeleh.WApi.Controllers
             if (ModelState.IsValid)
             {
                 var sessionInDb = await
-                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(pair.Session));
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(pair.Session));
 
                 if (sessionInDb != null)
                 {

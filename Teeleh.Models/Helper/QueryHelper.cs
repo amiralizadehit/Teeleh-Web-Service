@@ -65,7 +65,8 @@ namespace Teeleh.Models.Helper
         public static Expression<System.Func<Advertisement, bool>> GetAdvertisementValidationQuery()
         {
             return g => g.isDeleted == false &&
-                        g.Game.isDeleted == false;
+                        g.Game.isDeleted == false &&
+                        g.User.State==UserState.ACTIVE;
         }
 
 
@@ -98,7 +99,8 @@ namespace Teeleh.Models.Helper
         public static Expression<System.Func<Request, bool>> GetRequestValidationQuery()
         {
             return g => g.IsDeleted == false &&
-                        g.Game.isDeleted == false;
+                        g.Game.isDeleted == false &&
+                        g.User.State==UserState.ACTIVE;
         }
 
         //////////////////// Sessions Queries ///////////////////////////////////////////
@@ -127,12 +129,17 @@ namespace Teeleh.Models.Helper
             };
         }
 
-        public static Expression<System.Func<Session, bool>> GetUserSessionValidationQuery(SessionInfoObject seesionInfo)
+        public static Expression<System.Func<Session, bool>> GetSessionObjectValidationQuery(SessionInfoObject seesionInfo)
         {
             return s => s.SessionKey == seesionInfo.SessionKey &&
                         s.Id == seesionInfo.SessionId &&
                         s.State == SessionState.ACTIVE &&
                         s.User.State ==UserState.ACTIVE;
+        }
+
+        public static Expression<System.Func<Session, bool>> GetSessionValidationQuery()
+        {
+            return g => g.State ==SessionState.ACTIVE;
         }
 
         public static Expression<System.Func<Session, bool>> GetPendingSessionQuery(NoncePairDto pendingSession)
@@ -218,7 +225,7 @@ namespace Teeleh.Models.Helper
 
         public static Expression<System.Func<User, bool>> GetUserValidationQuery()
         {
-            return u => u.IsDeleted == false;
+            return u => u.State == UserState.ACTIVE;
         }
 
 

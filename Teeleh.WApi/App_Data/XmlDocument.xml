@@ -856,7 +856,7 @@
             </summary>
             <returns>Number of users</returns>
         </member>
-        <member name="M:Teeleh.WApi.Functions.ImageHandler.StoreUserImage(Teeleh.Models.AppDbContext,System.Int32,System.String)">
+        <member name="M:Teeleh.WApi.Functions.ImageHandler.CreateUserImage(Teeleh.Models.AppDbContext,System.Int32,System.String)">
             <summary>
             This helper function store uploaded images in memory
             </summary>

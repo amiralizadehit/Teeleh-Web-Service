@@ -7,6 +7,6 @@ namespace Teeleh.Utilities.Notification_Object
         public int Id;
         public string Avatar;
         public string Message;
-       // public NotificationType type;
+        public string Title;
     }
 }

@@ -89,7 +89,7 @@ namespace Teeleh.WApi.Controllers
                 var session =
                     await db
                         .Sessions
-                        .Where(QueryHelper.GetUserSessionValidationQuery(sessionInfo))
+                        .Where(QueryHelper.GetSessionObjectValidationQuery(sessionInfo))
                         .SingleOrDefaultAsync();
                 if (session == null)
                 {
@@ -120,7 +120,7 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetUserSessionValidationQuery(tokenPairDto.Session));
+                Session session = await db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(tokenPairDto.Session));
 
                 if (session != null)
                 {

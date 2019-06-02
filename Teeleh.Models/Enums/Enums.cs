@@ -46,7 +46,15 @@ namespace Teeleh.Models.Enums
         COVER,
         USER_IMAGE,
         GAMEPLAY,
-        NOTIFICATOIN_IMAGE
+        NOTIFICATION_IMAGE
+    }
+
+    public enum WebImageType
+    {
+        AVATAR,
+        COVER,
+        GAMEPLAY,
+        NOTIFICATION_IMAGE
     }
 
     ///////////////////////////////////////////////////// Filter Enums //////////////////////////////////////////////

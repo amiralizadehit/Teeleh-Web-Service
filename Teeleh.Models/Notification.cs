@@ -21,7 +21,7 @@ namespace Teeleh.Models
         
         public virtual Advertisement Advertisement { get; set; }
 
-        public Image Avatar { get; set; }
+        public virtual Image Avatar { get; set; }
 
         public int AvatarId { get; set; }
 

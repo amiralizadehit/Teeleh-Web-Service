@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Teeleh.Models;
+using Teeleh.Models.CustomValidation.Website;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Utilities;
@@ -23,46 +24,30 @@ namespace Teeleh.WApi.Controllers
             db = new AppDbContext();
         }
         // GET: Tools
+        
+        [SessionTimeout]
         public ActionResult Index()
         {
             return View();
         }
 
+        [ValidateAntiForgeryToken]
+        [SessionTimeout]
         public JsonResult SendNotification(CasualNotificationDto casualNotification)
         {
             if (ModelState.IsValid)
             {
-                string imageFilePath = "";
-                var folderRandomIndex = RandomHelper.RandomInt(0, 10000);
+
+                Image image;
                 if (casualNotification.Avatar != null)
                 {
-                    var fileRandomIndex = RandomHelper.RandomInt(0, 10000);
-
-                    var fileExtension = Path.GetExtension(casualNotification.Avatar.FileName);
-
-                    Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Image/Notification/" + folderRandomIndex));
-
-                    var fileName = fileRandomIndex + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
-                                   fileExtension;
-                    imageFilePath = "/Image/Notification/" + folderRandomIndex + "/" + fileName;
-                    fileName =
-                        Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Image/Notification/" + folderRandomIndex + "/"), fileName);
-                    casualNotification.Avatar.SaveAs(fileName);
+                    image = ImageHandler.CreateWebImage(casualNotification.Avatar, casualNotification.Title,
+                        WebImageType.NOTIFICATION_IMAGE);
                 }
                 else
                 {
-                    //Default
-                    imageFilePath = "/Image/Games/Default/Default.jpg";
+                    image = ImageHandler.CreateDefaultImage(casualNotification.Title, WebImageType.NOTIFICATION_IMAGE);
                 }
-
-                Image image = new Image()
-                {
-                    CreatedAt = DateTime.Now,
-                    Type = ImageType.NOTIFICATOIN_IMAGE,
-                    ImagePath = imageFilePath,
-                    Name = casualNotification.Title,
-                    UpdatedAt = DateTime.Now
-                };
 
                 NotificationGenerator.CasualNotification(db, casualNotification.Title, casualNotification.Message, image);
 

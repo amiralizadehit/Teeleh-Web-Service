@@ -37,7 +37,8 @@ namespace Teeleh.WApi.Functions
                     //No one has received this notification before
                     var newNotification = new Notification()
                     {
-                        //AdvertisementId = advertisement.Id,
+                        AdvertisementId = advertisement.Id,
+                        AvatarId = advertisement.Game.Avatar.Id,
                         CreatedAt = DateTime.Now,
                         Title = "Teeleh",
                         UserId = requestUser.Id,
@@ -72,15 +73,15 @@ namespace Teeleh.WApi.Functions
                 //we should check if a user has already received a notification for this advertisement
                 foreach (var notification in user.Notifications)
                 {
-                    //if (notification.AdvertisementId == advertisement.Id
-                    //) //this notification has been sent before to this user
-                    //{
-                    //    hasReceived = true;
-                    //    if (resend)
-                    //        here we resend the notification again.
-                    //        notification.Status = NotificationStatus.UNSEEN;
-                    //    break;
-                    //}
+                    if (notification.AdvertisementId == advertisement.Id
+                    ) //this notification has been sent before to this user
+                    {
+                        hasReceived = true;
+                        if (resend)
+                            //here we resend the notification again.
+                            notification.Status = NotificationStatus.UNSEEN;
+                        break;
+                    }
                 }
 
                 if (!hasReceived)
@@ -95,7 +96,7 @@ namespace Teeleh.WApi.Functions
                     {
                         var newNotification = new Notification()
                         {
-                            //AdvertisementId = advertisement.Id,
+                            AdvertisementId = advertisement.Id,
                             AvatarId = advertisement.Game.Avatar.Id,
                             CreatedAt = DateTime.Now,
                             Title = "Teeleh",
@@ -162,7 +163,7 @@ namespace Teeleh.WApi.Functions
                     .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
             }
 
-            query = (MediaType) advertisement.MedType == MediaType.NEW
+            query =  advertisement.MedType == MediaType.NEW
                 ? query.Where(r => r.FilterType == FilterType.JUST_NEW)
                 : query.Where(r => r.FilterType == FilterType.JUST_SECOND_HAND);
 

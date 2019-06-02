@@ -11,6 +11,7 @@ using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
 using Teeleh.Models.ViewModels.Website_View_Models;
 using Teeleh.Utilities;
+using Teeleh.WApi.Functions;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -193,46 +194,29 @@ namespace Teeleh.WApi.Controllers
             bool defaultCoverUsed = false;
             bool defaultAvatarUsed = false;
 
-            string avatarPhotoFilePath = "";
+            Image avatarImage;
             if (viewModel.AvatarImage != null)
             {
-                var fileRandomIndex = RandomHelper.RandomInt(0, 10000);
-
-                var avatarPhotoFileExtension = Path.GetExtension(viewModel.AvatarImage.FileName);
-
-                Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + folderRandomIndex));
-
-                var avatarPhotoFileName = fileRandomIndex + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
-                                          avatarPhotoFileExtension;
-                avatarPhotoFilePath = "/Image/Games/" + folderRandomIndex + "/" + avatarPhotoFileName;
-                avatarPhotoFileName =
-                    Path.Combine(Server.MapPath("~/Image/Games/" + folderRandomIndex + "/"), avatarPhotoFileName);
-                viewModel.AvatarImage.SaveAs(avatarPhotoFileName);
+                avatarImage =
+                    ImageHandler.CreateWebImage(viewModel.AvatarImage, viewModel.Name, WebImageType.AVATAR);
             }
             else
             {
                 //Default
-                avatarPhotoFilePath = "/Image/Games/Default/Default.jpg";
+                avatarImage = ImageHandler.CreateDefaultImage(viewModel.Name, WebImageType.AVATAR);
                 defaultAvatarUsed = true;
             }
 
-            string coverPhotoFilePath = "";
+            Image coverImage;
             if (viewModel.CoverImage != null)
             {
-                var fileRandomIndex = RandomHelper.RandomInt(0, 10000);
-                Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + folderRandomIndex));
-                var coverPhotoFileExtension = Path.GetExtension(viewModel.CoverImage.FileName);
-                var coverPhotoFileName = fileRandomIndex + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
-                                         coverPhotoFileExtension;
-                coverPhotoFilePath = "/Image/Games/" + folderRandomIndex + "/" + coverPhotoFileName;
-                coverPhotoFileName =
-                    Path.Combine(Server.MapPath("~/Image/Games/" + folderRandomIndex + "/"), coverPhotoFileName);
-                viewModel.CoverImage.SaveAs(coverPhotoFileName);
+                coverImage =
+                    ImageHandler.CreateWebImage(viewModel.CoverImage, viewModel.Name, WebImageType.COVER);
             }
             else
             {
                 //Here we set the default photo for cover image - coverPhotoFilePath= ...
-                coverPhotoFilePath = "/Image/Games/Default/DefaultCover.jpg";
+                coverImage = ImageHandler.CreateDefaultImage(viewModel.Name, WebImageType.COVER);
                 defaultCoverUsed = true;
             }
 
@@ -240,27 +224,11 @@ namespace Teeleh.WApi.Controllers
             List<Image> gameplayImages = new List<Image>(num);
             if (num > 0)
             {
-                Directory.CreateDirectory(Server.MapPath("~/Image/Games/" + folderRandomIndex));
                 foreach (var viewModelGameplayImage in viewModel.GameplayImages)
                 {
                     if (viewModelGameplayImage != null)
                     {
-                        var fileRandomIndex = RandomHelper.RandomInt(0, 10000);
-                        var gameplayPhotoFileExtension = Path.GetExtension(viewModelGameplayImage.FileName);
-                        var gameplayPhotoFileName = fileRandomIndex + DateTime.Now.ToString("yy-MM-dd-hh-mm-ss") +
-                                                    gameplayPhotoFileExtension;
-                        var gameplayImage = new Image()
-                        {
-                            Name = viewModel.Name,
-                            ImagePath = "/Image/Games/" + folderRandomIndex + "/" + gameplayPhotoFileName,
-                            Type = ImageType.GAMEPLAY,
-                            CreatedAt = DateTime.Now,
-                            UpdatedAt = DateTime.Now
-                        };
-                        gameplayImages.Add(gameplayImage);
-                        gameplayPhotoFileName =
-                            Path.Combine(Server.MapPath("~/Image/Games/" + folderRandomIndex + "/"), gameplayPhotoFileName);
-                        viewModelGameplayImage.SaveAs(gameplayPhotoFileName);
+                        gameplayImages.Add(ImageHandler.CreateWebImage(viewModelGameplayImage,avatarImage.Name,WebImageType.GAMEPLAY));
                     }
                 }
             }
@@ -271,25 +239,7 @@ namespace Teeleh.WApi.Controllers
 
             if (viewModel.Id == -1) //New
             {
-                var avatarImage = new Image()
-                {
-                    Name = viewModel.Name,
-                    ImagePath = avatarPhotoFilePath,
-                    Type = ImageType.AVATAR,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                };
-
-                var coverImage = new Image()
-                {
-                    Name = viewModel.Name,
-                    ImagePath = coverPhotoFilePath,
-                    Type = ImageType.COVER,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                };
-
-
+                
                 var game = new Game
                 {
                     Name = viewModel.Name,
@@ -327,38 +277,20 @@ namespace Teeleh.WApi.Controllers
 
                 if (avatarImageInDb == null) //Making a new record
                 {
-                    avatarImageInDb = new Image()
-                    {
-                        Name = viewModel.Name,
-                        ImagePath = avatarPhotoFilePath,
-                        Type = ImageType.AVATAR,
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now
-                    };
-                    //gameInDb.Avatar = avatarImage;
+                    avatarImageInDb = avatarImage;
                 }
                 else //Editing old record
                 {
                     if (!defaultAvatarUsed) //we replace the old photo only if a new photo has been uploaded.
                     {
-                        avatarImageInDb.Name = viewModel.Name;
-                        avatarImageInDb.ImagePath = avatarPhotoFilePath;
-                        avatarImageInDb.Type = ImageType.AVATAR;
-                        avatarImageInDb.UpdatedAt = DateTime.Now;
+                        avatarImageInDb = avatarImage;
                     }
                 }
 
 
                 if (coverImageInDb == null) //Making a new record
                 {
-                    coverImageInDb = new Image()
-                    {
-                        Name = viewModel.Name,
-                        ImagePath = coverPhotoFilePath,
-                        Type = ImageType.COVER,
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now
-                    };
+                    coverImageInDb = coverImage;
                     //gameInDb.Cover = coverImage;
                 }
                 else //Editing old record
@@ -366,10 +298,7 @@ namespace Teeleh.WApi.Controllers
 
                     if (!defaultCoverUsed) //we replace the old photo only if a new photo has been uploaded.
                     {
-                        coverImageInDb.Name = viewModel.Name;
-                        coverImageInDb.ImagePath = coverPhotoFilePath;
-                        coverImageInDb.Type = ImageType.COVER;
-                        coverImageInDb.UpdatedAt = DateTime.Now;
+                        coverImageInDb = coverImage;
                     }
                 }
 

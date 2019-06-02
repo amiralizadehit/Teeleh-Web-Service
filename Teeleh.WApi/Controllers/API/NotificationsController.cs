@@ -54,7 +54,7 @@ namespace Teeleh.WApi.Controllers.API
                 Image image = new Image()
                 {
                     CreatedAt = DateTime.Now,
-                    Type = ImageType.NOTIFICATOIN_IMAGE,
+                    Type = ImageType.NOTIFICATION_IMAGE,
                     ImagePath = imageFilePath,
                     Name = casualNotification.Title,
                     UpdatedAt = DateTime.Now

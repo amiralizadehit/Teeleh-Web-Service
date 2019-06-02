@@ -6,6 +6,7 @@ using System.Web;
 using System.Data.Entity;
 using Teeleh.Models;
 using Teeleh.Models.Enums;
+using Teeleh.Models.Helper;
 using Teeleh.Utilities;
 using Teeleh.Utilities.Notification_Object;
 
@@ -14,6 +15,7 @@ namespace Teeleh.WApi.Services
     public class Processes
     {
         private AppDbContext db;
+
         public Processes()
         {
             db = new AppDbContext();
@@ -29,59 +31,49 @@ namespace Teeleh.WApi.Services
             {
                 foreach (var notification in notifications)
                 {
-                    var userSessions = notification.User.Sessions;
-                
+                    //we want to make sure that we send notification to an active session
+                    var userSessions = notification.User.Sessions.Where(s => s.State == SessionState.ACTIVE);
+
                     // we send the notification to all active sessions of its target user
                     foreach (var userSession in userSessions)
                     {
-                        //we want to make sure that we send notification to an active session
-                        if (userSession.State == SessionState.ACTIVE)
+                        var fcmToken = userSession.FCMToken;
+                        if (fcmToken != null)
                         {
-                            var fcmToken = userSession.FCMToken;
-                            if (fcmToken != null)
-                            {
-                                // Here we create the notification Object based on the type of notification
-                                NotificationObject notificationObject;
+                            // Here we create the notification Object based on the type of notification
+                            NotificationObject notificationObject;
 
-                                switch (notification.Type)
-                                {
-                                    case NotificationType.ADVERTISEMENT :
-                                        var game = db.Games.Single(g => g.Id == notification.Advertisement.GameId);
-                                        notificationObject = new AdNotification()
-                                        {
-                                            Id = notification.Id,
-                                            Avatar = game.Avatar.ImagePath,
-                                            AdvertisementId = notification.AdvertisementId,
-                                            Message = notification.Message,
-                                            //type = NotificationType.ADVERTISEMENT
-                                        };
-                                        NotificationSender.SendRequestNotification(fcmToken, notificationObject);
-                                        break;
-                                    case NotificationType.CASUAL :
-                                        notificationObject = new CasualNotification()
-                                        {
-                                            Id = notification.Id,
-                                            //Todo: Here we should add a default image for our casual notifications.
-                                            Avatar = "",
-                                            Message = notification.Message,
-                                           // type = NotificationType.CASUAL
-                                        };
-                         
-                                        break;
-                                }
+                            switch (notification.Type)
+                            {
+                                case NotificationType.ADVERTISEMENT:
+                                   
+                                    notificationObject = new AdNotification()
+                                    {
+                                        Id = notification.Id,
+                                        Avatar = notification.Avatar.ImagePath,
+                                        AdvertisementId = notification.AdvertisementId,
+                                        Message = notification.Message,
+                                    };
+                                    NotificationSender.Send(fcmToken, notificationObject);
+                                    break;
+                                case NotificationType.CASUAL:
+                                    notificationObject = new CasualNotification()
+                                    {
+                                        Id = notification.Id,
+                                        Avatar = notification.Avatar.ImagePath,
+                                        Message = notification.Message,
+                                    };
+                                    NotificationSender.Send(fcmToken, notificationObject);
+                                    break;
                             }
                         }
                     }
-                
                 }
             }
         }
 
         public void UpdateRecommenderSystem()
         {
-
-
-
             //var advertisementInDb = await db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
             //    .SingleOrDefaultAsync(c => c.Id == id);
             //if (advertisementInDb != null)
@@ -104,9 +96,8 @@ namespace Teeleh.WApi.Services
             //    }
 
             //    var result = similarAds.Select(QueryHelper.GetAdvertisementQuery()).ToList();
-                
+
             //}
         }
-
     }
 }

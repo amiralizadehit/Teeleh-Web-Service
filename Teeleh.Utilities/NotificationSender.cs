@@ -20,14 +20,14 @@ namespace Teeleh.Utilities
         private static string SenderID = "698633888027";
 
 
-        public static Exception SendRequestNotification(string token, NotificationObject notification)
+        public static Exception Send(string token, NotificationObject notification)
         {
             var data = new
             {
                 to = token,
                 data = new
                 {
-                    title = "Teeleh",
+                    title = notification.Title,
                     body = notification,
                 }
             };

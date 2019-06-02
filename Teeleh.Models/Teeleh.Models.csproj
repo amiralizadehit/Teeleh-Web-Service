@@ -339,6 +339,10 @@
     <Compile Include="Migrations\201906012302146_NullableAdvertisementForNotifications.Designer.cs">
       <DependentUpon>201906012302146_NullableAdvertisementForNotifications.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906020853441_AddingIsDeletedToUserModel.cs" />
+    <Compile Include="Migrations\201906020853441_AddingIsDeletedToUserModel.Designer.cs">
+      <DependentUpon>201906020853441_AddingIsDeletedToUserModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
@@ -555,6 +559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906012302146_NullableAdvertisementForNotifications.resx">
       <DependentUpon>201906012302146_NullableAdvertisementForNotifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906020853441_AddingIsDeletedToUserModel.resx">
+      <DependentUpon>201906020853441_AddingIsDeletedToUserModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

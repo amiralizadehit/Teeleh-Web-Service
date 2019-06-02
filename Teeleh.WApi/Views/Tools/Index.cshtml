@@ -6,7 +6,7 @@
 
 <h2 style="margin-bottom: 40px">Tools</h2>
 
-@using (Ajax.BeginForm("SendNotification", "Tools", new AjaxOptions {OnSuccess = "OnSuccess",
+@using (Ajax.BeginForm("SendNotification", "Tools", new AjaxOptions {OnSuccess = "OnSuccess", OnBegin = "OnBegin", OnComplete = "OnComplete",
     OnFailure = "OnFailure"}, new{@enctype= "multipart/form-data" }))
 {
     <div class="tools-section notification-sender">
@@ -26,9 +26,11 @@
             @Html.Label("Upload avatar photo")
             <input style="margin-bottom: 30px" type="file" name="Avatar" accept=".jpg, .png" />
         </div>
-        <div>
+        <div style="display: inline-block">
             <button type="submit" value="submit" class="btn btn-primary ">Send</button>
         </div>
+        <div style="display: inline-block"><img id="progress" style="display: none" src="~/Image/loading.gif"/></div>
+        <h5 id="result"></h5>
     </div>
 }
 
@@ -40,10 +42,20 @@
 
 <script type="text/javascript">
     function OnSuccess(response) {
-        var result = response.result;
-        alert(result);
+        $("#progress").hide();
+        if (response.result === true)
+            $("#result").text("Notification has been sent.");
+        else {
+            $("#result").text("Unexpected error happend.");
+        }
     }
     function OnFailure(response) {
-        alert("Error occured.");
+        $("#progress").hide();
+        $("#result").text("Unexpected error happend.");
     }
+    function OnBegin() {
+        $("#progress").show();
+        $("#result").text("");
+    }
+
 </script>

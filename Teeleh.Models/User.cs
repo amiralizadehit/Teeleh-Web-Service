@@ -56,8 +56,6 @@ namespace Teeleh.Models
 
         public virtual List<AdBookmark> SavedAdvertisements { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public List<Notification> Notifications { get; set; }
 
         [ForeignKey("User_Id")] public virtual List<Session> Sessions { get; set; }
