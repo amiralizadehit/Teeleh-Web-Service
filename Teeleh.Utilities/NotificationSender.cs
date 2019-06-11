@@ -27,7 +27,7 @@ namespace Teeleh.Utilities
                 to = token,
                 data = new
                 {
-                    title = notification.Title,
+                    //title = notification.Title,
                     body = notification,
                 }
             };

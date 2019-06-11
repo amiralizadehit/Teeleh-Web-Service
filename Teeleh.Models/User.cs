@@ -169,6 +169,7 @@ namespace Teeleh.Models
             this.FirstName = userInfo.FirstName;
             this.LastName = userInfo.LastName;
 
+            
             this.userProvinceId = userInfo.ProvinceId;
             this.userCityId = userInfo.CityId;
 

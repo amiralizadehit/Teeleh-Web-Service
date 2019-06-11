@@ -149,9 +149,9 @@ namespace Teeleh.WApi.Controllers
                 User user = null;
 
                 if(!string.IsNullOrEmpty(userSignUp.PhoneNumber))
-                    user = await db.Users.SingleOrDefaultAsync(q => q.PhoneNumber == userSignUp.PhoneNumber);
+                    user = await db.Users.OrderByDescending(v=>v.CreatedAt).FirstOrDefaultAsync(q => q.PhoneNumber == userSignUp.PhoneNumber);
                 else if (!string.IsNullOrEmpty(userSignUp.Email))
-                    user = await db.Users.SingleOrDefaultAsync(q => q.Email == userSignUp.Email);
+                    user = await db.Users.OrderByDescending(v => v.CreatedAt).FirstOrDefaultAsync(q => q.Email == userSignUp.Email);
                 else
                     return BadRequest();
 
@@ -270,7 +270,7 @@ namespace Teeleh.WApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.SingleOrDefaultAsync(q => q.Email == userSignUpEmail.Email);
+                User user = await db.Users.OrderByDescending(v => v.CreatedAt).FirstOrDefaultAsync(q => q.Email == userSignUpEmail.Email);
                 Session session = null;
                 var randomNounce = RandomHelper.RandomInt(10000, 99999);
 

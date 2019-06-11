@@ -15,10 +15,14 @@ namespace Teeleh.WApi.Services
     public class Processes
     {
         private AppDbContext db;
+        private string localDomain;
 
         public Processes()
         {
             db = new AppDbContext();
+
+            //Todo : I have to find a better solution for this.
+            localDomain = "http://teelehdev.ir";
         }
 
         public void SendNotification()
@@ -50,9 +54,10 @@ namespace Teeleh.WApi.Services
                                     notificationObject = new AdNotification()
                                     {
                                         Id = notification.Id,
-                                        Avatar = notification.Avatar.ImagePath,
+                                        Avatar = localDomain + notification.Avatar.ImagePath,
                                         AdvertisementId = notification.AdvertisementId,
                                         Message = notification.Message,
+                                        Title = notification.Title
                                     };
                                     NotificationSender.Send(fcmToken, notificationObject);
                                     break;
@@ -60,8 +65,9 @@ namespace Teeleh.WApi.Services
                                     notificationObject = new CasualNotification()
                                     {
                                         Id = notification.Id,
-                                        Avatar = notification.Avatar.ImagePath,
+                                        Avatar = localDomain + notification.Avatar.ImagePath,
                                         Message = notification.Message,
+                                        Title = notification.Title
                                     };
                                     NotificationSender.Send(fcmToken, notificationObject);
                                     break;

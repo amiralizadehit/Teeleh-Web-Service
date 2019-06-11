@@ -91,9 +91,9 @@ namespace Teeleh.WApi.Controllers.API
 
                 if (sessionInDb != null)
                 {
-                    var anyUser = await db.Users.SingleOrDefaultAsync(f => f.PhoneNumber == stringDto.PhoneNumber);
+                    var anyUser = sessionInDb.User;
 
-                    if (anyUser == null || anyUser.State == UserState.DELETED)
+                    if (anyUser.State == UserState.ACTIVE)
                     {
                         var user = sessionInDb.User;
                         //result = smsSent
@@ -132,9 +132,9 @@ namespace Teeleh.WApi.Controllers.API
                     db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(pairDto.Session));
                 if (sessionInDb != null)
                 {
-                    var anyUser = await db.Users.SingleOrDefaultAsync(f => f.Email == pairDto.Email);
+                    var anyUser = sessionInDb.User;
 
-                    if (anyUser == null || anyUser.State == UserState.DELETED)
+                    if (anyUser.State == UserState.ACTIVE)
                     {
                         var user = sessionInDb.User;
                         user.ChangeEmail(pairDto.Email);
