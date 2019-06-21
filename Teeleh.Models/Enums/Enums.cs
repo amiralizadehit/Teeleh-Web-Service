@@ -99,8 +99,9 @@ namespace Teeleh.Models.Enums
 
     public enum NotificationStatus
     {
-        SEEN,
-        UNSEEN
+        NEW,
+        SENT,
+        SEEN
     }
 
     public enum NotificationType

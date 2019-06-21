@@ -28,7 +28,7 @@ namespace Teeleh.WApi.Services
         public void SendNotification()
         {
             // We just resend the notifications which have not been seen before by its target user
-            var notifications = db.Notifications.Where(n => n.Status == NotificationStatus.UNSEEN);
+            var notifications = db.Notifications.Where(n => n.Status == NotificationStatus.NEW);
 
 
             if (notifications.Any())
@@ -72,6 +72,9 @@ namespace Teeleh.WApi.Services
                                     NotificationSender.Send(fcmToken, notificationObject);
                                     break;
                             }
+
+                            notification.Status = NotificationStatus.SENT;
+                            db.SaveChanges();
                         }
                     }
                 }

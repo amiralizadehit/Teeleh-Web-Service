@@ -156,7 +156,7 @@ namespace Teeleh.WApi.Controllers
                     return BadRequest();
 
                 Session session = null;
-                var randomNounce = RandomHelper.RandomInt(10000, 99999);
+                var randomNonce = RandomHelper.RandomInt(10000, 99999);
                 
                 if (user == null || user.State == UserState.DELETED) //New User
                 {
@@ -176,7 +176,7 @@ namespace Teeleh.WApi.Controllers
 
                     session = new Session()
                     {
-                        Nonce = randomNounce,
+                        Nonce = randomNonce,
                         State = SessionState.PENDING,
                         InitMoment = DateTime.Now,
                         SessionKey = RandomHelper.RandomString(32),
@@ -203,7 +203,7 @@ namespace Teeleh.WApi.Controllers
 
                         session = new Session()
                         {
-                            Nonce = randomNounce,
+                            Nonce = randomNonce,
                             State = SessionState.PENDING,
                             InitMoment = DateTime.Now,
                             SessionKey = RandomHelper.RandomString(32),
@@ -230,7 +230,7 @@ namespace Teeleh.WApi.Controllers
 
                 var receptorPhone = userSignUp.PhoneNumber;
                 var receptorMail = userSignUp.Email;
-                var token = randomNounce.ToString();
+                var token = randomNonce.ToString();
 
                 if (receptorMail != null) //Mail
                 {

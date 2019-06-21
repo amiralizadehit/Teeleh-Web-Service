@@ -43,7 +43,7 @@ namespace Teeleh.WApi.Functions
                         Title = "Teeleh",
                         UserId = requestUser.Id,
                         Message = "آگهی مورد نظر شما موجود شد",
-                        Status = NotificationStatus.UNSEEN,
+                        Status = NotificationStatus.NEW,
                         Type = NotificationType.ADVERTISEMENT
                     };
                     db.Notifications.Add(newNotification);
@@ -79,7 +79,7 @@ namespace Teeleh.WApi.Functions
                         hasReceived = true;
                         if (resend)
                             //here we resend the notification again.
-                            notification.Status = NotificationStatus.UNSEEN;
+                            notification.Status = NotificationStatus.NEW;
                         break;
                     }
                 }
@@ -102,7 +102,7 @@ namespace Teeleh.WApi.Functions
                             Title = "Teeleh",
                             UserId = user.Id,
                             Message = "آگهی انتخابی شما تخفیف خورده است",
-                            Status = NotificationStatus.UNSEEN,
+                            Status = NotificationStatus.NEW,
                             Type = NotificationType.ADVERTISEMENT
                         };
                         db.Notifications.Add(newNotification);
@@ -128,7 +128,7 @@ namespace Teeleh.WApi.Functions
                     Message = message,
                     Title = title,
                     Avatar = avatar,
-                    Status = NotificationStatus.UNSEEN,
+                    Status = NotificationStatus.NEW,
                     Type = NotificationType.CASUAL,
                 };
                 db.Notifications.Add(newNotification);

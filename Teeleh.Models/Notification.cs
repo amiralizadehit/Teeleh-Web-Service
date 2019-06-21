@@ -25,7 +25,6 @@ namespace Teeleh.Models
 
         public int AvatarId { get; set; }
 
-
         [Required]
         public string Title { get; set; }
         [Required]

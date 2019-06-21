@@ -30,6 +30,7 @@ namespace Teeleh.Models.Helper
                 Id = a.Id,
                 Game = a.Game.Name,
                 Avatar = localDomain + a.Game.Avatar.ImagePath,
+                Cover = localDomain + a.Game.Cover.ImagePath,
                 UserImage = localDomain + a.UserImage.ImagePath,
                 Platform = a.Platform.Name,
                 MedType = a.MedType,

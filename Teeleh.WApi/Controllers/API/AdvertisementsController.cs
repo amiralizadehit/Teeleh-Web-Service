@@ -324,13 +324,12 @@ namespace Teeleh.WApi.Controllers
         /// <summary>
         /// Returns an advertisementCreate in a more detailed manner with given id.
         /// </summary>
-        /// <returns>200 : Ok |s
-        /// 404 : Advertisement Not Found |
-        /// 400 : Bad Request
+        /// <returns>200 : Ok |
+        /// 404 : Advertisement Not Found 
         /// </returns>
-        [Route("api/advertisements/detail/{id}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Detail(int id) //Some dummy algorithm has been implemented
+        [Route("api/advertisements/similar/{id}")]
+        public async Task<IHttpActionResult> GetSimilarAdvertisements(int id) //Some dummy algorithm has been implemented
         {
             var advertisementInDb = await db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
                 .SingleOrDefaultAsync(c => c.Id == id);
@@ -359,5 +358,27 @@ namespace Teeleh.WApi.Controllers
 
             return NotFound();
         }
-    }
+
+
+        /// <summary>
+        /// Returns all information of the advertisement specified with given id.
+        /// </summary>
+        /// <returns>200 : Ok |
+        /// 404 : Advertisement Not Found 
+        /// </returns>
+        [HttpGet]
+        [Route("api/advertisements/detail/{id}")]
+        public IHttpActionResult Detail(int id)
+        {
+            var advertisementInDb = db.Advertisements
+                .Where(QueryHelper.GetAdvertisementValidationQuery())
+                .Where(g => g.Id == id);
+
+            if (advertisementInDb.Any())
+            {
+                return Ok(advertisementInDb.Select(QueryHelper.GetAdvertisementQuery()));
+            }
+            return NotFound();
+        }
+    }   
 }

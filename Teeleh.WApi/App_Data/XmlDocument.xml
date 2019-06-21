@@ -530,13 +530,20 @@
             404 : Advertisement not found
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Detail(System.Int32)">
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetSimilarAdvertisements(System.Int32)">
             <summary>
             Returns an advertisementCreate in a more detailed manner with given id.
             </summary>
-            <returns>200 : Ok |s
-            404 : Advertisement Not Found |
-            400 : Bad Request
+            <returns>200 : Ok |
+            404 : Advertisement Not Found 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.Detail(System.Int32)">
+            <summary>
+            Returns all information of the advertisement specified with given id.
+            </summary>
+            <returns>200 : Ok |
+            404 : Advertisement Not Found 
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.API.LocationController.GetProvince">
