@@ -589,10 +589,11 @@
             It is used to change the phone number of a user.
             </summary>
             <returns>
-            200: Ok(smsSent) |
-            401: Unauthorized (Session info not found) |
+            200 : Ok(smsSent) |
+            404 : Not Found (Session info not found) |
             400 : Bad Request |
-            409 : User exists with same phone number
+            409 : User exists with same phone number |
+            401 : Use status is not active
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.API.ProfileController.NewEmail(Teeleh.Models.Dtos.EmailPairDto)">
@@ -600,10 +601,11 @@
             It is used to change the Email of a user.
             </summary>
             <returns>
-            200: Nonce Sent to New Email |
-            401: Unauthorized (Session info not found) |
+            200 : Nonce Sent to New Email |
+            404 : Not Found (Session info not found) |
             400 : Bad Request |
-            409 : User exists with same Email
+            409 : User exists with same Email |
+            401 : User status is not active
             </returns>
         </member>
         <member name="M:Teeleh.WApi.Controllers.API.ProfileController.ValidateNewPhoneNumber(Teeleh.Models.Dtos.NoncePairDto)">

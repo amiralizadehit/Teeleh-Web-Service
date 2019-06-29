@@ -75,10 +75,11 @@ namespace Teeleh.WApi.Controllers.API
         /// It is used to change the phone number of a user.
         /// </summary>
         /// <returns>
-        /// 200: Ok(smsSent) |
-        /// 401: Unauthorized (Session info not found) |
+        /// 200 : Ok(smsSent) |
+        /// 404 : Not Found (Session info not found) |
         /// 400 : Bad Request |
-        /// 409 : User exists with same phone number
+        /// 409 : User exists with same phone number |
+        /// 401 : Use status is not active
         /// </returns>
         [HttpPost]
         [Route("api/profile/edit/phone")]
@@ -86,29 +87,32 @@ namespace Teeleh.WApi.Controllers.API
         {
             if (ModelState.IsValid)
             {
+
                 var sessionInDb = await
                     db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(stringDto.Session));
 
                 if (sessionInDb != null)
                 {
-                    var anyUser = sessionInDb.User;
+                    var anyOtherUser = db.Users.SingleOrDefault(u => u.PhoneNumber == stringDto.PhoneNumber);
 
-                    if (anyUser.State == UserState.ACTIVE)
+                    if (anyOtherUser == null)
                     {
                         var user = sessionInDb.User;
-                        //result = smsSent
-                        var result = user.ChangePhoneNumber(stringDto.PhoneNumber);
-                        await db.SaveChangesAsync();
 
-                        return Ok(result);
+                        if (user.State == UserState.ACTIVE)
+                        {
+                            //result = smsSent
+                            var result = user.ChangePhoneNumber(stringDto.PhoneNumber);
+                            await db.SaveChangesAsync();
+
+                            return Ok(result);
+                        }
+                        return Unauthorized();
                     }
-
-                    return Conflict();
+                     return Conflict();
                 }
-
-                return Unauthorized();
+                return NotFound();
             }
-
             return BadRequest();
         }
 
@@ -117,10 +121,11 @@ namespace Teeleh.WApi.Controllers.API
         /// It is used to change the Email of a user.
         /// </summary>
         /// <returns>
-        /// 200: Nonce Sent to New Email |
-        /// 401: Unauthorized (Session info not found) |
+        /// 200 : Nonce Sent to New Email |
+        /// 404 : Not Found (Session info not found) |
         /// 400 : Bad Request |
-        /// 409 : User exists with same Email
+        /// 409 : User exists with same Email |
+        /// 401 : User status is not active
         /// </returns>
         [HttpPost]
         [Route("api/profile/edit/email")]
@@ -132,21 +137,25 @@ namespace Teeleh.WApi.Controllers.API
                     db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(pairDto.Session));
                 if (sessionInDb != null)
                 {
-                    var anyUser = sessionInDb.User;
+                    var anyOtherUser = db.Users.SingleOrDefault(u => u.Email == pairDto.Email);
 
-                    if (anyUser.State == UserState.ACTIVE)
+                    if (anyOtherUser == null)
                     {
                         var user = sessionInDb.User;
-                        user.ChangeEmail(pairDto.Email);
-                        await db.SaveChangesAsync();
+                        if (user.State == UserState.ACTIVE)
+                        {
+                            user.ChangeEmail(pairDto.Email);
+                            await db.SaveChangesAsync();
 
-                        return Ok();
+                            return Ok();
+                        }
+
+                        return Unauthorized();
                     }
-
                     return Conflict();
                 }
 
-                return Unauthorized();
+                return NotFound();
             }
 
             return BadRequest();
