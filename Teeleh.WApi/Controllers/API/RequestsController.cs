@@ -12,6 +12,7 @@ using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
+using Teeleh.WApi.Functions;
 
 namespace Teeleh.WApi.Controllers.API
 {
@@ -39,7 +40,6 @@ namespace Teeleh.WApi.Controllers.API
             return Ok(requests);
         }
 
-        
 
         /// <summary>
         /// This endpoint creates a request with the given information.
@@ -61,13 +61,20 @@ namespace Teeleh.WApi.Controllers.API
                 {
                     var user = session.User;
 
-                    var selectedPlatforms = db.Platforms.Where(g => requestCreate.SelectedPlatforms.Contains(g.Id)).ToList();
+                    var selectedPlatforms = db.Platforms.Where(g => requestCreate.SelectedPlatforms.Contains(g.Id))
+                        .ToList();
+
+                    if (!Enum.IsDefined(typeof(FilterType), requestCreate.FilterType) ||
+                        !Enum.IsDefined(typeof(RequestMode), requestCreate.ReqMode))
+                    {
+                        return BadRequest();
+                    }
 
                     var new_request = new Request()
                     {
                         GameId = requestCreate.GameId,
-                        FilterType = (FilterType)requestCreate.FilterType,
-                        ReqMode = (RequestMode)requestCreate.ReqMode,
+                        FilterType = (FilterType) requestCreate.FilterType,
+                        ReqMode = (RequestMode) requestCreate.ReqMode,
                         LocationCityId = requestCreate.LocationCity,
                         LocationProvinceId = requestCreate.LocationProvince,
                         LocationRegionId = requestCreate.LocationRegion,
@@ -91,10 +98,64 @@ namespace Teeleh.WApi.Controllers.API
             return BadRequest();
         }
 
+        /// <summary>
+        /// This endpoint edits the request with given information
+        /// </summary>
+        /// <returns>200 : Request edited |
+        /// 401 : Session info not found |
+        /// 400 : Bad Request 
+        /// 404 : Request not found 
+        /// </returns>
+        [HttpPost]
+        [Route("api/requests/edit")]
+        public async Task<IHttpActionResult> Edit(RequestEditDto requestEdit)
+        {
+            if (ModelState.IsValid)
+            {
+                var session = await
+                    db.Sessions.SingleOrDefaultAsync(
+                        QueryHelper.GetSessionObjectValidationQuery(requestEdit.Session));
+                if (session != null)
+                {
 
-        //[HttpPost]
-        //[Route("api/requests/edit")]
-        //public async Task<IHttpActionResult> Edit()
+
+                    var user = session.User;
+                    var requestInDb =
+                        db.Requests.SingleOrDefault(a => a.Id == requestEdit.Id && a.User.Id == user.Id);
+                    var selectedPlatforms = db.Platforms.Where(g => requestEdit.SelectedPlatforms.Contains(g.Id)).ToList();
+
+                    if(!Enum.IsDefined(typeof(FilterType), requestEdit.FilterType) ||
+                       !Enum.IsDefined(typeof(RequestMode), requestEdit.ReqMode))
+                    {
+                        return BadRequest();
+                    }
+
+                    if (requestInDb != null)
+                    {
+                    
+                        requestInDb.Platforms = selectedPlatforms;
+                        requestInDb.FilterType = (FilterType)requestEdit.FilterType;
+                        requestInDb.LocationCityId = requestEdit.LocationCity;
+                        requestInDb.LocationProvinceId = requestEdit.LocationProvince;
+                        requestInDb.LocationRegionId = requestEdit.LocationRegion;
+                        requestInDb.ReqMode = (RequestMode)requestEdit.ReqMode;
+                        requestInDb.MinPrice = requestEdit.MinPrice;
+                        requestInDb.MaxPrice = requestEdit.MaxPrice;
+                        requestInDb.UpdatedAt = DateTime.Now;
+
+                        await db.SaveChangesAsync();
+
+                        return Ok();
+                    }
+
+                    return NotFound();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
 
 
         /// <summary>

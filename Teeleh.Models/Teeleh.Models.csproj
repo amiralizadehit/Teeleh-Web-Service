@@ -84,6 +84,7 @@
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
     <Compile Include="Dtos\RequestCreateDto.cs" />
+    <Compile Include="Dtos\RequestEditDto.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="Helper\QueryHelper.cs" />

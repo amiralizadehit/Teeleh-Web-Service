@@ -1,14 +1,15 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Teeleh.Models.ViewModels;
 
 
 namespace Teeleh.Models.Dtos
 {
-    public class RequestCreateDto :PairDto
+    public class RequestEditDto : PairDto
     {
-        [Required]
-        public int GameId { get; set; }
+    
+        [Required] public int Id { get; set; }
 
         [Required]
         public List<string> SelectedPlatforms { get; set; }
@@ -25,6 +26,5 @@ namespace Teeleh.Models.Dtos
 
         public float? MinPrice { get; set; }
         public float? MaxPrice { get; set; }
-
     }
 }

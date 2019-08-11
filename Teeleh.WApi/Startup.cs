@@ -23,7 +23,7 @@ namespace Teeleh.WApi
                 Authorization = new[] { new AuthorizationFilter()}
             });
             Processes process = new Processes();
-            RecurringJob.AddOrUpdate(() => process.SendNotification(), Cron.MinuteInterval(5));
+            RecurringJob.AddOrUpdate(() => process.SendNotification(), Cron.MinuteInterval(2));
             app.UseHangfireServer();
         }
     }

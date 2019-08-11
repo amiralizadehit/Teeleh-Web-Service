@@ -35,10 +35,13 @@ namespace Teeleh.WApi.Functions
                 if (requestUser.Id != advertisementUser.Id)
                 {
                     //No one has received this notification before
+
+                    var avatarId = db.Games.Single(g => g.Id == advertisement.GameId).Avatar.Id;
+
                     var newNotification = new Notification()
                     {
                         AdvertisementId = advertisement.Id,
-                        AvatarId = advertisement.Game.Avatar.Id,
+                        AvatarId = avatarId,
                         CreatedAt = DateTime.Now,
                         Title = "Teeleh",
                         UserId = requestUser.Id,
@@ -148,6 +151,8 @@ namespace Teeleh.WApi.Functions
             var query = db.Requests.Where(QueryHelper.GetRequestValidationQuery())
                 .Where(s => s.GameId == advertisement.GameId).Include(k => k.User.Notifications);
 
+            
+
             if (adPrice != 0 && exchangeGamesCounts > 0)
             {
                 query = query.Where(r => r.ReqMode == RequestMode.ALL)
@@ -162,11 +167,11 @@ namespace Teeleh.WApi.Functions
                 query = query.Where(r => r.ReqMode == RequestMode.JUST_SELL)
                     .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
             }
-
+            var fasd = query.ToList();
             query =  advertisement.MedType == MediaType.NEW
                 ? query.Where(r => r.FilterType == FilterType.JUST_NEW)
                 : query.Where(r => r.FilterType == FilterType.JUST_SECOND_HAND);
-
+            var d = query.ToList();
             return query;
         }
     }

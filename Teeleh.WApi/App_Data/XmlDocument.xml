@@ -667,6 +667,16 @@
             400 : Bad Request 
             </returns>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.API.RequestsController.Edit(Teeleh.Models.Dtos.RequestEditDto)">
+            <summary>
+            This endpoint edits the request with given information
+            </summary>
+            <returns>200 : Request edited |
+            401 : Session info not found |
+            400 : Bad Request 
+            404 : Request not found 
+            </returns>
+        </member>
         <member name="M:Teeleh.WApi.Controllers.API.RequestsController.Delete(Teeleh.Models.Dtos.IDPairDto)">
             <summary>
             This endpoint deletes a request with given id.

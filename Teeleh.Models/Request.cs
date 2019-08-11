@@ -23,6 +23,7 @@ namespace Teeleh.Models
 
         public List<Platform> Platforms { get; set; }
 
+        [Required]
         public FilterType FilterType { get; set; }
 
         public Location LocationProvince { get; set; }
@@ -36,7 +37,8 @@ namespace Teeleh.Models
         public int? LocationProvinceId { get; set; }
         public int? LocationCityId { get; set; }
         public int? LocationRegionId { get; set; }
-
+        
+        [Required]
         public RequestMode ReqMode { get; set; }
 
         public bool IsDeleted { get; set; }

@@ -146,6 +146,11 @@ namespace Teeleh.WApi.Controllers
                         userImage = ImageHandler.CreateUserImage(db, user.Id, advertisementCreate.UserImage);
                     }
 
+                    if (!Enum.IsDefined(typeof(MediaType), advertisementCreate.MedType) ||
+                        !Enum.IsDefined(typeof(GameRegion), advertisementCreate.GameReg))
+                    {
+                        return BadRequest();
+                    }
 
                     var newAdvertisement = new Advertisement()
                     {
@@ -213,13 +218,18 @@ namespace Teeleh.WApi.Controllers
             {
                 var session = await
                     db.Sessions.SingleOrDefaultAsync(
-                        QueryHelper.GetSessionObjectValidationQuery(editAd.SessionInfo));
+                        QueryHelper.GetSessionObjectValidationQuery(editAd.Session));
                 if (session != null)
                 {
                     var user = session.User;
                     var adInDb =
                         db.Advertisements.Include(d => d.UserImage)
                             .SingleOrDefault(a => a.Id == editAd.Id && a.User.Id == user.Id);
+
+                    if (!Enum.IsDefined(typeof(MediaType), editAd.MedType))
+                    {
+                        return BadRequest();
+                    }
 
                     if (adInDb != null)
                     {

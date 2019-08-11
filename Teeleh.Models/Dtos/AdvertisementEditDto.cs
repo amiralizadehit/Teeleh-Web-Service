@@ -9,10 +9,9 @@ using Teeleh.Models.ViewModels;
 
 namespace Teeleh.Models.Dtos
 {
-    public class AdvertisementEditDto
+    public class AdvertisementEditDto : PairDto
     {
-        [Required] public SessionInfoObject SessionInfo { get; set; }
-
+      
         [Required] public int Id { get; set; }
 
         public float Price { get; set; }
