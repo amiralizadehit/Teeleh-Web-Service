@@ -133,6 +133,7 @@ namespace Teeleh.WApi.Controllers
         {
             var gameToDelete = db.Games.Include(f=>f.Avatar).Single(g => g.Id == id);
             gameToDelete.isDeleted = true;
+
             db.SaveChanges();
 
             return RedirectToAction("Index", "Games");

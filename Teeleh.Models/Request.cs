@@ -33,7 +33,6 @@ namespace Teeleh.Models
         public Location LocationRegion { get; set; }
         
 
-
         public int? LocationProvinceId { get; set; }
         public int? LocationCityId { get; set; }
         public int? LocationRegionId { get; set; }

@@ -45,7 +45,7 @@ namespace Teeleh.WApi.Controllers
         [Route("api/advertisements")]
         public IHttpActionResult GetAdvertisements()
         {
-            var advertisements = db.Advertisements.Where(QueryHelper.GetAdvertisementValidationQuery())
+            var advertisements = db.Advertisements.Where(a=>!a.Game.isDeleted && a.User.State==UserState.ACTIVE)
                 .Select(QueryHelper.GetAdvertisementQuery()).ToList();
 
             return Ok(advertisements);
@@ -75,7 +75,7 @@ namespace Teeleh.WApi.Controllers
                 var sort = (filter.Sort ?? Sort.NEWEST);
 
                 var query = db.Advertisements.Where(a => a.Price >= minPrice && a.Price <= maxPrice)
-                    .Where(d => d.isDeleted == false);
+                    .Where(QueryHelper.GetAdvertisementValidationQuery());
 
 
                 if (provinceId != null)
@@ -381,8 +381,9 @@ namespace Teeleh.WApi.Controllers
         public IHttpActionResult Detail(int id)
         {
             var advertisementInDb = db.Advertisements
-                .Where(QueryHelper.GetAdvertisementValidationQuery())
-                .Where(g => g.Id == id);
+                .Where(g => g.Id == id)
+                .Where(a => !a.Game.isDeleted && a.User.State == UserState.ACTIVE);
+                
 
             if (advertisementInDb.Any())
             {

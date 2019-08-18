@@ -728,11 +728,33 @@ namespace Teeleh.WApi.Controllers
                 {
                     var user = sessionInDb.User;
                     var requests = db.Requests
-
                         .Where(QueryHelper.GetRequestValidationQuery()).Where(c => c.User.Id == user.Id)
                         .Select(QueryHelper.GetRequestQuery()).ToList();
+                 
                     return Ok(requests);
+                }
 
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+        //////////////////////////////////// Notifications ////////////////////////////////////////////////
+
+        [HttpPost]
+        [Route("api/users/notifications/me")]
+        public async Task<IHttpActionResult> GetNotifications(SessionInfoObject sessionInfoObject)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(sessionInfoObject));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    var notifications = user.GetNotifications(db).ToList();
+                    return Ok(notifications);
                 }
 
                 return Unauthorized();

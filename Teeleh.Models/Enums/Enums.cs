@@ -101,7 +101,8 @@ namespace Teeleh.Models.Enums
     {
         NEW,
         SENT,
-        SEEN
+        SEEN,
+        DELETED
     }
 
     public enum NotificationType

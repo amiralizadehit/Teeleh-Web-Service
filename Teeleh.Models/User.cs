@@ -83,6 +83,16 @@ namespace Teeleh.Models
             return advertisements;
         }
 
+        public IQueryable<object> GetNotifications(AppDbContext db)
+        {
+            var notifications = db.Notifications.Where(n => n.UserId == Id)
+                .Where(QueryHelper.GetNotificationsValidationQuery())
+                .Select(QueryHelper.GetNotificationQuery()); ;
+            return notifications;
+        }
+
+
+
         /// <summary>
         /// Create an advertisement bookmark for the user it's called upon
         /// </summary>

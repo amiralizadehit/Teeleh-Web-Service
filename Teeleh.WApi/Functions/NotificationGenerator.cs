@@ -149,7 +149,7 @@ namespace Teeleh.WApi.Functions
             var exchangeGamesCounts = advertisement.ExchangeGames?.Count ?? 0;
 
             var query = db.Requests.Where(QueryHelper.GetRequestValidationQuery())
-                .Where(s => s.GameId == advertisement.GameId).Include(k => k.User.Notifications);
+                .Where(s => s.GameId == advertisement.GameId && s.Platforms.Any(p=>p.Id==advertisement.PlatformId)).Include(k => k.User.Notifications);
 
             
 

@@ -2,6 +2,7 @@
 using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Web;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
@@ -28,10 +29,11 @@ namespace Teeleh.Models.Helper
             return a => new
             {
                 Id = a.Id,
+                IsDeleted = a.isDeleted,
                 Game = a.Game.Name,
-                Avatar = localDomain + a.Game.Avatar.ImagePath,
-                Cover = localDomain + a.Game.Cover.ImagePath,
-                UserImage = localDomain + a.UserImage.ImagePath,
+                Avatar =localDomain + a.Game.Avatar.ImagePath,
+                Cover = a.Game.Cover!=null?localDomain + a.Game.Cover.ImagePath:null,
+                UserImage = a.UserImage!=null?localDomain + a.UserImage.ImagePath:null,
                 Platform = a.Platform.Name,
                 MedType = a.MedType,
                 Caption = a.Caption,
@@ -80,7 +82,7 @@ namespace Teeleh.Models.Helper
                 r.Id,
                 Game = r.Game.Name,
                 Avatar = localDomain + r.Game.Avatar.ImagePath,
-                Platform = r.Platforms.Select(p => p.Id),
+                Platform = r.Platforms.Select(p=>p.Id),
                 Location = new
                 {
                     Province = r.LocationProvince,
@@ -237,6 +239,29 @@ namespace Teeleh.Models.Helper
             //validation and authorization
             return b => b.IsDeleted == false 
                         && b.UserId==userId;
+        }
+
+        ////////////////////// Notifications Queries //////////////////////////////////
+        public static Expression<System.Func<Notification, bool>> GetNotificationsValidationQuery()
+        {
+            return b => b.Status != NotificationStatus.DELETED
+                        && b.User.State == UserState.ACTIVE;
+        }
+
+
+        public static Expression<System.Func<Notification, object>> GetNotificationQuery()
+        {
+            return n => new
+            {
+                Id = n.Id,
+                Title = n.Title,
+                Message = n.Message,
+                Status = (n.Status == NotificationStatus.SEEN) ? "SEEN" : "UNSEEN",
+                Avatar = localDomain + n.Avatar.ImagePath,
+                AdvertisementId = n.AdvertisementId,
+                Age = SqlFunctions.DateDiff("minute", n.CreatedAt, DateTime.Now),
+                CreatedAt = n.CreatedAt
+            };
         }
     }
 }

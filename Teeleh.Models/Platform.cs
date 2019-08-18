@@ -17,5 +17,6 @@ namespace Teeleh.Models
         public string Name { get; set; }
 
         public virtual List<Game> Games { get; set; }
+        public List<Request> Requests { get; set; }
     }
 }
