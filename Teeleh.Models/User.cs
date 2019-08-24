@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Policy;
@@ -66,7 +67,8 @@ namespace Teeleh.Models
 
         //Methods
 
-
+        
+        ////////////////////////////// BOOKMARKS //////////////////////////////////////
         /// <summary>
         /// Returns all advertisement bookmarks of the user object it's called upon
         /// </summary>
@@ -82,15 +84,6 @@ namespace Teeleh.Models
 
             return advertisements;
         }
-
-        public IQueryable<object> GetNotifications(AppDbContext db)
-        {
-            var notifications = db.Notifications.Where(n => n.UserId == Id)
-                .Where(QueryHelper.GetNotificationsValidationQuery())
-                .Select(QueryHelper.GetNotificationQuery()); ;
-            return notifications;
-        }
-
 
 
         /// <summary>
@@ -131,6 +124,54 @@ namespace Teeleh.Models
             if (bookmarkInDb != null)
                 bookmarkInDb.IsDeleted = true;
         }
+
+
+        ////////////////////////////// NOTIFICATIONS //////////////////////////////////
+
+        /// <summary>
+        /// Returns all notifications of the user object it's called upon
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        public IQueryable<object> GetNotifications(AppDbContext db)
+        {
+            var notifications = db.Notifications.Where(n => n.UserId == Id)
+                .Where(QueryHelper.GetNotificationsValidationQuery())
+                .GroupBy(n => n.CreatedAt.Day)
+                .OrderBy(g=>g.Key)
+                .Select(QueryHelper.GetNotificationGroupByDate()); 
+            return notifications;
+        }
+
+        /// <summary>
+        /// Delete the notification with specified Id of the user it's called upon
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="notificationId"></param>
+        public void DeleteNotification(AppDbContext db, int notificationId)
+        {
+            var notificationInDb = db.Notifications.SingleOrDefault(a => a.UserId == Id
+                                                                   && a.Id == notificationId);
+            if (notificationInDb != null)
+                notificationInDb.Status = NotificationStatus.DELETED;
+        }
+
+        /// <summary>
+        /// Mark the notification with specified Id as SEEN
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="notificationId"></param>
+        public void MarkAsSeenNotifications(AppDbContext db, int notificationId)
+        {
+            var notificationInDb = db.Notifications.SingleOrDefault(a => a.UserId == Id
+                                                                         && a.Id == notificationId);
+            if (notificationInDb != null)
+                notificationInDb.Status = NotificationStatus.SEEN;
+        }
+
+
+
+        
 
 
         /// <summary>

@@ -869,6 +869,33 @@
             401 : Session info not found
             </returns>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.GetNotifications(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            This endpoint returns a list of notifications owned by a user specified by given session information.
+            </summary>
+            <returns>200 : sent |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.DeleteNotification(Teeleh.Models.Dtos.IDPairDto)">
+            <summary>
+            This endpoint deletes an notification of the user specified with given information.
+            </summary>
+            <returns>200 : Deleted |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.UsersController.MarkAsSeenNotification(Teeleh.Models.Dtos.IDPairDto)">
+            <summary>
+            This endpoint marks a notification of a user as seen.
+            </summary>
+            <returns>200 : Deleted |
+            400 : Bad Request |
+            401 : Session info not found
+            </returns>
+        </member>
         <member name="M:Teeleh.WApi.Controllers.UsersController.GetCount">
             <summary>
             Returns number of users

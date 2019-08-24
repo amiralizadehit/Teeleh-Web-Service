@@ -258,9 +258,30 @@ namespace Teeleh.Models.Helper
                 Message = n.Message,
                 Status = (n.Status == NotificationStatus.SEEN) ? "SEEN" : "UNSEEN",
                 Avatar = localDomain + n.Avatar.ImagePath,
+                Type = n.Type==0?"CASUAL":"ADVERTISEMENT",
                 AdvertisementId = n.AdvertisementId,
                 Age = SqlFunctions.DateDiff("minute", n.CreatedAt, DateTime.Now),
                 CreatedAt = n.CreatedAt
+            };
+        }
+
+        public static Expression<System.Func<IGrouping<int,Notification>, object>> GetNotificationGroupByDate()
+        {
+            return o => new
+            {
+                Date = o.Select(y=>y.CreatedAt).FirstOrDefault(),
+                Notifications = o.Select(n => new
+                {
+                    Id = n.Id,
+                    Title = n.Title,
+                    Message = n.Message,
+                    Status = (n.Status == NotificationStatus.SEEN) ? "SEEN" : "UNSEEN",
+                    Avatar = localDomain + n.Avatar.ImagePath,
+                    Type = n.Type == 0 ? "CASUAL" : "ADVERTISEMENT",
+                    AdvertisementId = n.AdvertisementId,
+                    Age = SqlFunctions.DateDiff("minute", n.CreatedAt, DateTime.Now),
+                    CreatedAt = n.CreatedAt
+                })
             };
         }
     }

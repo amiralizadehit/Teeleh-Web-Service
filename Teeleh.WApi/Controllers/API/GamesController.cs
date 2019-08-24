@@ -26,7 +26,7 @@ namespace Teeleh.WApi.Controllers.API
         public IHttpActionResult GetGames()
         {
             
-            var games = db.Games.Select(QueryHelper.GetGameQuery()).ToList();
+            var games = db.Games.Where(QueryHelper.GetGameValidationQuery()).Select(QueryHelper.GetGameQuery()).ToList();
             return Ok(games);
         }
         [HttpGet]

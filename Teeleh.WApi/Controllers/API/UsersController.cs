@@ -742,6 +742,13 @@ namespace Teeleh.WApi.Controllers
 
         //////////////////////////////////// Notifications ////////////////////////////////////////////////
 
+        /// <summary>
+        /// This endpoint returns a list of notifications owned by a user specified by given session information.
+        /// </summary>
+        /// <returns>200 : sent |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
         [HttpPost]
         [Route("api/users/notifications/me")]
         public async Task<IHttpActionResult> GetNotifications(SessionInfoObject sessionInfoObject)
@@ -762,6 +769,68 @@ namespace Teeleh.WApi.Controllers
 
             return BadRequest();
         }
+
+        /// <summary>
+        /// This endpoint deletes an notification of the user specified with given information.
+        /// </summary>
+        /// <returns>200 : Deleted |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/notifications/delete")]
+        public async Task<IHttpActionResult> DeleteNotification(IDPairDto pair)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(pair.Session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    user.DeleteNotification(db, pair.Id);
+                    db.SaveChanges();
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// This endpoint marks a notification of a user as seen.
+        /// </summary>
+        /// <returns>200 : Deleted |
+        /// 400 : Bad Request |
+        /// 401 : Session info not found
+        /// </returns>
+        [HttpPost]
+        [Route("api/users/notifications/mark_as_seen")]
+        public async Task<IHttpActionResult> MarkAsSeenNotification(IDPairDto pair)
+        {
+            if (ModelState.IsValid)
+            {
+                var sessionInDb = await
+                    db.Sessions.SingleOrDefaultAsync(QueryHelper.GetSessionObjectValidationQuery(pair.Session));
+                if (sessionInDb != null)
+                {
+                    var user = sessionInDb.User;
+                    user.MarkAsSeenNotifications(db, pair.Id);
+                    db.SaveChanges();
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+
+            return BadRequest();
+        }
+
+
+
+
 
 
 

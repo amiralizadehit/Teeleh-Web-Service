@@ -74,6 +74,19 @@ namespace Teeleh.WApi.Areas.HelpPage
 
             }), new MediaTypeHeaderValue("application/json"), "Users", "SignUp");
 
+            config.SetSampleResponse(JsonConvert.SerializeObject(new
+            {
+                Id = 1234,
+                Title = "Some Title",
+                Message = "Some Message",
+                Status = "UNSEEN or SEEN",
+                Avatar = "Photo URL",
+                AdvertisementId = 1234,
+                Age = 12345,
+                CreatedAt = 13135
+
+            }), new MediaTypeHeaderValue("application/json"), "Users", "GetNotifications");
+
             /*config.SetSampleResponse(JsonConvert.SerializeObject(new
             {
                 SessionId = 1234,
