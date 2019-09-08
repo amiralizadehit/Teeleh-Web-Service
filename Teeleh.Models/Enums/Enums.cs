@@ -22,9 +22,30 @@ namespace Teeleh.Models.Enums
         R3,
         R4
     }
+    ///////////////////////////////////////////////////// PSN Account //////////////////////////////////////////////////
+
+    public enum PSNAccountCapacity
+    {
+        ONE,
+        TWO,
+        THREE
+    }
+    public enum PSNAccountType
+    {
+        LEGAL,
+        HACKED
+    }
+
+    public enum PSNAccountRegion
+    {
+        R1,
+        R2,
+        R3
+    }
+
 
     ///////////////////////////////////////////////////// Request Enums //////////////////////////////////////////////
-    
+
     public enum FilterType
     {
         ALL,
@@ -109,5 +130,12 @@ namespace Teeleh.Models.Enums
     {
         CASUAL,
         ADVERTISEMENT
+    }
+    ///////////////////////////////////////////////////// Location /////////////////////////////////////////////////////////
+    public enum LocationType
+    {
+        PROVINCE,
+        CITY,
+        REGION
     }
 }

@@ -74,10 +74,11 @@ namespace Teeleh.WApi.Services
                             }
 
                             notification.Status = NotificationStatus.SENT;
-                            db.SaveChanges();
+                            
                         }
                     }
                 }
+                db.SaveChanges();
             }
         }
 

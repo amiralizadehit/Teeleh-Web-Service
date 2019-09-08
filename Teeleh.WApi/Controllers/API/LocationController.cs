@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Http;
 using Teeleh.Models;
+using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 
 namespace Teeleh.WApi.Controllers.API
@@ -25,7 +26,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getprovince")]
         public IHttpActionResult GetProvince()
         {
-            var provinces = db.Locations.Where(QueryHelper.GetLocationValidationQuery(null ,Location.LocationType.PROVINCE));
+            var provinces = db.Locations.Where(QueryHelper.GetLocationValidationQuery(null ,LocationType.PROVINCE));
 
             if (provinces.Any())
             {
@@ -46,7 +47,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getcity/{provinceId}")]
         public IHttpActionResult GetCity(int provinceId)
         {
-            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(provinceId,Location.LocationType.CITY));
+            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(provinceId,LocationType.CITY));
             if (cities.Any())
             {
                 return Ok(cities.Select(QueryHelper.GetLocationQuery()));
@@ -64,7 +65,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getcity")]
         public IHttpActionResult GetCity()
         {
-            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(Location.LocationType.CITY));
+            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(LocationType.CITY));
 
             if (cities.Any())
             {
@@ -85,7 +86,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getregion/{cityId}")]
         public IHttpActionResult GetRegion(int cityId)
         {
-            var regions = db.Locations.Where(QueryHelper.GetLocationValidationQuery(cityId,Location.LocationType.REGION));
+            var regions = db.Locations.Where(QueryHelper.GetLocationValidationQuery(cityId,LocationType.REGION));
 
             if (regions.Any())
             {

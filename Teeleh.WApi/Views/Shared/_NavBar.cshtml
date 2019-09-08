@@ -15,6 +15,17 @@
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 <li>@Html.ActionLink("API", "Index", "Help")</li>
                 <li>@Html.ActionLink("Games Panel", "Index", "Games")</li>
+                <li >
+                    <div class="dropdown">
+                        <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                           style="color: white; cursor: pointer; padding: 15px;" >
+                            Locations <span class="caret" style="border-bottom-color: white; border-top-color: white"></span>
+</div>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Add Province", "CreateProvince", "Locations", null, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Add City", "CreateCity", "Locations", null, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </div></li>
                 <li>@Html.ActionLink("Tools", "Index", "Tools")</li>
                 <li>
                     <a href="/hangfire">Hangfire</a>

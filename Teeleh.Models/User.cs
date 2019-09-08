@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -137,8 +138,8 @@ namespace Teeleh.Models
         {
             var notifications = db.Notifications.Where(n => n.UserId == Id)
                 .Where(QueryHelper.GetNotificationsValidationQuery())
-                .GroupBy(n => n.CreatedAt.Day)
-                .OrderBy(g=>g.Key)
+                .GroupBy(n => DbFunctions.TruncateTime(n.CreatedAt))
+                .OrderByDescending(g=>g.Key)
                 .Select(QueryHelper.GetNotificationGroupByDate()); 
             return notifications;
         }

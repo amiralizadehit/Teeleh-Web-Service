@@ -87,6 +87,7 @@
     <Compile Include="Dtos\RequestEditDto.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Exchange.cs" />
+    <Compile Include="Helper\LocationExcelObject.cs" />
     <Compile Include="Helper\QueryHelper.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Game.cs" />
@@ -348,10 +349,27 @@
     <Compile Include="Migrations\201908180956098_AddingRequestFieldtoPlatform.Designer.cs">
       <DependentUpon>201908180956098_AddingRequestFieldtoPlatform.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908262105292_AddPSNAccount.cs" />
+    <Compile Include="Migrations\201908262105292_AddPSNAccount.Designer.cs">
+      <DependentUpon>201908262105292_AddPSNAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908262131249_AddMorePropertyToPSNAccount.cs" />
+    <Compile Include="Migrations\201908262131249_AddMorePropertyToPSNAccount.Designer.cs">
+      <DependentUpon>201908262131249_AddMorePropertyToPSNAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908262132464_DescriptionAddedToPSNAccount.cs" />
+    <Compile Include="Migrations\201908262132464_DescriptionAddedToPSNAccount.Designer.cs">
+      <DependentUpon>201908262132464_DescriptionAddedToPSNAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908301848115_AddingNewGenre.cs" />
+    <Compile Include="Migrations\201908301848115_AddingNewGenre.Designer.cs">
+      <DependentUpon>201908301848115_AddingNewGenre.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
+    <Compile Include="PSNAccount.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Panel\Admin.cs" />
@@ -367,6 +385,7 @@
     <Compile Include="ViewModels\SessionInfoObject.cs" />
     <Compile Include="ViewModels\ValidDate.cs" />
     <Compile Include="ViewModels\Website View Models\GamePageViewModel.cs" />
+    <Compile Include="ViewModels\Website View Models\LocationFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -571,6 +590,18 @@
     <EmbeddedResource Include="Migrations\201908180956098_AddingRequestFieldtoPlatform.resx">
       <DependentUpon>201908180956098_AddingRequestFieldtoPlatform.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908262105292_AddPSNAccount.resx">
+      <DependentUpon>201908262105292_AddPSNAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908262131249_AddMorePropertyToPSNAccount.resx">
+      <DependentUpon>201908262131249_AddMorePropertyToPSNAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908262132464_DescriptionAddedToPSNAccount.resx">
+      <DependentUpon>201908262132464_DescriptionAddedToPSNAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908301848115_AddingNewGenre.resx">
+      <DependentUpon>201908301848115_AddingNewGenre.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -582,9 +613,7 @@
     <Content Include="Scripts\jquery-1.9.0.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Notification Object\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Teeleh.Utilities\Teeleh.Utilities.csproj">
       <Project>{bc7fae28-04f9-4816-8341-45c64550306c}</Project>

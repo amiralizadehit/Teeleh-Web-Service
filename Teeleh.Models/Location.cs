@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using Teeleh.Models.Enums;
 
 namespace Teeleh.Models
 {
@@ -12,11 +14,6 @@ namespace Teeleh.Models
 
         public List<Advertisement> Advertisements { get; set; }
 
-        public enum LocationType
-        {
-            PROVINCE,
-            CITY,
-            REGION
-        }
+        
    }
 }

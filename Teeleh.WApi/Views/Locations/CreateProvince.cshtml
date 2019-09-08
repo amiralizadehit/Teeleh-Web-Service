@@ -1,0 +1,40 @@
+﻿@model Teeleh.Models.ViewModels.Website_View_Models.LocationFormViewModel
+@{
+    ViewBag.Title = "CreateProvince";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Province</h2>
+
+@using (Html.BeginForm("Submit", "Locations", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p class="alert alert-info">All fields are <strong>required</strong>.</p>
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.Label("Upload list of cities in excel sheet")
+        <input type="file" id="fileUpload" class="btn btn-primary" accept=".xlsx" name="ExcelFile" required><br />
+    </div>
+    @Html.HiddenFor(m => m.Type);
+    <br />
+
+    <div>
+        <button type="submit" id="fileUploadExcel" class="btn btn-primary ">Save</button>
+        <strong >@ViewBag.Message</strong>
+    </div>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $('#fileUploadExcel').click(function (e) {
+            if ($('#fileUpload').val() === "") {
+                bootbox.alert("Oops...!!! Please select an Excel file");
+                return false;
+            }
+
+        });
+    </script>
+}

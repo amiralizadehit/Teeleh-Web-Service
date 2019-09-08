@@ -192,12 +192,12 @@ namespace Teeleh.Models.Helper
             };
         }
 
-        public static Expression<System.Func<Location, bool>> GetLocationValidationQuery(int? id, Location.LocationType type)
+        public static Expression<System.Func<Location, bool>> GetLocationValidationQuery(int? id, LocationType type)
         {
             return l => l.ParentId == id && l.Type == type;
         }
 
-        public static Expression<System.Func<Location, bool>> GetLocationValidationQuery(Location.LocationType type)
+        public static Expression<System.Func<Location, bool>> GetLocationValidationQuery(LocationType type)
         {
             return l => l.Type == type;
         }
@@ -265,11 +265,12 @@ namespace Teeleh.Models.Helper
             };
         }
 
-        public static Expression<System.Func<IGrouping<int,Notification>, object>> GetNotificationGroupByDate()
+        public static Expression<System.Func<IGrouping<DateTime?,Notification>, object>> GetNotificationGroupByDate()
         {
             return o => new
             {
-                Date = o.Select(y=>y.CreatedAt).FirstOrDefault(),
+                //Date = o.Select(y=>y.CreatedAt).FirstOrDefault(),
+                Date = o.Key,
                 Notifications = o.Select(n => new
                 {
                     Id = n.Id,
@@ -281,7 +282,7 @@ namespace Teeleh.Models.Helper
                     AdvertisementId = n.AdvertisementId,
                     Age = SqlFunctions.DateDiff("minute", n.CreatedAt, DateTime.Now),
                     CreatedAt = n.CreatedAt
-                })
+                }).OrderByDescending(n=>n.CreatedAt)
             };
         }
     }
