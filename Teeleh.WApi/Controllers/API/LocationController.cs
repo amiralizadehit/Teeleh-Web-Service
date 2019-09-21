@@ -26,7 +26,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getprovince")]
         public IHttpActionResult GetProvince()
         {
-            var provinces = db.Locations.Where(QueryHelper.GetLocationValidationQuery(null ,LocationType.PROVINCE));
+            var provinces = db.Locations.Where(QueryHelper.GetLocationValidationQuery(null ,LocationType.PROVINCE)).OrderBy(l => l.Name);
 
             if (provinces.Any())
             {
@@ -47,7 +47,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getcity/{provinceId}")]
         public IHttpActionResult GetCity(int provinceId)
         {
-            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(provinceId,LocationType.CITY));
+            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(provinceId,LocationType.CITY)).OrderBy(l => l.Name);
             if (cities.Any())
             {
                 return Ok(cities.Select(QueryHelper.GetLocationQuery()));
@@ -65,7 +65,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getcity")]
         public IHttpActionResult GetCity()
         {
-            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(LocationType.CITY));
+            var cities = db.Locations.Where(QueryHelper.GetLocationValidationQuery(LocationType.CITY)).OrderBy(l => l.Name);
 
             if (cities.Any())
             {
@@ -86,7 +86,7 @@ namespace Teeleh.WApi.Controllers.API
         [Route("api/locations/getregion/{cityId}")]
         public IHttpActionResult GetRegion(int cityId)
         {
-            var regions = db.Locations.Where(QueryHelper.GetLocationValidationQuery(cityId,LocationType.REGION));
+            var regions = db.Locations.Where(QueryHelper.GetLocationValidationQuery(cityId,LocationType.REGION)).OrderBy(l => l.Name);
 
             if (regions.Any())
             {

@@ -80,7 +80,7 @@
     <Compile Include="Dtos\AdvertisementEditDto.cs" />
     <Compile Include="Dtos\CasualNotificationDto.cs" />
     <Compile Include="Dtos\PairDto.cs" />
-    <Compile Include="Dtos\Filter.cs" />
+    <Compile Include="Dtos\FeedOptions.cs" />
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
     <Compile Include="Dtos\RequestCreateDto.cs" />

@@ -493,7 +493,7 @@
             <returns>200 : sent
             </returns>
         </member>
-        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements(Teeleh.Models.Dtos.Filter)">
+        <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements(Teeleh.Models.Dtos.FeedOptions)">
             <summary>
             This endpoint returns a list of advertisements filtered by given filter object.
             </summary>

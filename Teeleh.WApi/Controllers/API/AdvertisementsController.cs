@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Microsoft.Ajax.Utilities;
 using Teeleh.Models;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
@@ -60,19 +61,20 @@ namespace Teeleh.WApi.Controllers
         /// </returns>
         [HttpPost]
         [Route("api/advertisements")]
-        public IHttpActionResult GetAdvertisements(Filter filter)
+        public IHttpActionResult GetAdvertisements(FeedOptions options)
         {
             if (ModelState.IsValid)
             {
                 var pageSize = 10;
-                var platforms = filter.PlatformIds;
-                var minPrice = (filter.MinPrice ?? 0);
-                var maxPrice = (filter.MaxPrice ?? 3000000);
-                var provinceId = filter.LocationProvinceId;
-                var cityId = filter.LocationCityId;
-                var mediaType = filter.MedType;
-                var pageNumber = (filter.PageNumber ?? 1);
-                var sort = (filter.Sort ?? Sort.NEWEST);
+                var platforms = options.Filter.PlatformIds;
+                var minPrice = (options.Filter.MinPrice ?? 0);
+                var maxPrice = (options.Filter.MaxPrice ?? 3000000);
+                var provinceId = options.Filter.LocationProvinceId;
+                var cityId = options.Filter.LocationCityId;
+                var mediaType = options.Filter.MedType;
+                var pageNumber = (options.Filter.PageNumber ?? 1);
+                var search = options.Search;
+                var sort = (options.Filter.Sort ?? Sort.NEWEST);
 
                 var query = db.Advertisements.Where(a => a.Price >= minPrice && a.Price <= maxPrice)
                     .Where(QueryHelper.GetAdvertisementValidationQuery());
@@ -96,6 +98,12 @@ namespace Teeleh.WApi.Controllers
                 if (platforms != null)
                 {
                     query = query.Where(p => platforms.Any(x => x == p.PlatformId));
+                }
+
+                if (!search.IsNullOrWhiteSpace())
+                {
+                    search = search.TrimEnd(' ');
+                    query = query.Where(s => s.Game.Name.Contains(search));
                 }
 
                 if (sort == Sort.NEWEST)

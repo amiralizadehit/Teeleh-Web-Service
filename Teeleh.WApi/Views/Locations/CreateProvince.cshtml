@@ -12,15 +12,15 @@
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        @Html.Label("Upload list of cities in excel sheet")
+        @Html.Label("Upload list of provinces in excel sheet")
         <input type="file" id="fileUpload" class="btn btn-primary" accept=".xlsx" name="ExcelFile" required><br />
     </div>
     @Html.HiddenFor(m => m.Type);
     <br />
 
     <div>
-        <button type="submit" id="fileUploadExcel" class="btn btn-primary ">Save</button>
-        <strong >@ViewBag.Message</strong>
+        <button type="submit" id="fileUploadExcel" class="btn btn-primary ">Submit</button>
+        <strong id="message_box" >@ViewBag.Message</strong>
     </div>
 }
 
@@ -34,7 +34,8 @@
                 bootbox.alert("Oops...!!! Please select an Excel file");
                 return false;
             }
-
+            $('#fileUploadExcel').disable = true;
+            $('#message_box').html("Processing...");
         });
     </script>
 }

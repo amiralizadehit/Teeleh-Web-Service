@@ -41,7 +41,7 @@ namespace Teeleh.WApi.Controllers
         {
             var viewModel = new LocationFormViewModel();
 
-            var locations = db.Locations.Where(l => l.Type == LocationType.PROVINCE).ToList();
+            var locations = db.Locations.Where(l => l.Type == LocationType.PROVINCE).OrderBy(l=>l.Name).ToList();
 
             viewModel.Parents = locations;
             viewModel.Type = LocationType.CITY;
