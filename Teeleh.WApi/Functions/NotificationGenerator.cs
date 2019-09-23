@@ -25,6 +25,8 @@ namespace Teeleh.WApi.Functions
             //Here we get all the requests matching this advertisement
             var requests = GetMatchedRequests(db, advertisement);
 
+           
+
             if (!requests.Any()) return; //we don't have any request matching this advertisement.
             foreach (var request in requests)
             {
@@ -36,14 +38,14 @@ namespace Teeleh.WApi.Functions
                 {
                     //No one has received this notification before
 
-                    var avatarId = db.Games.Single(g => g.Id == advertisement.GameId).Avatar.Id;
+                    var game = db.Games.Single(g => g.Id == advertisement.GameId);
 
                     var newNotification = new Notification()
                     {
                         AdvertisementId = advertisement.Id,
-                        AvatarId = avatarId,
+                        AvatarId = game.Avatar.Id,
                         CreatedAt = DateTime.Now,
-                        Title = "Teeleh",
+                        Title = game.Name,
                         UserId = requestUser.Id,
                         Message = "آگهی مورد نظر شما موجود شد",
                         Status = NotificationStatus.NEW,
@@ -102,7 +104,7 @@ namespace Teeleh.WApi.Functions
                             AdvertisementId = advertisement.Id,
                             AvatarId = advertisement.Game.Avatar.Id,
                             CreatedAt = DateTime.Now,
-                            Title = "Teeleh",
+                            Title = advertisement.Game.Name,
                             UserId = user.Id,
                             Message = "آگهی انتخابی شما تخفیف خورده است",
                             Status = NotificationStatus.NEW,
@@ -148,30 +150,32 @@ namespace Teeleh.WApi.Functions
             var adPrice = advertisement.Price;
             var exchangeGamesCounts = advertisement.ExchangeGames?.Count ?? 0;
 
-            var query = db.Requests.Where(QueryHelper.GetRequestValidationQuery())
+            var validRecords = db.Requests.Where(QueryHelper.GetRequestValidationQuery())
                 .Where(s => s.GameId == advertisement.GameId && s.Platforms.Any(p=>p.Id==advertisement.PlatformId)).Include(k => k.User.Notifications);
 
-            
 
-            if (adPrice != 0 && exchangeGamesCounts > 0)
+            var query = validRecords.Where(r => r.ReqMode == RequestMode.ALL)
+                .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
+
+            if (adPrice == 0 && exchangeGamesCounts > 0)
             {
-                query = query.Where(r => r.ReqMode == RequestMode.ALL)
-                    .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
+                query = query.Union(validRecords.Where(r => r.ReqMode == RequestMode.JUST_EXCHANGE));
             }
-            else if (adPrice == 0 && exchangeGamesCounts > 0)
+            else if(adPrice != 0 && exchangeGamesCounts == 0)
             {
-                query = query.Where(r => r.ReqMode == RequestMode.JUST_EXCHANGE);
+                query = query.Union(validRecords.Where(r => r.ReqMode == RequestMode.JUST_SELL)
+                    .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice));
             }
-            else
-            {
-                query = query.Where(r => r.ReqMode == RequestMode.JUST_SELL)
-                    .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
-            }
-            var fasd = query.ToList();
+            
+        
+            //if (adPrice != 0 && exchangeGamesCounts > 0)
+            //{
+            //    query = query.Where(r => r.ReqMode == RequestMode.ALL)
+            //        .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
+            //}
             query =  advertisement.MedType == MediaType.NEW
                 ? query.Where(r => r.FilterType == FilterType.JUST_NEW)
                 : query.Where(r => r.FilterType == FilterType.JUST_SECOND_HAND);
-            var d = query.ToList();
             return query;
         }
     }

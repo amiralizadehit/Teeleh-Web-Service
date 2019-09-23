@@ -9,11 +9,12 @@ namespace Teeleh.Models
     {
         public int Id { get; set; }
         public float Price { get; set; }
+
         public GameRegion GameReg { get; set; }
 
         [Required]
         public virtual User User { get; set; }
-
+        
         public virtual Game Game { get; set; }
 
         public virtual Platform Platform { get; set; }

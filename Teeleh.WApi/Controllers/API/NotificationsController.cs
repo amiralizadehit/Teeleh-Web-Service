@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teeleh.Models;
+using Teeleh.Models.CustomValidation.Website;
 using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Utilities;
@@ -23,6 +24,7 @@ namespace Teeleh.WApi.Controllers.API
         }
 
         [HttpPost]
+        [SessionTimeout]
         [Route("api/notifications/send")]
         public IHttpActionResult Send(CasualNotificationDto casualNotification)
         {
