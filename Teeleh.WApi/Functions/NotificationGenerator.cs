@@ -47,7 +47,7 @@ namespace Teeleh.WApi.Functions
                         CreatedAt = DateTime.Now,
                         Title = game.Name,
                         UserId = requestUser.Id,
-                        Message = "آگهی مورد نظر شما موجود شد",
+                        Message = ".آگهی مورد نظر شما موجود شد",
                         Status = NotificationStatus.NEW,
                         Type = NotificationType.ADVERTISEMENT
                     };
@@ -106,7 +106,7 @@ namespace Teeleh.WApi.Functions
                             CreatedAt = DateTime.Now,
                             Title = advertisement.Game.Name,
                             UserId = user.Id,
-                            Message = "آگهی انتخابی شما تخفیف خورده است",
+                            Message = ".آگهی انتخابی شما تخفیف خورده است",
                             Status = NotificationStatus.NEW,
                             Type = NotificationType.ADVERTISEMENT
                         };

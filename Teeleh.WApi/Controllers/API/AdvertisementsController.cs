@@ -74,7 +74,7 @@ namespace Teeleh.WApi.Controllers
                 var mediaType = options.Filter.MedType;
                 var pageNumber = (options.Filter.PageNumber ?? 1);
                 var search = options.Search;
-                var sort = (options.Filter.Sort ?? Sort.NEWEST);
+                var sort = options.Sort;
 
                 var query = db.Advertisements.Where(a => a.Price >= minPrice && a.Price <= maxPrice)
                     .Where(QueryHelper.GetAdvertisementValidationQuery());

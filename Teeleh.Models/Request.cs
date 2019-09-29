@@ -21,7 +21,7 @@ namespace Teeleh.Models
         [Required]
         public int GameId { get; set; }
 
-        public List<Platform> Platforms { get; set; }
+        public virtual List<Platform> Platforms { get; set; }
 
         [Required]
         public FilterType FilterType { get; set; }

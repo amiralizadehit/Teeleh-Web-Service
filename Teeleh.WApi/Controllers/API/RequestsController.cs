@@ -122,8 +122,7 @@ namespace Teeleh.WApi.Controllers.API
                     var user = session.User;
                     var requestInDb =
                         db.Requests.SingleOrDefault(a => a.Id == requestEdit.Id && a.User.Id == user.Id);
-                    var selectedPlatforms = db.Platforms.Where(g => requestEdit.SelectedPlatforms.Contains(g.Id)).ToList();
-
+                  
                     if(!Enum.IsDefined(typeof(FilterType), requestEdit.FilterType) ||
                        !Enum.IsDefined(typeof(RequestMode), requestEdit.ReqMode))
                     {
@@ -132,8 +131,6 @@ namespace Teeleh.WApi.Controllers.API
 
                     if (requestInDb != null)
                     {
-                    
-                        requestInDb.Platforms = selectedPlatforms;
                         requestInDb.FilterType = (FilterType)requestEdit.FilterType;
                         requestInDb.LocationCityId = requestEdit.LocationCity;
                         requestInDb.LocationProvinceId = requestEdit.LocationProvince;

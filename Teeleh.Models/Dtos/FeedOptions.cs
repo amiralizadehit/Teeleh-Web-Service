@@ -23,7 +23,6 @@ namespace Teeleh.Models.Dtos
         public int? LocationProvinceId { get; set; }
         public Enums.MediaType? MedType { get; set; }
         public int? PageNumber { get; set; }
-        public Sort? Sort { get; set; }
     }
 
     
