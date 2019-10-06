@@ -83,6 +83,7 @@
     <Compile Include="Dtos\FeedOptions.cs" />
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
+    <Compile Include="Dtos\PhoneNumberValidatorDto.cs" />
     <Compile Include="Dtos\RequestCreateDto.cs" />
     <Compile Include="Dtos\RequestEditDto.cs" />
     <Compile Include="Enums\Enums.cs" />
@@ -365,6 +366,18 @@
     <Compile Include="Migrations\201908301848115_AddingNewGenre.Designer.cs">
       <DependentUpon>201908301848115_AddingNewGenre.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910060804198_AddingUserPhoneValidatorModel.cs" />
+    <Compile Include="Migrations\201910060804198_AddingUserPhoneValidatorModel.Designer.cs">
+      <DependentUpon>201910060804198_AddingUserPhoneValidatorModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910060827426_NullableFieldForValidatedAt.cs" />
+    <Compile Include="Migrations\201910060827426_NullableFieldForValidatedAt.Designer.cs">
+      <DependentUpon>201910060827426_NullableFieldForValidatedAt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910060846344_DeleteTempPhoneNumberFromUserModel.cs" />
+    <Compile Include="Migrations\201910060846344_DeleteTempPhoneNumberFromUserModel.Designer.cs">
+      <DependentUpon>201910060846344_DeleteTempPhoneNumberFromUserModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
@@ -376,6 +389,7 @@
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Dtos\ForgotPasswordValidationDto.cs" />
+    <Compile Include="UserPhoneNumberValidator.cs" />
     <Compile Include="ViewModels\Website View Models\AdminLoginViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\AdminViewModel.cs" />
     <Compile Include="ViewModels\Website View Models\GameFormViewModel.cs" />
@@ -601,6 +615,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908301848115_AddingNewGenre.resx">
       <DependentUpon>201908301848115_AddingNewGenre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910060804198_AddingUserPhoneValidatorModel.resx">
+      <DependentUpon>201910060804198_AddingUserPhoneValidatorModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910060827426_NullableFieldForValidatedAt.resx">
+      <DependentUpon>201910060827426_NullableFieldForValidatedAt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910060846344_DeleteTempPhoneNumberFromUserModel.resx">
+      <DependentUpon>201910060846344_DeleteTempPhoneNumberFromUserModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

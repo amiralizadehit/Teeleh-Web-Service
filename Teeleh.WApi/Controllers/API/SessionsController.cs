@@ -59,6 +59,20 @@ namespace Teeleh.WApi.Controllers
                 session.ActivationMoment = DateTime.Now;
                 session.State = SessionState.ACTIVE;
 
+                //We add the registered phone number to user's validated phone number.
+                if (session.User.PhoneNumber!=null)
+                {
+                    var newValidator = new UserPhoneNumberValidator()
+                    {
+                        UserId = session.User.Id,
+                        TargetNumber = session.User.PhoneNumber,
+                        IsValidated = true,
+                        CreatedAt = DateTime.Now,
+                        ValidatedAt = DateTime.Now
+                    };
+                    db.UserPhoneNumberValidators.Add(newValidator);
+                }
+
                 await db.SaveChangesAsync();
 
                 SessionInfoObject sessionInfo = new SessionInfoObject()

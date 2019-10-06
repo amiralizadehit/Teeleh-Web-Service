@@ -53,6 +53,8 @@ namespace Teeleh.Models
         public DbSet<Image> Images { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
         public DbSet<AdBookmark> AdBookmarks { get; set; }
+        public DbSet<UserPhoneNumberValidator> UserPhoneNumberValidators { get; set; }
+        
 
         // Teeleh 
         public DbSet<Admin> Admins { get; set; }

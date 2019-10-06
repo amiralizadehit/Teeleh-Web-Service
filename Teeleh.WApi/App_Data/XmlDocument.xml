@@ -687,6 +687,25 @@
             404 : Request not found
             </returns>
         </member>
+        <member name="M:Teeleh.WApi.Controllers.API.UserPhoneNumberValidatorController.Create(Teeleh.Models.Dtos.PhoneNumberValidatorDto)">
+            <summary>
+            This endpoint creates a new validator for a new phone number.
+            </summary>
+            <returns>200 : Validator Created (Nonce Returned) |
+            401 : Session info not found |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.UserPhoneNumberValidatorController.Validate(Teeleh.Models.Dtos.NoncePairDto)">
+            <summary>
+            This endpoint validate a nonce in validator list.
+            </summary>
+            <returns>200 : Successfully Validated |
+            401 : Session info not found |
+            404 : Validator Not Found (Wrong Nonce) |
+            400 : Bad Request 
+            </returns>
+        </member>
         <member name="T:Teeleh.WApi.Controllers.GamesController">
             <summary>
             This class is used to manage games

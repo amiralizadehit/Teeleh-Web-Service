@@ -151,9 +151,20 @@ namespace Teeleh.WApi.Functions
             var exchangeGamesCounts = advertisement.ExchangeGames?.Count ?? 0;
 
             var validRecords = db.Requests.Where(QueryHelper.GetRequestValidationQuery())
-                .Where(s => s.GameId == advertisement.GameId && s.Platforms.Any(p=>p.Id==advertisement.PlatformId)).Include(k => k.User.Notifications);
+                .Where(s => s.GameId == advertisement.GameId 
+                            && s.Platforms.Any(p=>p.Id==advertisement.PlatformId)).Include(k => k.User.Notifications);
 
+            validRecords = validRecords
+                .Where(r => r.LocationProvinceId == advertisement.LocationProvinceId || r.LocationProvinceId == null)
+                .Where(r => r.LocationCityId == advertisement.LocationCityId || r.LocationCityId == null);
 
+            if (advertisement.LocationRegionId != null)
+            {
+                validRecords = validRecords.Where(r =>
+                    r.LocationRegionId == advertisement.LocationRegionId || r.LocationRegionId == null);
+            }
+                
+       
             var query = validRecords.Where(r => r.ReqMode == RequestMode.ALL)
                 .Where(p => p.MinPrice <= adPrice && p.MaxPrice >= adPrice);
 

@@ -310,6 +310,7 @@
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\API\PSNAccountController.cs" />
     <Compile Include="Controllers\API\RequestsController.cs" />
+    <Compile Include="Controllers\API\UserPhoneNumberValidatorController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\API\SessionsController.cs" />
@@ -648,6 +649,7 @@
     <Folder Include="Helper\" />
     <Folder Include="Models\" />
     <Folder Include="UploadedFiles\Locations\" />
+    <Folder Include="Views\UserPhoneNumberValidator\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

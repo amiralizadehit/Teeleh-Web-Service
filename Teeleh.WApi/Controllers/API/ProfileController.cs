@@ -102,7 +102,7 @@ namespace Teeleh.WApi.Controllers.API
                         if (user.State == UserState.ACTIVE)
                         {
                             //result = smsSent
-                            var result = user.ChangePhoneNumber(stringDto.PhoneNumber);
+                            var result = user.ChangePhoneNumber(db, stringDto.PhoneNumber);
                             await db.SaveChangesAsync();
 
                             return Ok(result);
@@ -182,7 +182,7 @@ namespace Teeleh.WApi.Controllers.API
                 if (sessionInDb != null)
                 {
                     var user = sessionInDb.User;
-                    var result = user.ValidateNewPhoneNumber(nonceDto.Nonce);
+                    var result = user.ValidateNewPhoneNumber(db, nonceDto.Nonce);
                     await db.SaveChangesAsync();
                     if (result)
                         return Ok();

@@ -215,6 +215,13 @@ namespace Teeleh.WApi.Controllers
 
                         db.Sessions.Add(session);
 
+                        user.FirstName = userSignUp.FirstName;
+                        user.LastName = userSignUp.LastName;
+                        user.PhoneNumber = userSignUp.PhoneNumber;
+                        user.Email = userSignUp.Email;
+                        user.Password = HasherHelper.sha256_hash(userSignUp.Password);
+                        user.UpdatedAt = DateTime.Now;
+                       
                         await db.SaveChangesAsync();
 
                     }

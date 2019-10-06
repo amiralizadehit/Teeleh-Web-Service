@@ -24,9 +24,7 @@ namespace Teeleh.Models
 
         [Required] [StringLength(30)] public string LastName { get; set; }
 
-        [StringLength(11)] public string PhoneNumber { get; set; }
-
-        [StringLength(11)] public string TemporaryPhoneNumber { get; set; }
+        [Phone][StringLength(11)] public string PhoneNumber { get; set; }
 
         [Required] public string Password { get; set; }
 
@@ -180,12 +178,21 @@ namespace Teeleh.Models
         /// </summary>
         /// <param name="newPhoneNumber"></param>
         /// <returns>smsSent</returns>
-        public bool ChangePhoneNumber(string newPhoneNumber)
+        public bool ChangePhoneNumber(AppDbContext db, string newPhoneNumber)
         {
             bool smsSent = true;
-            TemporaryPhoneNumber = newPhoneNumber;
-            SecurityToken = RandomHelper.RandomInt(10000, 99999);
-            if (MessageHelper.SendSMS_K(SecurityToken.ToString(), newPhoneNumber,
+            int nonce = RandomHelper.RandomInt(10000, 99999);
+            var validator = new UserPhoneNumberValidator()
+            {
+                UserId = Id,
+                TargetNumber = newPhoneNumber,
+                SecurityToken = HasherHelper.sha256_hash(nonce.ToString()),
+                IsValidated = false,
+                CreatedAt = DateTime.Now
+        };
+            db.UserPhoneNumberValidators.Add(validator);
+
+            if (MessageHelper.SendSMS_K(nonce.ToString(), newPhoneNumber,
                     MessageHelper.SMSMode.VERIFICATION) != null)
             {
                 smsSent = false;
@@ -202,11 +209,16 @@ namespace Teeleh.Models
         /// True : if old phone number has replaced with new one.
         /// False : if old phone number has not replaced with new one.
         /// </returns>
-        public bool ValidateNewPhoneNumber(int token)
+        public bool ValidateNewPhoneNumber(AppDbContext db, int token)
         {
-            if (SecurityToken == token)
+            var validator = db.UserPhoneNumberValidators.Where(v => v.UserId == Id).OrderByDescending(v => v.CreatedAt)
+                .First();
+
+            if (validator.SecurityToken == HasherHelper.sha256_hash(token.ToString()))
             {
-                PhoneNumber = TemporaryPhoneNumber;
+                PhoneNumber = validator.TargetNumber;
+                validator.IsValidated = true;
+                validator.ValidatedAt = DateTime.Now;
                 return true;
             }
                 return false;
