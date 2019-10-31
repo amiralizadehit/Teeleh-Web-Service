@@ -64,17 +64,11 @@ namespace Teeleh.WApi.Controllers.API
                     var selectedPlatforms = db.Platforms.Where(g => requestCreate.SelectedPlatforms.Contains(g.Id))
                         .ToList();
 
-                    if (!Enum.IsDefined(typeof(FilterType), requestCreate.FilterType) ||
-                        !Enum.IsDefined(typeof(RequestMode), requestCreate.ReqMode))
-                    {
-                        return BadRequest();
-                    }
-
                     var new_request = new Request()
                     {
                         GameId = requestCreate.GameId,
-                        FilterType = (FilterType) requestCreate.FilterType,
-                        ReqMode = (RequestMode) requestCreate.ReqMode,
+                        FilterType = requestCreate.FilterType,
+                        ReqMode = requestCreate.ReqMode,
                         LocationCityId = requestCreate.LocationCity,
                         LocationProvinceId = requestCreate.LocationProvince,
                         LocationRegionId = requestCreate.LocationRegion,
@@ -122,20 +116,15 @@ namespace Teeleh.WApi.Controllers.API
                     var user = session.User;
                     var requestInDb =
                         db.Requests.SingleOrDefault(a => a.Id == requestEdit.Id && a.User.Id == user.Id);
-                  
-                    if(!Enum.IsDefined(typeof(FilterType), requestEdit.FilterType) ||
-                       !Enum.IsDefined(typeof(RequestMode), requestEdit.ReqMode))
-                    {
-                        return BadRequest();
-                    }
+                 
 
                     if (requestInDb != null)
                     {
-                        requestInDb.FilterType = (FilterType)requestEdit.FilterType;
+                        requestInDb.FilterType = requestEdit.FilterType;
                         requestInDb.LocationCityId = requestEdit.LocationCity;
                         requestInDb.LocationProvinceId = requestEdit.LocationProvince;
                         requestInDb.LocationRegionId = requestEdit.LocationRegion;
-                        requestInDb.ReqMode = (RequestMode)requestEdit.ReqMode;
+                        requestInDb.ReqMode = requestEdit.ReqMode;
                         requestInDb.MinPrice = requestEdit.MinPrice;
                         requestInDb.MaxPrice = requestEdit.MaxPrice;
                         requestInDb.UpdatedAt = DateTime.Now;

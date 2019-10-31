@@ -10,6 +10,9 @@ namespace Teeleh.Models
     public class UserPhoneNumberValidator
     {
         public int Id { get; set; }
+
+        public User User { get; set; }
+
         [Required]
         public int UserId { get; set; }
         [Required]

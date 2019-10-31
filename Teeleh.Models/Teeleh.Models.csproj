@@ -75,6 +75,7 @@
     <Compile Include="AppDbContext.cs" />
     <Compile Include="AdBookmark.cs" />
     <Compile Include="CustomValidation\PhoneOrEmail.cs" />
+    <Compile Include="CustomValidation\ValidEnumValueAttribute.cs" />
     <Compile Include="CustomValidation\Website\SessionTimeoutAttribute.cs" />
     <Compile Include="Dtos\AdvertisementCreateDto.cs" />
     <Compile Include="Dtos\AdvertisementEditDto.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Dtos\ImageDto.cs" />
     <Compile Include="Dtos\PhoneNumberValidatorDto.cs" />
+    <Compile Include="Dtos\PSNAccountAdvertisementCreateDto.cs" />
+    <Compile Include="Dtos\PSNAccountRequestCreateDto.cs" />
     <Compile Include="Dtos\RequestCreateDto.cs" />
     <Compile Include="Dtos\RequestEditDto.cs" />
     <Compile Include="Enums\Enums.cs" />
@@ -378,11 +381,44 @@
     <Compile Include="Migrations\201910060846344_DeleteTempPhoneNumberFromUserModel.Designer.cs">
       <DependentUpon>201910060846344_DeleteTempPhoneNumberFromUserModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910271437082_NewAccountChanges.cs" />
+    <Compile Include="Migrations\201910271437082_NewAccountChanges.Designer.cs">
+      <DependentUpon>201910271437082_NewAccountChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910271505307_NewChangesToAccountAd.cs" />
+    <Compile Include="Migrations\201910271505307_NewChangesToAccountAd.Designer.cs">
+      <DependentUpon>201910271505307_NewChangesToAccountAd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910271627399_AddingHosseinToAdmin.cs" />
+    <Compile Include="Migrations\201910271627399_AddingHosseinToAdmin.Designer.cs">
+      <DependentUpon>201910271627399_AddingHosseinToAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910272148147_AddingPSNAccountIdToNotification.cs" />
+    <Compile Include="Migrations\201910272148147_AddingPSNAccountIdToNotification.Designer.cs">
+      <DependentUpon>201910272148147_AddingPSNAccountIdToNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910312122528_AddingAccountRequest.cs" />
+    <Compile Include="Migrations\201910312122528_AddingAccountRequest.Designer.cs">
+      <DependentUpon>201910312122528_AddingAccountRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910312125007_AddingAccountRequestToGames.cs" />
+    <Compile Include="Migrations\201910312125007_AddingAccountRequestToGames.Designer.cs">
+      <DependentUpon>201910312125007_AddingAccountRequestToGames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910312137450_AddingUserToPhoneNumberValidator.cs" />
+    <Compile Include="Migrations\201910312137450_AddingUserToPhoneNumberValidator.Designer.cs">
+      <DependentUpon>201910312137450_AddingUserToPhoneNumberValidator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910312202333_AddTypeToPSNAccountRequest.cs" />
+    <Compile Include="Migrations\201910312202333_AddTypeToPSNAccountRequest.Designer.cs">
+      <DependentUpon>201910312202333_AddTypeToPSNAccountRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Panel\AdminSession.cs" />
     <Compile Include="Platform.cs" />
-    <Compile Include="PSNAccount.cs" />
+    <Compile Include="PSNAccountAdvertisement.cs" />
+    <Compile Include="PSNAccountRequest.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Panel\Admin.cs" />
@@ -625,6 +661,30 @@
     <EmbeddedResource Include="Migrations\201910060846344_DeleteTempPhoneNumberFromUserModel.resx">
       <DependentUpon>201910060846344_DeleteTempPhoneNumberFromUserModel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910271437082_NewAccountChanges.resx">
+      <DependentUpon>201910271437082_NewAccountChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910271505307_NewChangesToAccountAd.resx">
+      <DependentUpon>201910271505307_NewChangesToAccountAd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910271627399_AddingHosseinToAdmin.resx">
+      <DependentUpon>201910271627399_AddingHosseinToAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910272148147_AddingPSNAccountIdToNotification.resx">
+      <DependentUpon>201910272148147_AddingPSNAccountIdToNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910312122528_AddingAccountRequest.resx">
+      <DependentUpon>201910312122528_AddingAccountRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910312125007_AddingAccountRequestToGames.resx">
+      <DependentUpon>201910312125007_AddingAccountRequestToGames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910312137450_AddingUserToPhoneNumberValidator.resx">
+      <DependentUpon>201910312137450_AddingUserToPhoneNumberValidator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910312202333_AddTypeToPSNAccountRequest.resx">
+      <DependentUpon>201910312202333_AddTypeToPSNAccountRequest.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -636,7 +696,9 @@
     <Content Include="Scripts\jquery-1.9.0.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ModelBase\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Teeleh.Utilities\Teeleh.Utilities.csproj">
       <Project>{bc7fae28-04f9-4816-8341-45c64550306c}</Project>

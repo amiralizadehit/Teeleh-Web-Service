@@ -25,7 +25,7 @@ using Image = System.Drawing.Image;
 namespace Teeleh.WApi.Controllers
 {
     /// <summary>
-    /// This class is used to manage client requests related to advertisements.
+    /// This class is used to manage client requests related to Disk Advertisements.
     /// </summary>
     public class AdvertisementsController : ApiController
     {
@@ -154,18 +154,12 @@ namespace Teeleh.WApi.Controllers
                         userImage = ImageHandler.CreateUserImage(db, user.Id, advertisementCreate.UserImage);
                     }
 
-                    if (!Enum.IsDefined(typeof(MediaType), advertisementCreate.MedType) ||
-                        !Enum.IsDefined(typeof(GameRegion), advertisementCreate.GameReg))
-                    {
-                        return BadRequest();
-                    }
-
                     var newAdvertisement = new Advertisement()
                     {
                         User = user,
-                        MedType = (MediaType) advertisementCreate.MedType,
+                        MedType = advertisementCreate.MedType,
                         GameId = advertisementCreate.GameId,
-                        GameReg = (GameRegion) advertisementCreate.GameReg,
+                        GameReg = advertisementCreate.GameReg,
                         Latitude = advertisementCreate.Latitude,
                         Longitude = advertisementCreate.Longitude,
                         LocationRegionId = advertisementCreate.LocationRegionId,
@@ -175,6 +169,7 @@ namespace Teeleh.WApi.Controllers
                         PlatformId = advertisementCreate.PlatformId,
                         Caption = advertisementCreate.Caption,
                         UserImage = userImage,
+                        isDeleted = false,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
                     };
@@ -195,7 +190,7 @@ namespace Teeleh.WApi.Controllers
                         }
                     }
 
-                    await db.SaveChangesAsync();
+                     await db.SaveChangesAsync();
                     // Broadcasting
 
                     NotificationGenerator.NewAdvertisementNotification(db, newAdvertisement);
@@ -234,11 +229,6 @@ namespace Teeleh.WApi.Controllers
                         db.Advertisements.Include(d => d.UserImage)
                             .SingleOrDefault(a => a.Id == editAd.Id && a.User.Id == user.Id);
 
-                    if (!Enum.IsDefined(typeof(MediaType), editAd.MedType))
-                    {
-                        return BadRequest();
-                    }
-
                     if (adInDb != null)
                     {
                         var isImageEmpty = string.IsNullOrEmpty(editAd.UserImage);
@@ -256,7 +246,7 @@ namespace Teeleh.WApi.Controllers
                             adInDb.UserImage = null;
                         }
 
-                        adInDb.MedType = (MediaType) editAd.MedType;
+                        adInDb.MedType = editAd.MedType;
                         adInDb.Latitude = editAd.Latitude;
                         adInDb.Longitude = editAd.Longitude;
                         adInDb.LocationRegionId = editAd.LocationRegionId;

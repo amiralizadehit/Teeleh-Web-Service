@@ -18,11 +18,12 @@ namespace Teeleh.Models
         [Key]
         [Column(Order = 1)]
         public int UserId { get; set; }
-        public virtual Advertisement Advertisement { get; set; }
-
         [Key]
         [Column(Order = 2)]
         public int AdvertisementId { get; set; }
+
+        public virtual Advertisement Advertisement { get; set; }
+
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
     }

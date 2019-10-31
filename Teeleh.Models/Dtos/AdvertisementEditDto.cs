@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Teeleh.Models.CustomValidation;
+using Teeleh.Models.Enums;
 using Teeleh.Models.Migrations;
 using Teeleh.Models.ViewModels;
 
@@ -33,7 +35,8 @@ namespace Teeleh.Models.Dtos
         public string Caption { get; set; }
 
         [Required]
-        public int MedType { get; set; }
+        [ValidEnumValue]
+        public MediaType MedType { get; set; }
 
         public List<int> ExchangeGames { get; set; }
     }

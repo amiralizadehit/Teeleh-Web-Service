@@ -26,9 +26,11 @@ namespace Teeleh.Models
 
         public List<Advertisement> Advertisements { get; set; }
 
-        public List<PSNAccount> PSNAccounts { get; set; }
+        public List<PSNAccountAdvertisement> PsnAccountAdvertisements { get; set; }
 
         public List<Request> Requests { get; set; }
+
+        public List<PSNAccountRequest> PSNAccountRequests { get; set; }
 
         public List<Exchange> ToExchangeWith { get; set; }
 

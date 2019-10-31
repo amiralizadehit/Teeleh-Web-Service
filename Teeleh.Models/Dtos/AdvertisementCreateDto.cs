@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Teeleh.Models.CustomValidation;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 
 
@@ -26,7 +28,8 @@ namespace Teeleh.Models.Dtos
         public int LocationProvinceId { get; set; }
 
         [Required]
-        public int GameReg { get; set; }
+        [ValidEnumValue]
+        public GameRegion GameReg { get; set; }
 
         public string UserImage { get; set; }
 
@@ -37,7 +40,8 @@ namespace Teeleh.Models.Dtos
         public string Caption { get; set; }
 
         [Required]
-        public int MedType { get; set; }
+        [ValidEnumValue]
+        public MediaType MedType { get; set; }
 
         public List<int> ExchangeGames { get; set; }
 

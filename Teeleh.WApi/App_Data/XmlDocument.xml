@@ -483,7 +483,7 @@
         </member>
         <member name="T:Teeleh.WApi.Controllers.AdvertisementsController">
             <summary>
-            This class is used to manage client requests related to advertisements.
+            This class is used to manage client requests related to Disk Advertisements.
             </summary>
         </member>
         <member name="M:Teeleh.WApi.Controllers.AdvertisementsController.GetAdvertisements">
@@ -651,6 +651,29 @@
             401 : Session info not found
             </returns>
         </member>
+        <member name="T:Teeleh.WApi.Controllers.API.PSNAccountAdvertisementController">
+            <summary>
+            This class is used to manage client requests related to PSN Account Advertisements.
+            </summary>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.PSNAccountAdvertisementController.Create(Teeleh.Models.Dtos.PSNAccountAdvertisementCreateDto)">
+            <summary>
+            This endpoint creates a psn account advertisement with the given information.
+            </summary>
+            <returns>200 : Advertisement Created |
+            401 : Session info not found |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.API.PSNAccountRequestController.Create(Teeleh.Models.Dtos.PSNAccountRequestCreateDto)">
+            <summary>
+            This endpoint creates a psn account request with the given information.
+            </summary>
+            <returns>200 : Request Created |
+            401 : Session info not found |
+            400 : Bad Request 
+            </returns>
+        </member>
         <member name="M:Teeleh.WApi.Controllers.API.RequestsController.GetRequests">
             <summary>
             This endpoint returns a list of all requests.
@@ -733,7 +756,16 @@
         </member>
         <member name="M:Teeleh.WApi.Controllers.SessionsController.Deactive(Teeleh.Models.ViewModels.SessionInfoObject)">
             <summary>
-            Deactives active session with given SessionId and SessionKey - User Logout
+            Deactivates active session with given SessionId and SessionKey - User Logout
+            </summary>
+            <returns>200 : Ok (Session Deactivated Successfully) |
+            404 : No Session Found (Wrong SessionId or SessionKey) |
+            400 : Bad Request 
+            </returns>
+        </member>
+        <member name="M:Teeleh.WApi.Controllers.SessionsController.Verify(Teeleh.Models.ViewModels.SessionInfoObject)">
+            <summary>
+            Verifies if a user access is still valid given session info object.
             </summary>
             <returns>200 : Ok (Session Deactivated Successfully) |
             404 : No Session Found (Wrong SessionId or SessionKey) |

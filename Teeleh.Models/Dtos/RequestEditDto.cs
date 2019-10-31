@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Teeleh.Models.CustomValidation;
+using Teeleh.Models.Enums;
 using Teeleh.Models.ViewModels;
 
 
@@ -15,14 +17,16 @@ namespace Teeleh.Models.Dtos
         public List<string> SelectedPlatforms { get; set; }
 
         [Required]
-        public int FilterType { get; set; }
+        [ValidEnumValue]
+        public FilterType FilterType { get; set; }
 
         public int? LocationProvince { get; set; }
         public int? LocationCity { get; set; }
         public int? LocationRegion { get; set; }
 
         [Required]
-        public int ReqMode { get; set; }
+        [ValidEnumValue]
+        public RequestMode ReqMode { get; set; }
 
         public float? MinPrice { get; set; }
         public float? MaxPrice { get; set; }

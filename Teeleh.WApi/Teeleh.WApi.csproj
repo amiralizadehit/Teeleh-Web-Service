@@ -308,7 +308,8 @@
     <Compile Include="Controllers\API\LocationController.cs" />
     <Compile Include="Controllers\API\NotificationsController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
-    <Compile Include="Controllers\API\PSNAccountController.cs" />
+    <Compile Include="Controllers\API\PSNAccountAdvertisementController.cs" />
+    <Compile Include="Controllers\API\PSNAccountRequestController.cs" />
     <Compile Include="Controllers\API\RequestsController.cs" />
     <Compile Include="Controllers\API\UserPhoneNumberValidatorController.cs" />
     <Compile Include="Controllers\GamesController.cs" />

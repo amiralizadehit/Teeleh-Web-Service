@@ -8,6 +8,7 @@ namespace Teeleh.Models
     public class Advertisement
     {
         public int Id { get; set; }
+
         public float Price { get; set; }
 
         public GameRegion GameReg { get; set; }
@@ -42,6 +43,7 @@ namespace Teeleh.Models
         public string PlatformId { get; set; }
 
         public double? Latitude { get; set; }
+
         public double? Longitude { get; set; }
 
         public string Caption { get; set; }

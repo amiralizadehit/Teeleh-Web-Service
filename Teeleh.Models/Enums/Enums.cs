@@ -33,7 +33,7 @@ namespace Teeleh.Models.Enums
     public enum PSNAccountType
     {
         LEGAL,
-        HACKED
+        COMBINATIONAL
     }
 
     public enum PSNAccountRegion

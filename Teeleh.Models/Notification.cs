@@ -13,13 +13,19 @@ namespace Teeleh.Models
     public class Notification
     {
         public int Id { get; set; }
+
         [Required]
         public int UserId { get; set; }
+
         public virtual User User { get; set; }
 
         public int? AdvertisementId { get; set; }
         
         public virtual Advertisement Advertisement { get; set; }
+
+        public virtual PSNAccountAdvertisement PSNAccountAdvertisement { get; set; }
+
+        public int? PSNAccountAdvertisementId { get; set; }
 
         public virtual Image Avatar { get; set; }
 

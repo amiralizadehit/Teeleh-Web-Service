@@ -8,6 +8,7 @@ using Teeleh.Models.Dtos;
 using Teeleh.Models.Enums;
 using Teeleh.Models.Helper;
 using Teeleh.Models.ViewModels;
+using Teeleh.Utilities;
 
 namespace Teeleh.WApi.Controllers
 {
@@ -66,6 +67,7 @@ namespace Teeleh.WApi.Controllers
                     {
                         UserId = session.User.Id,
                         TargetNumber = session.User.PhoneNumber,
+                        SecurityToken = HasherHelper.sha256_hash(pendingSession.Nonce.ToString()),
                         IsValidated = true,
                         CreatedAt = DateTime.Now,
                         ValidatedAt = DateTime.Now
@@ -88,7 +90,7 @@ namespace Teeleh.WApi.Controllers
         }
 
         /// <summary>
-        /// Deactives active session with given SessionId and SessionKey - User Logout
+        /// Deactivates active session with given SessionId and SessionKey - User Logout
         /// </summary>
         /// <returns>200 : Ok (Session Deactivated Successfully) |
         /// 404 : No Session Found (Wrong SessionId or SessionKey) |
@@ -119,6 +121,36 @@ namespace Teeleh.WApi.Controllers
 
             return BadRequest();
         }
+
+        /// <summary>
+        /// Verifies if a user access is still valid given session info object.
+        /// </summary>
+        /// <returns>200 : Ok (Session Deactivated Successfully) |
+        /// 404 : No Session Found (Wrong SessionId or SessionKey) |
+        /// 400 : Bad Request 
+        /// </returns>
+        [HttpPost]
+        [Route("api/sessions/verify")]
+        public async Task<IHttpActionResult> Verify(SessionInfoObject sessionInfo)
+        {
+            if (ModelState.IsValid)
+            {
+                var session =
+                    await db
+                        .Sessions
+                        .Where(QueryHelper.GetSessionObjectValidationQuery(sessionInfo))
+                        .SingleOrDefaultAsync();
+                if (session == null)
+                {
+                    return NotFound();
+                }
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+
 
 
         /// <summary>
