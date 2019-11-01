@@ -17,9 +17,24 @@ namespace Teeleh.WApi.Controllers.API
     {
         private AppDbContext db;
 
+
         public PSNAccountRequestController()
         {
             db = new AppDbContext();
+        }
+
+        /// <summary>
+        /// This endpoint returns a list of all psn account requests.
+        /// </summary>
+        /// <returns>200 : sent
+        /// </returns>
+        [HttpGet]
+        [Route("api/requests_accounts/psn")]
+        public IHttpActionResult GetRequests()
+        {
+            var requests = db.PSNAccountRequests.Select(QueryHelper.GetPSNAccountRequestQuery()).ToList();
+
+            return Ok(requests);
         }
 
 

@@ -26,6 +26,22 @@ namespace Teeleh.WApi.Controllers.API
         }
 
         /// <summary>
+        /// This endpoint returns a list of all psn account advertisements.
+        /// </summary>
+        /// <returns>200 : sent
+        /// </returns>
+        [HttpGet]
+        [Route("api/advertisements_accounts/psn")]
+        public IHttpActionResult GetAdvertisements()
+        {
+            var advertisements = db.PSNAccountAdvertisements.Where(a => !a.IsDeleted && a.User.State == UserState.ACTIVE)
+                .Select(QueryHelper.GetPSNAccountAdvertisementQuery()).ToList();
+
+            return Ok(advertisements);
+        }
+
+
+        /// <summary>
         /// This endpoint creates a psn account advertisement with the given information.
         /// </summary>
         /// <returns>200 : Advertisement Created |
@@ -64,14 +80,14 @@ namespace Teeleh.WApi.Controllers.API
                         Type = advertisementCreate.Type,
                         Price = advertisementCreate.Price,
                         Caption = advertisementCreate.Caption,
-                        HasPlus = advertisementCreate.HasPlus,
+                        HasPlus = advertisementCreate.HasPlus ?? false,
                         UserImage = userImage,
                         IsDeleted = false,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
                     };
 
-                    db.PsnAccountAdvertisements.Add(newAdvertisement);
+                    db.PSNAccountAdvertisements.Add(newAdvertisement);
 
                     await db.SaveChangesAsync();
 

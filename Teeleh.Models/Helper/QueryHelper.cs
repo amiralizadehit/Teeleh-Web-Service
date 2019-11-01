@@ -21,7 +21,7 @@ namespace Teeleh.Models.Helper
         }
 
 
-        ///////////////////// Advertisements Queries /////////////////////////////////////
+        ///////////////////// Advertisements Queries (DISK) /////////////////////////////////////
 
         public static Expression<System.Func<Advertisement, object>> GetAdvertisementQuery()
         {
@@ -73,7 +73,44 @@ namespace Teeleh.Models.Helper
         }
 
 
-        ///////////////////// Requests Queries //////////////////////////////////////////
+        ///////////////////// PSN Account Advertisements Queries /////////////////////////////////////
+
+        public static Expression<System.Func<PSNAccountAdvertisement, object>> GetPSNAccountAdvertisementQuery()
+        {
+            return a => new
+            {
+                Id = a.Id,
+                IsDeleted = a.IsDeleted,
+                Games = a.Games.Where(e=>e.isDeleted==false).Select(g =>new 
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                }),
+                UserImage = a.UserImage != null ? localDomain + a.UserImage.ImagePath : null,
+                Capacity = a.Capacity,
+                Type = a.Type,
+                Caption = a.Caption,
+                HasPlus = a.HasPlus ?? false,
+                Region = a.Region,
+                CreatedAt = a.CreatedAt,
+                Age = SqlFunctions.DateDiff("minute", a.CreatedAt, DateTime.Now),
+                Price = a.Price,
+                Information = new
+                {
+                    PhoneNumber = a.User.PhoneNumber,
+                    Email = a.User.Email,
+                },
+            };
+        }
+
+        public static Expression<System.Func<PSNAccountAdvertisement, bool>> GetPSNAccountAdvertisementValidationQuery()
+        {
+            return g => g.IsDeleted == false &&
+                        (g.Type != 0 || g.Games[0].isDeleted==false) &&
+                        g.User.State == UserState.ACTIVE;
+        }
+
+        ///////////////////// Requests Queries ///////////////////////////////////////////////////
 
         public static Expression<System.Func<Request, object>> GetRequestQuery()
         {
@@ -101,9 +138,42 @@ namespace Teeleh.Models.Helper
 
         public static Expression<System.Func<Request, bool>> GetRequestValidationQuery()
         {
+
             return g => g.IsDeleted == false &&
                         g.Game.isDeleted == false &&
                         g.User.State==UserState.ACTIVE;
+        }
+
+
+        ///////////////////// PSN Account Requests Queries //////////////////////////////
+
+        public static Expression<System.Func<PSNAccountRequest, object>> GetPSNAccountRequestQuery()
+        {
+            return r => new
+            {
+                r.Id,
+                Games = r.Games.Where(e=>e.isDeleted==false).Select(g=>new
+                {
+                    Id = g.isDeleted,
+                    Name = g.Name
+                }),
+                Capacity = r.Capacity,
+                Region = r.Region,
+                Type = r.Type,
+                HasPlus = r.HasPlus,
+                MinPrice = r.MinPrice,
+                MaxPrice = r.MaxPrice,
+                IsDeleted = r.IsDeleted,
+                CreatedAt = r.CreatedAt,
+                UpdateAt = r.UpdatedAt
+            };
+        }
+
+        public static Expression<System.Func<PSNAccountRequest, bool>> GetPSNAccountRequestValidationQuery()
+        {
+            return g => g.IsDeleted == false &&
+                        (g.Type != 0 || g.Games[0].isDeleted == false) &&
+                        g.User.State == UserState.ACTIVE;
         }
 
         //////////////////// Sessions Queries ///////////////////////////////////////////
